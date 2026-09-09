@@ -1,0 +1,568 @@
+[
+  {
+    "n": 1,
+    "text": "올해 시청률 13%를 넘긴 드라마 세 편, 전부 같은 공식을 썼습니다.",
+    "source": "clip",
+    "queries": [
+      "21세기 대군부인 하이라이트"
+    ],
+    "chosen": 0,
+    "candidates": [
+      {
+        "provider": "youtube",
+        "id": "yTeKiI7e76I",
+        "page": "https://www.youtube.com/watch?v=yTeKiI7e76I",
+        "author": "MBCdrama",
+        "title": "[21세기 대군부인 하이라이트] 이번 주, 대군부부를 맞이할 채비 되셨습니까? 4/10(금) ＜21세기 대군부인＞ 첫 방송!, MBC 260410 방송",
+        "duration": 209,
+        "views": 642058,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/yTeKiI7e76I/hqdefault.jpg",
+        "start": 52.2
+      },
+      {
+        "provider": "youtube",
+        "id": "W1Id5jabwt4",
+        "page": "https://www.youtube.com/watch?v=W1Id5jabwt4",
+        "author": "드파밍",
+        "title": "[21세기 대군부인] 8회 하이라이트 | ♨️에필포함♨️ 대군부부 첫날밤인데 볼 준비 됐어? #아이유 #변우석 MBC260502방송",
+        "duration": 210,
+        "views": 451299,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/W1Id5jabwt4/hqdefault.jpg",
+        "start": 52.5
+      },
+      {
+        "provider": "youtube",
+        "id": "GJl2VZg6LOQ",
+        "page": "https://www.youtube.com/watch?v=GJl2VZg6LOQ",
+        "author": "드파밍",
+        "title": "[21세기 대군부인] 11회 하이라이트 | 변우석 깨어났다는 소식에 전력질주하는 아이유ㅠ 폭발 사고는 레드레드, 대군부부 사랑은 그린그린💚MBC260515방송",
+        "duration": 211,
+        "views": 333751,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/GJl2VZg6LOQ/hqdefault.jpg",
+        "start": 52.8
+      },
+      {
+        "provider": "youtube",
+        "id": "O9oBIWWKT5M",
+        "page": "https://www.youtube.com/watch?v=O9oBIWWKT5M",
+        "author": "Disney Plus Korea 디즈니 플러스 코리아",
+        "title": "대군쀼 앓이 본격 스타트 | [21세기 대군부인] 하이라이트 | 디즈니+",
+        "duration": 224,
+        "views": 269151,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/O9oBIWWKT5M/hqdefault.jpg",
+        "start": 56.0
+      }
+    ]
+  },
+  {
+    "n": 2,
+    "text": "3위는 tvN 언더커버 미쓰홍, 13.1%.",
+    "source": "clip",
+    "queries": [
+      "언더커버 미쓰홍 예고"
+    ],
+    "chosen": 0,
+    "candidates": [
+      {
+        "provider": "youtube",
+        "id": "lcnmvG9imw0",
+        "page": "https://www.youtube.com/watch?v=lcnmvG9imw0",
+        "author": "tvN DRAMA",
+        "title": "[종합 예고] 사이다 말단 사원 미쓰홍✨ 잠입 수사로 내부 고발자 '예삐'를 찾아라🕵️‍♀️ #언더커버미쓰홍 EP.0",
+        "duration": 66,
+        "views": 199468,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/lcnmvG9imw0/hqdefault.jpg",
+        "start": 16.5
+      },
+      {
+        "provider": "youtube",
+        "id": "hbefdykJFAA",
+        "page": "https://www.youtube.com/watch?v=hbefdykJFAA",
+        "author": "tvN DRAMA",
+        "title": "[미쓰홍 티저] \"미쓰홍~🌹\" 시대적 가면을 쓴 엘리트 언더커버 박신혜의 위장 잠입이 시작된다! #언더커버미쓰홍 EP.0",
+        "duration": 35,
+        "views": 99995,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/hbefdykJFAA/hqdefault.jpg",
+        "start": 8.8
+      },
+      {
+        "provider": "youtube",
+        "id": "yBnK8qU7L7Q",
+        "page": "https://www.youtube.com/watch?v=yBnK8qU7L7Q",
+        "author": "tvN DRAMA",
+        "title": "[13화 예고] 숨통을 조여오는 한민증권, 기숙사에 들이닥친 강도까지!? 이번 위기도 넘어설 수 있을까? #언더커버미쓰홍 EP.13",
+        "duration": 37,
+        "views": 85901,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/yBnK8qU7L7Q/hqdefault.jpg",
+        "start": 9.2
+      },
+      {
+        "provider": "youtube",
+        "id": "3yVEg9OglUw",
+        "page": "https://www.youtube.com/watch?v=3yVEg9OglUw",
+        "author": "Netflix Korea 넷플릭스 코리아",
+        "title": "언더커버 미쓰홍 | 공식 예고편 | 넷플릭스",
+        "duration": 83,
+        "views": 43228,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/3yVEg9OglUw/hqdefault.jpg",
+        "start": 20.8
+      }
+    ]
+  },
+  {
+    "n": 3,
+    "text": "2위는 MBC 판사 이한영, 13.6%.",
+    "source": "clip",
+    "queries": [
+      "판사 이한영 예고"
+    ],
+    "chosen": 0,
+    "candidates": [
+      {
+        "provider": "youtube",
+        "id": "0MDNTAK-NUg",
+        "page": "https://www.youtube.com/watch?v=0MDNTAK-NUg",
+        "author": "MBCdrama",
+        "title": "[판사 이한영 5회 예고] ＂수석님께 꼭 필요한 사람이 되겠습니다＂, MBC 260116 방송",
+        "duration": 34,
+        "views": 55666,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/0MDNTAK-NUg/hqdefault.jpg",
+        "start": 25.5
+      },
+      {
+        "provider": "youtube",
+        "id": "WvI0_5ddg98",
+        "page": "https://www.youtube.com/watch?v=WvI0_5ddg98",
+        "author": "MBCdrama",
+        "title": "[판사 이한영 11회 예고] ＂수오재의 주인이 될 거야＂, MBC 260206 방송",
+        "duration": 34,
+        "views": 54874,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/WvI0_5ddg98/hqdefault.jpg",
+        "start": 8.5
+      },
+      {
+        "provider": "youtube",
+        "id": "Wh1Sww4Zk-0",
+        "page": "https://www.youtube.com/watch?v=Wh1Sww4Zk-0",
+        "author": "MBCdrama",
+        "title": "[판사 이한영 10회 예고] ＂대법원장이 되는 일은 없을 거야＂, MBC 260131 방송",
+        "duration": 36,
+        "views": 48738,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/Wh1Sww4Zk-0/hqdefault.jpg",
+        "start": 9.0
+      },
+      {
+        "provider": "youtube",
+        "id": "wgBA_3hxMZg",
+        "page": "https://www.youtube.com/watch?v=wgBA_3hxMZg",
+        "author": "MBCdrama",
+        "title": "[판사 이한영 1차 티저] 지성, 2035년 적폐 판사➡️2025년 정의 구현 판사로 회귀, MBC 260102 방송",
+        "duration": 61,
+        "views": 48660,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/wgBA_3hxMZg/hqdefault.jpg",
+        "start": 15.2
+      }
+    ]
+  },
+  {
+    "n": 4,
+    "text": "1위는 같은 MBC의 21세기 대군부인, 13.8%였습니다.",
+    "source": "clip",
+    "queries": [
+      "21세기 대군부인 예고"
+    ],
+    "chosen": 0,
+    "candidates": [
+      {
+        "provider": "youtube",
+        "id": "VIAdoQqT56s",
+        "page": "https://www.youtube.com/watch?v=VIAdoQqT56s",
+        "author": "Disney Plus Korea 디즈니 플러스 코리아",
+        "title": "21세기 대군부인 | 3차 티저 예고편 | 디즈니+",
+        "duration": 57,
+        "views": 1977768,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/VIAdoQqT56s/hqdefault.jpg",
+        "start": 14.2
+      },
+      {
+        "provider": "youtube",
+        "id": "x352TuRAg84",
+        "page": "https://www.youtube.com/watch?v=x352TuRAg84",
+        "author": "MBCdrama",
+        "title": "[21세기 대군부인 티저] ＂저와 혼인하시지요＂ 아이유X변우석 '21세기 대군부인' 2026년 상반기 첫 방송!, MBC 2026 방송",
+        "duration": 41,
+        "views": 1095289,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/x352TuRAg84/hqdefault.jpg",
+        "start": 10.2
+      },
+      {
+        "provider": "youtube",
+        "id": "n0pzXj0uAUw",
+        "page": "https://www.youtube.com/watch?v=n0pzXj0uAUw",
+        "author": "MBCdrama",
+        "title": "[21세기 대군부인 9회 예고] ＂내가 좋아해, 아주 많이＂, MBC 260508 방송",
+        "duration": 45,
+        "views": 405466,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/n0pzXj0uAUw/hqdefault.jpg",
+        "start": 11.2
+      },
+      {
+        "provider": "youtube",
+        "id": "OOi2fM5VErA",
+        "page": "https://www.youtube.com/watch?v=OOi2fM5VErA",
+        "author": "MBCdrama",
+        "title": "[21세기 대군부인 11회 예고] ＂자가한테 안전한 곳이 있긴 한 거예요?＂, MBC 260515 방송",
+        "duration": 45,
+        "views": 316276,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/OOi2fM5VErA/hqdefault.jpg",
+        "start": 11.2
+      }
+    ]
+  },
+  {
+    "n": 5,
+    "text": "공통점은 장르가 아니라 질문입니다. 셋 다 만약에라는 가정에서 출발해요.",
+    "source": "clip",
+    "queries": [
+      "21세기 대군부인 명장면"
+    ],
+    "chosen": 0,
+    "candidates": [
+      {
+        "provider": "youtube",
+        "id": "mlZH_-DaK9U",
+        "page": "https://www.youtube.com/watch?v=mlZH_-DaK9U",
+        "author": "드파밍",
+        "title": "[21세기 대군부인] 10회 하이라이트 | 싸운 뒤 쌍방 키스한 아이유X변우석💋 이렇게 귀한 걸 봐도 될까요🥵 MBC260509방송",
+        "duration": 211,
+        "views": 935678,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/mlZH_-DaK9U/hqdefault.jpg",
+        "start": 52.8
+      },
+      {
+        "provider": "youtube",
+        "id": "W1Id5jabwt4",
+        "page": "https://www.youtube.com/watch?v=W1Id5jabwt4",
+        "author": "드파밍",
+        "title": "[21세기 대군부인] 8회 하이라이트 | ♨️에필포함♨️ 대군부부 첫날밤인데 볼 준비 됐어? #아이유 #변우석 MBC260502방송",
+        "duration": 210,
+        "views": 451299,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/W1Id5jabwt4/hqdefault.jpg",
+        "start": 52.5
+      },
+      {
+        "provider": "youtube",
+        "id": "GJl2VZg6LOQ",
+        "page": "https://www.youtube.com/watch?v=GJl2VZg6LOQ",
+        "author": "드파밍",
+        "title": "[21세기 대군부인] 11회 하이라이트 | 변우석 깨어났다는 소식에 전력질주하는 아이유ㅠ 폭발 사고는 레드레드, 대군부부 사랑은 그린그린💚MBC260515방송",
+        "duration": 211,
+        "views": 333751,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/GJl2VZg6LOQ/hqdefault.jpg",
+        "start": 52.8
+      },
+      {
+        "provider": "youtube",
+        "id": "VqyEV8R6egs",
+        "page": "https://www.youtube.com/watch?v=VqyEV8R6egs",
+        "author": "드파밍",
+        "title": "[21세기 대군부인] 9회 하이라이트 | 아기 전하 지켜ㅠㅠ 조카님 건드려 극대노한 변우석🔥MBC260508방송",
+        "duration": 211,
+        "views": 322380,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/VqyEV8R6egs/hqdefault.jpg",
+        "start": 52.8
+      }
+    ]
+  },
+  {
+    "n": 6,
+    "text": "판사 이한영은 주인공이 죽은 뒤 10년 전으로 되돌아갑니다.",
+    "source": "clip",
+    "queries": [
+      "판사 이한영 회귀"
+    ],
+    "chosen": 0,
+    "candidates": [
+      {
+        "provider": "youtube",
+        "id": "VPYg1_zp4EE",
+        "page": "https://www.youtube.com/watch?v=VPYg1_zp4EE",
+        "author": "MBCdrama",
+        "title": "[판사 이한영 스페셜] 지성&오세영, 회귀 전후 한눈에 보기, MBC 260117 방송",
+        "duration": 220,
+        "views": 530711,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/VPYg1_zp4EE/hqdefault.jpg",
+        "start": 33.0
+      },
+      {
+        "provider": "youtube",
+        "id": "Nn6uT3DyPT4",
+        "page": "https://www.youtube.com/watch?v=Nn6uT3DyPT4",
+        "author": "MBCdrama",
+        "title": "[판사 이한영] 저승행이 아니라 회귀였다?! 10년 전으로 돌아간 지성!, MBC 260103 방송",
+        "duration": 155,
+        "views": 3570,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/Nn6uT3DyPT4/hqdefault.jpg",
+        "start": 38.8
+      }
+    ]
+  },
+  {
+    "n": 7,
+    "text": "21세기 대군부인은 왕실이 그대로 남아 있는 가상의 대한민국이 무대고요.",
+    "source": "clip",
+    "queries": [
+      "21세기 대군부인 왕실"
+    ],
+    "chosen": 1,
+    "candidates": [
+      {
+        "provider": "youtube",
+        "id": "PkJbnlcPYwc",
+        "page": "https://www.youtube.com/watch?v=PkJbnlcPYwc",
+        "author": "드파밍",
+        "title": "[21세기 대군부인] 최종회 하이라이트 | 3년 후 엄마는 재벌 사업가, 아빠는 팔불출 백수가 된 건에 대하여 MBC260516방송",
+        "duration": 210,
+        "views": 842359,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/PkJbnlcPYwc/hqdefault.jpg",
+        "start": 52.5
+      },
+      {
+        "provider": "youtube",
+        "id": "vdXwjnkBL64",
+        "page": "https://www.youtube.com/watch?v=vdXwjnkBL64",
+        "author": "드파밍",
+        "title": "[21세기 대군부인] 최종회 하이라이트 | 집착으로 무너진 노상현의 최후⚡ 이제야 평범한 일상을 누리는 형수님과 도련님❤️‍🩹 MBC260516방송",
+        "duration": 210,
+        "views": 446224,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/vdXwjnkBL64/hqdefault.jpg",
+        "start": 52.5
+      },
+      {
+        "provider": "youtube",
+        "id": "GJl2VZg6LOQ",
+        "page": "https://www.youtube.com/watch?v=GJl2VZg6LOQ",
+        "author": "드파밍",
+        "title": "[21세기 대군부인] 11회 하이라이트 | 변우석 깨어났다는 소식에 전력질주하는 아이유ㅠ 폭발 사고는 레드레드, 대군부부 사랑은 그린그린💚MBC260515방송",
+        "duration": 211,
+        "views": 333751,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/GJl2VZg6LOQ/hqdefault.jpg",
+        "start": 52.8
+      },
+      {
+        "provider": "youtube",
+        "id": "0blhYV4F6eo",
+        "page": "https://www.youtube.com/watch?v=0blhYV4F6eo",
+        "author": "드파밍",
+        "title": "[21세기 대군부인] 1회 하이라이트 | 21세기 수양대군의 탄생💥 변우석X공승연 왕실 기싸움 시작 MBC260410방송",
+        "duration": 210,
+        "views": 159046,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/0blhYV4F6eo/hqdefault.jpg",
+        "start": 52.5
+      }
+    ]
+  },
+  {
+    "n": 8,
+    "text": "언더커버 미쓰홍은 금융감독관이 신분을 숨기고 기업에 잠입하죠.",
+    "source": "clip",
+    "queries": [
+      "언더커버 미쓰홍 잠입"
+    ],
+    "chosen": 0,
+    "candidates": [
+      {
+        "provider": "youtube",
+        "id": "gGuGrpUOb4U",
+        "page": "https://www.youtube.com/watch?v=gGuGrpUOb4U",
+        "author": "디글 :Diggle",
+        "title": "[#언더커버미쓰홍] 결국 고경표한테 들켜버린 위장 잠입?!💥 오히려 당당하게 나가는 박신혜 ㄷㄷ😏",
+        "duration": 528,
+        "views": 143048,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/gGuGrpUOb4U/hqdefault.jpg",
+        "start": 132.0
+      },
+      {
+        "provider": "youtube",
+        "id": "hbefdykJFAA",
+        "page": "https://www.youtube.com/watch?v=hbefdykJFAA",
+        "author": "tvN DRAMA",
+        "title": "[미쓰홍 티저] \"미쓰홍~🌹\" 시대적 가면을 쓴 엘리트 언더커버 박신혜의 위장 잠입이 시작된다! #언더커버미쓰홍 EP.0",
+        "duration": 35,
+        "views": 99995,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/hbefdykJFAA/hqdefault.jpg",
+        "start": 8.8
+      },
+      {
+        "provider": "youtube",
+        "id": "ZYED1u08wOs",
+        "page": "https://www.youtube.com/watch?v=ZYED1u08wOs",
+        "author": "디글 :Diggle",
+        "title": "[#언더커버미쓰홍 3화] 잠입 수사 중 회사 손해까지 막은 박신혜😮 근데 돌아오는 건 징계뿐⁉️",
+        "duration": 595,
+        "views": 45639,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/ZYED1u08wOs/hqdefault.jpg",
+        "start": 148.8
+      },
+      {
+        "provider": "youtube",
+        "id": "8CRW2H_wOEc",
+        "page": "https://www.youtube.com/watch?v=8CRW2H_wOEc",
+        "author": "tvN D ENT",
+        "title": "[#언더커버미쓰홍] 경력직한테 금고 털기는 일도 아님-☆ 절대 음감으로 금고 비밀번호 기억해둔 고복희ㄷㄷ | #번개클립",
+        "duration": 593,
+        "views": 16334,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/8CRW2H_wOEc/hqdefault.jpg",
+        "start": 148.2
+      }
+    ]
+  },
+  {
+    "n": 9,
+    "text": "되돌린다면, 숨긴다면, 왕실이 남았다면. 이 세 가정이 올해 통했습니다.",
+    "source": "clip",
+    "queries": [
+      "판사 이한영 명장면"
+    ],
+    "chosen": 0,
+    "candidates": [
+      {
+        "provider": "youtube",
+        "id": "Ti9SUt2ljgg",
+        "page": "https://www.youtube.com/watch?v=Ti9SUt2ljgg",
+        "author": "MBCdrama",
+        "title": "[판사 이한영] 지성의 의도를 읽은 김태우, 지성 편에 서다!, MBC 260131 방송",
+        "duration": 189,
+        "views": 329682,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/Ti9SUt2ljgg/hqdefault.jpg",
+        "start": 47.2
+      },
+      {
+        "provider": "youtube",
+        "id": "m_GbcLgdJLk",
+        "page": "https://www.youtube.com/watch?v=m_GbcLgdJLk",
+        "author": "MBCdrama",
+        "title": "[판사 이한영] 최종 선고! 지성, 모든 이들의 고통을 얹은 판결, MBC 260109 방송",
+        "duration": 243,
+        "views": 233053,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/m_GbcLgdJLk/hqdefault.jpg",
+        "start": 60.8
+      },
+      {
+        "provider": "youtube",
+        "id": "yiOsL2b7UII",
+        "page": "https://www.youtube.com/watch?v=yiOsL2b7UII",
+        "author": "MBCdrama",
+        "title": "[판사 이한영] 전생과는 다르다! 처형 백승희 앞에서 달라진 지성, MBC 260123 방송",
+        "duration": 123,
+        "views": 200580,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/yiOsL2b7UII/hqdefault.jpg",
+        "start": 30.8
+      },
+      {
+        "provider": "youtube",
+        "id": "lf1XqAFVpqQ",
+        "page": "https://www.youtube.com/watch?v=lf1XqAFVpqQ",
+        "author": "드파밍",
+        "title": "[판사 이한영] 4회 | 내가 누구게~?😊 백진희 괴롭히는 나쁜 놈들 참교육해주는 지성 사이다 모먼트 🍾 MBC260110방송",
+        "duration": 484,
+        "views": 152570,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/lf1XqAFVpqQ/hqdefault.jpg",
+        "start": 121.0
+      }
+    ]
+  },
+  {
+    "n": 10,
+    "text": "하반기에도 이 공식이 통할까요? 여러분 생각은 어떠세요?",
+    "source": "clip",
+    "queries": [
+      "언더커버 미쓰홍 하이라이트"
+    ],
+    "chosen": 0,
+    "candidates": [
+      {
+        "provider": "youtube",
+        "id": "Hm27qPXYKoc",
+        "page": "https://www.youtube.com/watch?v=Hm27qPXYKoc",
+        "author": "tvN DRAMA",
+        "title": "40% 인원 감축.. 25년 근속한 소경동 부장의 쓸쓸한 퇴장 #언더커버미쓰홍 EP.9 | tvN 260214 방송",
+        "duration": 250,
+        "views": 210038,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/Hm27qPXYKoc/hqdefault.jpg",
+        "start": 62.5
+      },
+      {
+        "provider": "youtube",
+        "id": "v65GOP1Xdjg",
+        "page": "https://www.youtube.com/watch?v=v65GOP1Xdjg",
+        "author": "tvN DRAMA",
+        "title": "9화 하이라이트｜되찾은 비자금 장부! 다시 판 짜는 박신혜 #언더커버미쓰홍 EP.9",
+        "duration": 536,
+        "views": 113458,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/v65GOP1Xdjg/hqdefault.jpg",
+        "start": 134.0
+      },
+      {
+        "provider": "youtube",
+        "id": "TDUDWoPLatw",
+        "page": "https://www.youtube.com/watch?v=TDUDWoPLatw",
+        "author": "tvN DRAMA",
+        "title": "1화 하이라이트｜aka. 여의도 마녀, 일잘러 증권 감독관 박신혜 #언더커버미쓰홍 EP.1",
+        "duration": 524,
+        "views": 111411,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/TDUDWoPLatw/hqdefault.jpg",
+        "start": 131.0
+      },
+      {
+        "provider": "youtube",
+        "id": "KqGLmAoAZdI",
+        "page": "https://www.youtube.com/watch?v=KqGLmAoAZdI",
+        "author": "tvN DRAMA",
+        "title": "[하이라이트] 정체는 숨겨도 성질은 못 숨기는 박신혜💥 좌충우돌 레트로 오피스 코미디 커밍쑨! #언더커버미쓰홍 EP.0",
+        "duration": 211,
+        "views": 61461,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/KqGLmAoAZdI/hqdefault.jpg",
+        "start": 52.8
+      }
+    ]
+  }
+]

@@ -1,0 +1,57 @@
+# 주간 조사 설정.
+#
+# 하이타치(@hi_tachy) 방식: 인물이나 프로그램을 하나로 고정하지 않는다.
+# 매주 여러 소스의 최근 롱폼을 훑어 그 주에 조회수가 오른 것을 소재로 잡고,
+# 벤치마크 채널이 최근 잘 뽑은 숏폼에서 어떤 장면이 먹히는지 배운다.
+#
+# 하이타치 실측 근거: 조회 상위가 특정 인물에 몰려 있지 않다.
+# 1위 이선민·정혁(110만), 2위 지예은·바타(110만), 3위 원이(32.4만) — 전부 다른 소재다.
+# 히트는 인물이 아니라 그 주 화제성에서 나온다.
+
+# 참고용. 조사를 좁히지 않는다. 나중에 특정 인물로 집중하기로 하면 여기를 쓴다.
+axis:
+  name: "고정하지 않음 (주간 화제성 추종)"
+  people: []
+
+# 매주 훑을 소스. 롱폼 공급량과 규모로 추린 후보다 (전략/12-소스채널-후보.md).
+source_channels:
+  - name: 침착맨
+    url: https://www.youtube.com/channel/UCUj6rrhMTR9pipbAWBAMvUQ
+  - name: 짠한형 신동엽
+    url: https://www.youtube.com/channel/UCikSO7mSQl-lx3BJOBzqA8w
+  - name: 요정재형
+    url: https://www.youtube.com/channel/UCN5XdqTDRbyjXPF5NXUqWdA
+  - name: 할명수
+    url: https://www.youtube.com/channel/UCmbGE7Y2ov7pTBuUrkXgtTQ
+  - name: 슈카월드
+    url: https://www.youtube.com/channel/UCsJ6RuBiTVWRX156FVbeaGg
+  - name: 피식대학
+    url: https://www.youtube.com/channel/UCGX5sP4ehBkihHwt5bs5wvg
+  - name: 말왕TV
+    url: https://www.youtube.com/channel/UCYJDUekoQz0-bo8al1diLWQ
+  - name: 하말넘많
+    url: https://www.youtube.com/channel/UCm3SDarPtTOS_NjCh9d3TDQ
+  - name: 뜬뜬 핑계고
+    url: https://www.youtube.com/channel/UCDNvRZRgvkBTUkQzFoT_8rA
+  - name: 노빠꾸탁재훈
+    url: https://www.youtube.com/channel/UCSSkHIU1-nL_FeCjeZ_Xtvg
+
+# 벤치마크. 이들의 최근 숏폼 성과를 보고 어떤 장면·제목이 먹히는지 배운다.
+# 그대로 베끼지 않는다. 구조만 가져온다.
+benchmark_channels:
+  - name: 하이타치
+    url: https://www.youtube.com/@hi_tachy
+  - name: 김갈대reed
+    url: https://www.youtube.com/@%EA%B9%80%EA%B0%88%EB%8C%80reed
+
+# 우리 채널. 만들면 여기에 넣는다. 지난 편 성과가 조사에 들어간다.
+own_channel: ""
+
+# 조사 유효 기간(일). 이보다 오래된 리포트로는 기획할 수 없다.
+freshness_days: 7
+
+# 주간 목표 편수
+weekly_target: 3
+
+# 롱폼에서 최근 며칠 것까지 볼지
+lookback_days: 14

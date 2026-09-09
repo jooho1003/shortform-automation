@@ -1,0 +1,10 @@
+# edge-tts 내레이션 설정
+voice: ko-KR-HyunsuMultilingualNeural
+rate: "+3%"
+volume: "+0%"
+pitch: "+0Hz"
+pronunciations:
+  MBC: 엠비씨
+  tvN: 티비엔
+  AI: 에이아이
+  TOP3: 톱 쓰리

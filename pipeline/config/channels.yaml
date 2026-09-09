@@ -1,0 +1,29 @@
+# 공식 채널 판별용 힌트. 후보 정렬에만 쓴다 — 최종 판정은 사람이 한다.
+#
+# 주의: 이건 채널명 부분 일치라서 "MBC 드라마 모음" 같은 무단 재업로드 채널도 걸린다.
+# 컨택트시트에 채널명을 그대로 찍어 두었으니 승인 전에 눈으로 확인할 것.
+
+official_hints:
+  - MBCdrama
+  - MBCentertainment
+  - MBC
+  - tvN
+  - SBS
+  - KBS
+  - JTBC
+  - TVING
+  - Netflix
+  - Disney
+  - ENA
+  - OCN
+  - 드파밍
+  - 채널십오야
+  - 스브스
+  - 디글
+
+# 검색할 때 붙일 꼬리말. 공식 클립이 상위에 오도록 유도한다.
+query_suffix: ""
+
+# 후보 개수와 최대 길이(초). 너무 긴 다시보기 영상은 소재로 부적합하다.
+candidates_per_line: 4
+max_duration: 900

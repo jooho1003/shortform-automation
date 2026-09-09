@@ -1,0 +1,620 @@
+{
+  "week": "2026-W37",
+  "generated": "2026-09-09T03:52:01",
+  "axis": "고정하지 않음 (주간 화제성 추종)",
+  "weekly_target": 3,
+  "freshness_days": 7,
+  "sources": [
+    {
+      "name": "침착맨",
+      "url": "https://www.youtube.com/channel/UCUj6rrhMTR9pipbAWBAMvUQ",
+      "items": [
+        {
+          "id": "UfC8r1wiV8Q",
+          "title": "Detective Conan's Most Ridiculous Motives World Cup",
+          "views": 2300000,
+          "duration": 1862,
+          "url": "https://www.youtube.com/watch?v=UfC8r1wiV8Q"
+        },
+        {
+          "id": "gO5_CmAwidU",
+          "title": "매너가 사람을 만든다",
+          "views": 1800000,
+          "duration": 9383,
+          "url": "https://www.youtube.com/watch?v=gO5_CmAwidU"
+        },
+        {
+          "id": "iMNuAmjPKho",
+          "title": "A Japan travel review on a whole different level",
+          "views": 1500000,
+          "duration": 2946,
+          "url": "https://www.youtube.com/watch?v=iMNuAmjPKho"
+        },
+        {
+          "id": "bftsFYX8sS4",
+          "title": "Guess What’s Older",
+          "views": 1500000,
+          "duration": 3293,
+          "url": "https://www.youtube.com/watch?v=bftsFYX8sS4"
+        },
+        {
+          "id": "SjIyU5h7-VE",
+          "title": "Guessing Various Rankings Koreans Love",
+          "views": 1200000,
+          "duration": 2729,
+          "url": "https://www.youtube.com/watch?v=SjIyU5h7-VE"
+        },
+        {
+          "id": "VkU0gF-SVBY",
+          "title": "This is how seniors do TikTok",
+          "views": 1200000,
+          "duration": 2177,
+          "url": "https://www.youtube.com/watch?v=VkU0gF-SVBY"
+        }
+      ]
+    },
+    {
+      "name": "짠한형 신동엽",
+      "url": "https://www.youtube.com/channel/UCikSO7mSQl-lx3BJOBzqA8w",
+      "items": [
+        {
+          "id": "flVWnlf6tZ4",
+          "title": "Sung Si-kyung\n[Zzanhan Bro EP.151]\n😋 Is this 'Zzanhan Bro' or 'let's dig in'? 🍽️",
+          "views": 2900000,
+          "duration": 4398,
+          "url": "https://www.youtube.com/watch?v=flVWnlf6tZ4"
+        },
+        {
+          "id": "_SiCTMm1Zwc",
+          "title": "송준근 박영진 김원효 양상국 [짠한형 EP.158] 전설의 KBS 22기 🕹️ 유행어 대잔치 🔥",
+          "views": 2000000,
+          "duration": 4899,
+          "url": "https://www.youtube.com/watch?v=_SiCTMm1Zwc"
+        },
+        {
+          "id": "e2adI2gOsfU",
+          "title": "Lee Hyun-kyun, Kim Min-ho, Kim Dong-jun, Nam Tae-woo [Zzanhan Bro EP.160] Salute🫡 We 4-lute You~",
+          "views": 1800000,
+          "duration": 4737,
+          "url": "https://www.youtube.com/watch?v=e2adI2gOsfU"
+        },
+        {
+          "id": "a0Lp7lkfu-Y",
+          "title": "Seo Hyun-chul, Ko Chang-seok, Ryu Soo-young [Zzanhanghyung EP.154] 🍻 These guys make the screen s...",
+          "views": 1800000,
+          "duration": 5287,
+          "url": "https://www.youtube.com/watch?v=a0Lp7lkfu-Y"
+        },
+        {
+          "id": "NW-6anKDOV4",
+          "title": "Mamamoo Solar Moonbyul Wheein Hwasa [Zzanhan Bro EP.148] 🫡 Mamamoo came together as a group🔥",
+          "views": 1600000,
+          "duration": 4714,
+          "url": "https://www.youtube.com/watch?v=NW-6anKDOV4"
+        },
+        {
+          "id": "NQlbhUnOiLk",
+          "title": "Jung Sun-hee, Moon Cheon-sik [Zzanhan Bro EP.155] 🔥Legendary Real-Life Sibling Moments🤣",
+          "views": 1500000,
+          "duration": 4602,
+          "url": "https://www.youtube.com/watch?v=NQlbhUnOiLk"
+        }
+      ]
+    },
+    {
+      "name": "요정재형",
+      "url": "https://www.youtube.com/channel/UCN5XdqTDRbyjXPF5NXUqWdA",
+      "items": [
+        {
+          "id": "thd1ztcy53s",
+          "title": "It's okay... Just poke me if I talk for too long",
+          "views": 3700000,
+          "duration": 4560,
+          "url": "https://www.youtube.com/watch?v=thd1ztcy53s"
+        },
+        {
+          "id": "L637BOkuR9I",
+          "title": "Choi Min Sik has been reading all the comments too. More candid than ever.",
+          "views": 1700000,
+          "duration": 4328,
+          "url": "https://www.youtube.com/watch?v=L637BOkuR9I"
+        },
+        {
+          "id": "ToJOtFS1o6k",
+          "title": "When has life ever been fair?",
+          "views": 1000000,
+          "duration": 3901,
+          "url": "https://www.youtube.com/watch?v=ToJOtFS1o6k"
+        },
+        {
+          "id": "U4XULth7Hr4",
+          "title": "성격은 맞는데, 취향이 안 맞는 30년 지기 친구가 있으세요",
+          "views": 952000,
+          "duration": 3570,
+          "url": "https://www.youtube.com/watch?v=U4XULth7Hr4"
+        },
+        {
+          "id": "cEr8nSVdSGg",
+          "title": "어떻게 우리가 미국에서 보게 됐니",
+          "views": 875000,
+          "duration": 3930,
+          "url": "https://www.youtube.com/watch?v=cEr8nSVdSGg"
+        },
+        {
+          "id": "WeAiFoFlvqI",
+          "title": "정화랑 해듬이랑 슈퍼랑 48시간 데이트, 강쥐들 아이템 소개까지♡",
+          "views": 668000,
+          "duration": 2965,
+          "url": "https://www.youtube.com/watch?v=WeAiFoFlvqI"
+        }
+      ]
+    },
+    {
+      "name": "할명수",
+      "url": "https://www.youtube.com/channel/UCmbGE7Y2ov7pTBuUrkXgtTQ",
+      "items": [
+        {
+          "id": "WZAxjx3hcVs",
+          "title": "I haven't remembered since I arrived in Bangkok. 🇹🇭 | ep.2 Halmyungsoo Spin-off",
+          "views": 963000,
+          "duration": 3961,
+          "url": "https://www.youtube.com/watch?v=WZAxjx3hcVs"
+        },
+        {
+          "id": "Xf6c80h6i8A",
+          "title": "월드 투어 못 돌아서 라면 투어 돌고왔다 | 서울 라면 투어🍜 | 할명수 ep.295",
+          "views": 870000,
+          "duration": 1236,
+          "url": "https://www.youtube.com/watch?v=Xf6c80h6i8A"
+        },
+        {
+          "id": "I747C1-Kgmw",
+          "title": "Let me go HOME✈️🇹🇭 | ep.3  Halmyungsoo Spin-off",
+          "views": 593000,
+          "duration": 3483,
+          "url": "https://www.youtube.com/watch?v=I747C1-Kgmw"
+        },
+        {
+          "id": "1NBS6PsqB34",
+          "title": "“엥 그게 왜 서운해?” 극T 혜리 VS 극F 황인엽🔥 명수까지 과몰입한 논쟁 드림 ㅣ황인엽X이혜리ㅣ할명수ep.296",
+          "views": 519000,
+          "duration": 2163,
+          "url": "https://www.youtube.com/watch?v=1NBS6PsqB34"
+        },
+        {
+          "id": "hFL56sG0Owo",
+          "title": "치킨 피자 떡볶이 한 번에 시켜 먹는 권력 있는 어른이 되자 | 여름방학 특집🌴 | 할명수 배달음식 몰아보기",
+          "views": 428000,
+          "duration": 2481,
+          "url": "https://www.youtube.com/watch?v=hFL56sG0Owo"
+        },
+        {
+          "id": "Cio3wjMLkhA",
+          "title": "다들 휴가 갈 거지? 도쿄부터 오사카까지 할명수 코스 총정리  | 여름방학 특집🌴 | 할명수 일본 여행 몰아보기",
+          "views": 409000,
+          "duration": 6568,
+          "url": "https://www.youtube.com/watch?v=Cio3wjMLkhA"
+        }
+      ]
+    },
+    {
+      "name": "슈카월드",
+      "url": "https://www.youtube.com/channel/UCsJ6RuBiTVWRX156FVbeaGg",
+      "items": [
+        {
+          "id": "4u3VzpSKE1g",
+          "title": "K-retail investors forced into long-term holding",
+          "views": 1800000,
+          "duration": 2065,
+          "url": "https://www.youtube.com/watch?v=4u3VzpSKE1g"
+        },
+        {
+          "id": "ym_P0XtiEco",
+          "title": "France in an Uproar Over Calls to 'Stop Paying Your Debts'",
+          "views": 1600000,
+          "duration": 2031,
+          "url": "https://www.youtube.com/watch?v=ym_P0XtiEco"
+        },
+        {
+          "id": "cp7_u68GYLA",
+          "title": "The Recent Situation in India: Launching a Massive Crackdown on Sanitation",
+          "views": 1500000,
+          "duration": 1699,
+          "url": "https://www.youtube.com/watch?v=cp7_u68GYLA"
+        },
+        {
+          "id": "XXpW-QNHcCk",
+          "title": "Trump's Draft to Start a Trade War with Canada",
+          "views": 1500000,
+          "duration": 2248,
+          "url": "https://www.youtube.com/watch?v=XXpW-QNHcCk"
+        },
+        {
+          "id": "2lFgnNyvBCs",
+          "title": "If Iran's Denuclearization Is the Goal, What About North Korea??",
+          "views": 1400000,
+          "duration": 2447,
+          "url": "https://www.youtube.com/watch?v=2lFgnNyvBCs"
+        },
+        {
+          "id": "35-9KG8v1M8",
+          "title": "As the Real Estate Bubble Bursts, the Chinese Rush Into the Stock Market",
+          "views": 1300000,
+          "duration": 1980,
+          "url": "https://www.youtube.com/watch?v=35-9KG8v1M8"
+        }
+      ]
+    },
+    {
+      "name": "피식대학",
+      "url": "https://www.youtube.com/channel/UCGX5sP4ehBkihHwt5bs5wvg",
+      "items": [
+        {
+          "id": "HQ_By8J8eN0",
+          "title": "추구미가 권인하인 사람들의 차에서 모임",
+          "views": 1300000,
+          "duration": 2627,
+          "url": "https://www.youtube.com/watch?v=HQ_By8J8eN0"
+        },
+        {
+          "id": "-LPlPepeVsE",
+          "title": "꿀벌은 인간보다 나은 존재인가 feat. 프응TV (수강생: 이제규, 이대한 교수, 김민수, 이용주)",
+          "views": 800000,
+          "duration": 2304,
+          "url": "https://www.youtube.com/watch?v=-LPlPepeVsE"
+        },
+        {
+          "id": "r9NjVxGpCK8",
+          "title": "추구미가 권인하인 사람들의 모임",
+          "views": 677000,
+          "duration": 2438,
+          "url": "https://www.youtube.com/watch?v=r9NjVxGpCK8"
+        },
+        {
+          "id": "Px6D0jTdQyI",
+          "title": "선유도 공원에서 이인하의 한 남자 | 권트럴파크",
+          "views": 593000,
+          "duration": 265,
+          "url": "https://www.youtube.com/watch?v=Px6D0jTdQyI"
+        },
+        {
+          "id": "7luj7uTiOQc",
+          "title": "곰은 여우가 될 수 있는가 (수강생: 우정잉, 허성범, 허미진, 정재형)",
+          "views": 523000,
+          "duration": 3987,
+          "url": "https://www.youtube.com/watch?v=7luj7uTiOQc"
+        },
+        {
+          "id": "F_hwM58VVUI",
+          "title": "[한글자막] 존박에게 리센느 어떻게 섭외했냐고 묻다",
+          "views": 407000,
+          "duration": 2238,
+          "url": "https://www.youtube.com/watch?v=F_hwM58VVUI"
+        }
+      ]
+    },
+    {
+      "name": "말왕TV",
+      "url": "https://www.youtube.com/channel/UCYJDUekoQz0-bo8al1diLWQ",
+      "items": [
+        {
+          "id": "0bNUmc3uRM4",
+          "title": "Marwang MalQueen Debut Final Edit",
+          "views": 1700000,
+          "duration": 3035,
+          "url": "https://www.youtube.com/watch?v=0bNUmc3uRM4"
+        },
+        {
+          "id": "b0ovZEJb7uM",
+          "title": "07/26 Recording Edit 4th Revision",
+          "views": 1000000,
+          "duration": 3274,
+          "url": "https://www.youtube.com/watch?v=b0ovZEJb7uM"
+        },
+        {
+          "id": "hYt4KzhFsJY",
+          "title": "Getting a PUBG Chicken Dinner while wearing a modified haptic suit",
+          "views": 715000,
+          "duration": 2952,
+          "url": "https://www.youtube.com/watch?v=hYt4KzhFsJY"
+        },
+        {
+          "id": "Av0hHfFd_lo",
+          "title": "WASD Tori's Adventure: The 4-Player Finale",
+          "views": 676000,
+          "duration": 1308,
+          "url": "https://www.youtube.com/watch?v=Av0hHfFd_lo"
+        },
+        {
+          "id": "dNEe6hoMBeQ",
+          "title": "The Greatest 1vs3 Manhunt Ever",
+          "views": 643000,
+          "duration": 1827,
+          "url": "https://www.youtube.com/watch?v=dNEe6hoMBeQ"
+        },
+        {
+          "id": "Z8oxLVD3zJM",
+          "title": "The employees have formed a union [50vs50 Minecraft War]",
+          "views": 609000,
+          "duration": 3291,
+          "url": "https://www.youtube.com/watch?v=Z8oxLVD3zJM"
+        }
+      ]
+    },
+    {
+      "name": "하말넘많",
+      "url": "https://www.youtube.com/channel/UCm3SDarPtTOS_NjCh9d3TDQ",
+      "items": [
+        {
+          "id": "cEJVQONOSFE",
+          "title": "08/28 COSTCO",
+          "views": 990000,
+          "duration": 2244,
+          "url": "https://www.youtube.com/watch?v=cEJVQONOSFE"
+        },
+        {
+          "id": "wyIsD27wdZ0",
+          "title": "Staying Over at a Friend's House 2 (Millstone Exercise, Horror Stories, Breakfast Buffet)",
+          "views": 618000,
+          "duration": 2597,
+          "url": "https://www.youtube.com/watch?v=wyIsD27wdZ0"
+        },
+        {
+          "id": "UUwSNqdByqM",
+          "title": "What Happened in 4 Days [I’ve Never Dated But Want to Date Season 2 | Episodes 1-6 Review]",
+          "views": 527000,
+          "duration": 3647,
+          "url": "https://www.youtube.com/watch?v=UUwSNqdByqM"
+        },
+        {
+          "id": "GedQUnYTu_A",
+          "title": "Too Many Words Bukhansan Water Park",
+          "views": 518000,
+          "duration": 1572,
+          "url": "https://www.youtube.com/watch?v=GedQUnYTu_A"
+        },
+        {
+          "id": "RsUWPq-tNbw",
+          "title": "Birthday Party Invitation [Bloody Hungry Ghosts, The House of Ghosts... Korean Folk Village Review]",
+          "views": 382000,
+          "duration": 1705,
+          "url": "https://www.youtube.com/watch?v=RsUWPq-tNbw"
+        },
+        {
+          "id": "UN7VZ736sPw",
+          "title": "How Different is the Movie \"The Odyssey\" from the Original? (Movie Summary and Key Differences)",
+          "views": 363000,
+          "duration": 3216,
+          "url": "https://www.youtube.com/watch?v=UN7VZ736sPw"
+        }
+      ]
+    },
+    {
+      "name": "뜬뜬 핑계고",
+      "url": "https://www.youtube.com/channel/UCDNvRZRgvkBTUkQzFoT_8rA",
+      "items": [
+        {
+          "id": "5X-7Env4phc",
+          "title": "Destination by Wheel, Route by Atlas: 4 Bros' No-GPS Trip | Punghyangjung EP.1 | 2026 Summer Road",
+          "views": 9300000,
+          "duration": 6912,
+          "url": "https://www.youtube.com/watch?v=5X-7Env4phc"
+        },
+        {
+          "id": "tBro21UtTIs",
+          "title": "Anniversaries Are Just an Excuse ｜ EP.116",
+          "views": 8600000,
+          "duration": 4498,
+          "url": "https://www.youtube.com/watch?v=tBro21UtTIs"
+        },
+        {
+          "id": "YKSF43X4D8I",
+          "title": "Heavy Talkers’ Day-Trip Ramyeon Mukbang｜Ramyeon Hangout EP.1｜2026 Summer Road",
+          "views": 8200000,
+          "duration": 5018,
+          "url": "https://www.youtube.com/watch?v=YKSF43X4D8I"
+        },
+        {
+          "id": "A_ZNp9mHne0",
+          "title": "A Jjamppong Craving Sparks an Epic Road Trip! Final Stop?｜Punghyangjung EP.3｜2026 Summer Road",
+          "views": 6900000,
+          "duration": 7026,
+          "url": "https://www.youtube.com/watch?v=A_ZNp9mHne0"
+        },
+        {
+          "id": "UNN8SLmxAI8",
+          "title": "Ran Into Blasting on the Way to Iksan and Made a Run for It | Punghyangjung EP.2 | 2026 Summer Road",
+          "views": 6900000,
+          "duration": 6678,
+          "url": "https://www.youtube.com/watch?v=UNN8SLmxAI8"
+        },
+        {
+          "id": "sDOu7Ed0QW0",
+          "title": "Summer School Special Is Just an Excuse｜EP.115",
+          "views": 6700000,
+          "duration": 4283,
+          "url": "https://www.youtube.com/watch?v=sDOu7Ed0QW0"
+        }
+      ]
+    },
+    {
+      "name": "노빠꾸탁재훈",
+      "url": "https://www.youtube.com/channel/UCSSkHIU1-nL_FeCjeZ_Xtvg",
+      "items": [
+        {
+          "id": "gZNNr9PTZRc",
+          "title": "한송이, 미남 꼬시고 싶어서 탈북했는데 자꾸 이상준이랑 엮이는 자본주의 앞잡이│ 노빠꾸탁재훈 시즌4 EP.33",
+          "views": 2500000,
+          "duration": 1113,
+          "url": "https://www.youtube.com/watch?v=gZNNr9PTZRc"
+        },
+        {
+          "id": "ErYrBN98hdo",
+          "title": "트리플에스 김채연, 보고만 있어도 미소가 절로 나는 현시점 워터밤 최고의 유망주  │ 노빠꾸탁재훈 시즌4 EP.29",
+          "views": 1600000,
+          "duration": 1304,
+          "url": "https://www.youtube.com/watch?v=ErYrBN98hdo"
+        },
+        {
+          "id": "Qj8Fc2glzh4",
+          "title": "월드컵을 TV로 보는 코리안 메시, 축구 악동, K리그 연봉킹 이승우 │ 노빠꾸탁재훈 시즌4 EP.31",
+          "views": 1500000,
+          "duration": 1415,
+          "url": "https://www.youtube.com/watch?v=Qj8Fc2glzh4"
+        },
+        {
+          "id": "ahnkR3Nk3-Q",
+          "title": "김와일드욱, 마블의 멀티버스 세계관에 버금가는 한국판 다중우주 도전자 │ 노빠꾸탁재훈 시즌4 EP.41",
+          "views": 1000000,
+          "duration": 1203,
+          "url": "https://www.youtube.com/watch?v=ahnkR3Nk3-Q"
+        },
+        {
+          "id": "Jws-lZFJYXc",
+          "title": "김정은, 북쪽 버크셔 때문에 먼저 태어났지만 검색어 순위 밀린 그녀│ 노빠꾸탁재훈 시즌4 EP.40",
+          "views": 771000,
+          "duration": 1215,
+          "url": "https://www.youtube.com/watch?v=Jws-lZFJYXc"
+        },
+        {
+          "id": "i_2OES5rfug",
+          "title": "강예빈, 저화질 캠 뒤에 숨어 수많은 남심을 울린 하두리 여신│ 노빠꾸탁재훈 시즌4 EP.36",
+          "views": 751000,
+          "duration": 1238,
+          "url": "https://www.youtube.com/watch?v=i_2OES5rfug"
+        }
+      ]
+    }
+  ],
+  "benchmarks": [
+    {
+      "name": "하이타치",
+      "url": "https://www.youtube.com/@hi_tachy",
+      "views_median": 23000,
+      "views_max": 1100000,
+      "items": [
+        {
+          "id": "wcJo15fb1Aw",
+          "title": "마! 이게 남자 아이가!! 🍚 #이선민 #정혁",
+          "views": 1100000,
+          "duration": null,
+          "url": "https://www.youtube.com/watch?v=wcJo15fb1Aw"
+        },
+        {
+          "id": "9PlTgjYOLNw",
+          "title": "초고속 결혼하는 지예은♥️바타 #지예은 #바타 #결혼",
+          "views": 1100000,
+          "duration": null,
+          "url": "https://www.youtube.com/watch?v=9PlTgjYOLNw"
+        },
+        {
+          "id": "xRCgFzy6ZT4",
+          "title": "오늘 자로 삼촌과 약속 지킨 원이🥹 #원이 #이선민 #약속",
+          "views": 324000,
+          "duration": null,
+          "url": "https://www.youtube.com/watch?v=xRCgFzy6ZT4"
+        },
+        {
+          "id": "OEBYVUo4Hfg",
+          "title": "빨리 죽어라 그럼 빨리 쉴 수 있다🤺 #이준혁 #라스",
+          "views": 136000,
+          "duration": null,
+          "url": "https://www.youtube.com/watch?v=OEBYVUo4Hfg"
+        },
+        {
+          "id": "MISnpNtjpTo",
+          "title": "달고 기름진게 최고야🍬 #유퀴즈 #장형우",
+          "views": 126000,
+          "duration": null,
+          "url": "https://www.youtube.com/watch?v=MISnpNtjpTo"
+        },
+        {
+          "id": "GbPizMSrI9E",
+          "title": "재석 행님 사랑 독차지 하는 방법💗 #놀뭐 #유재석 #허경환",
+          "views": 97000,
+          "duration": null,
+          "url": "https://www.youtube.com/watch?v=GbPizMSrI9E"
+        },
+        {
+          "id": "doE2ntIAuCM",
+          "title": "일방적 미미미누 폭행💀 #정일영 #곽범 #미미미누",
+          "views": 56000,
+          "duration": null,
+          "url": "https://www.youtube.com/watch?v=doE2ntIAuCM"
+        },
+        {
+          "id": "xuVli8aMe60",
+          "title": "새로운 티파니의 모습에 반한 순정 마초♥️ #변요한 #티파니 #추성훈",
+          "views": 55000,
+          "duration": null,
+          "url": "https://www.youtube.com/watch?v=xuVli8aMe60"
+        }
+      ]
+    },
+    {
+      "name": "김갈대reed",
+      "url": "https://www.youtube.com/@%EA%B9%80%EA%B0%88%EB%8C%80reed",
+      "views_median": 113000,
+      "views_max": 3300000,
+      "items": [
+        {
+          "id": "iWuXYb81bWc",
+          "title": "LOL Han So-hee with a satoori accent is so cute ㅠㅠ",
+          "views": 3300000,
+          "duration": null,
+          "url": "https://www.youtube.com/watch?v=iWuXYb81bWc"
+        },
+        {
+          "id": "wOQQQCWIKgg",
+          "title": "The Ritz commercial from back then was truly legendary..",
+          "views": 1400000,
+          "duration": null,
+          "url": "https://www.youtube.com/watch?v=wOQQQCWIKgg"
+        },
+        {
+          "id": "xH4ZxPgGgx0",
+          "title": "Seo Kang-joon, who says he has many unrequited loves, reveals his ideal type?!",
+          "views": 955000,
+          "duration": null,
+          "url": "https://www.youtube.com/watch?v=xH4ZxPgGgx0"
+        },
+        {
+          "id": "6bXo2yVAjuA",
+          "title": "The perfect happy routine for introverts lol",
+          "views": 779000,
+          "duration": null,
+          "url": "https://www.youtube.com/watch?v=6bXo2yVAjuA"
+        },
+        {
+          "id": "f1ZyvOZAU84",
+          "title": "미친 용안 구경 시켜주는 서강준..",
+          "views": 693000,
+          "duration": null,
+          "url": "https://www.youtube.com/watch?v=f1ZyvOZAU84"
+        },
+        {
+          "id": "e1-TyGbuqWc",
+          "title": "😭 Wonderful Tiffany... Wishing you both happiness 🤍",
+          "views": 558000,
+          "duration": null,
+          "url": "https://www.youtube.com/watch?v=e1-TyGbuqWc"
+        },
+        {
+          "id": "-P9OVSDY-Aw",
+          "title": "SM 거절한 겸손한 서강준…",
+          "views": 368000,
+          "duration": null,
+          "url": "https://www.youtube.com/watch?v=-P9OVSDY-Aw"
+        },
+        {
+          "id": "XsmIB-w1wno",
+          "title": "Han So-hee needs a week to recharge lol ㅠㅠ",
+          "views": 364000,
+          "duration": null,
+          "url": "https://www.youtube.com/watch?v=XsmIB-w1wno"
+        }
+      ]
+    }
+  ],
+  "own": null
+}

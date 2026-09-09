@@ -1,0 +1,27 @@
+# 발굴 키워드. 채널 주제 = 엔터(예능·영화·드라마).
+region: KR
+language: ko
+
+# 인급동에서 훑을 카테고리 (YouTube videoCategoryId)
+trending_categories:
+  - 24  # Entertainment
+  - 23  # Comedy
+  - 1   # Film & Animation
+
+# 조회수 상위 검색어
+search_terms:
+  - 드라마 결말 해석
+  - 드라마 명장면 분석
+  - 영화 숨은 설정
+  - 예능 레전드 장면
+  - 배우 캐스팅 비하인드
+  - 드라마 시청률 순위
+
+# 재사용 허용(CC BY) 후보를 찾을 검색어. 화면 소재 후보일 뿐,
+# 실제 사용 여부는 클립 컨펌에서 사람이 판정한다.
+cc_terms:
+  - korean drama press conference
+  - film premiere red carpet
+  - movie set behind the scenes
+
+published_within_days: 90

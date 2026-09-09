@@ -1,0 +1,15 @@
+default: briefing-focus
+
+templates:
+  - id: briefing-focus
+    name: 브리핑 포커스
+    duration: [35, 60]
+    enforce_duration: false
+  - id: feed-card-light
+    name: 화이트 피드 카드
+    duration: [15, 30]
+    enforce_duration: true
+  - id: feed-card-dark
+    name: 블랙 피드 카드
+    duration: [15, 30]
+    enforce_duration: true

@@ -1,0 +1,37 @@
+# 파이썬
+pipeline/.venv/
+__pycache__/
+*.pyc
+
+# 노드 / Remotion
+pipeline/remotion/node_modules/
+pipeline/remotion/public/ep/
+pipeline/remotion/props.json
+pipeline/remotion/out/
+
+# 비밀. 절대 올리지 않는다
+pipeline/secrets/
+.env
+*.pem
+client_secret*.json
+*token*.json
+
+# 내려받은 원본과 캐시. 편당 수십 MB
+pipeline/data/cache/
+
+# 편 산출물 중 미디어. 기획안·승인 파일·컨택트시트·클립목록은 올린다
+2026-*/*/03-소재/
+2026-*/*/04-영상/
+2026-*/*/02-이미지/프레임/
+2026-*/*/상태.json
+
+# 토큰 절약용 축소본
+*-sm.png
+*-sm.jpg
+
+# 이 레포와 무관한 기존 자산
+shortform-skill/
+귀칼실사화/
+레퍼런스 이미지/
+.bkit/
+2026-09-08 10 43 03_002*.png
