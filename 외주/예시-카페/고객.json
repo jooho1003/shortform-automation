@@ -1,0 +1,45 @@
+{
+  "slug": "예시-카페",
+  "name": "예시 카페",
+  "contact": {
+    "person": "김민지",
+    "phone": "010-1234-5678",
+    "email": "example-cafe@example.com",
+    "kakao": "examplecafe"
+  },
+  "survey": {
+    "industry": "카페 · 디저트",
+    "main_product": "시그니처 크림라떼, 수제 스콘",
+    "instagram_url": "https://instagram.com/example_cafe",
+    "external_channels": "네이버 플레이스, 배달의민족",
+    "key_message": "매일 아침 직접 굽는 스콘과 원두를 직접 로스팅하는 정성",
+    "target": "20~30대 여성, 감성 카페 투어를 즐기는 고객",
+    "purpose": "신메뉴 홍보와 매장 방문 유도",
+    "tone": "따뜻하고 아늑한 감성, 파스텔 톤"
+  },
+  "package": {
+    "id": "deluxe",
+    "name": "디럭스",
+    "monthly_reels": 10,
+    "monthly_edits": 10,
+    "monthly_uploads": 10,
+    "community_mgmt": true,
+    "hashtag_setup": true,
+    "profile_setup": true,
+    "price": 1490000,
+    "event_price": 700000
+  },
+  "contract": {
+    "start": "2026-09-01",
+    "end": "2026-09-30",
+    "status": "lead",
+    "event_price_applied": true,
+    "notes": "예시 데이터 — 삭제해도 됩니다"
+  },
+  "profile_setup": {
+    "done": false,
+    "notes": ""
+  },
+  "created": "2026-09-10T00:00:00.000Z",
+  "updated": "2026-09-10T00:00:00.000Z"
+}

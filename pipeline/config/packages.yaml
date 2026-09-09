@@ -1,0 +1,45 @@
+# 제안서.png 기준 초안 — 수치는 확인 후 수정
+packages:
+  - id: basic
+    name: 베이직
+    monthly_reels: 8        # 릴스 콘텐츠 기획 건수
+    monthly_edits: 8        # 릴스 영상 편집 건수
+    monthly_uploads: 8      # 릴스&스토리 업로드 관리 건수
+    community_mgmt: true    # 계정 소통 관리 (좋아요·댓글·DM)
+    hashtag_setup: true     # 해시태그 세팅 및 캡션 최적화
+    profile_setup: true     # 계정 프로필 세팅 (이벤트 1회 무료, 정상가 200,000)
+    price: 1290000          # 정상가 (VAT 포함)
+    event_price: 600000     # 이벤트 특가
+  - id: deluxe
+    name: 디럭스
+    monthly_reels: 10
+    monthly_edits: 10
+    monthly_uploads: 10
+    community_mgmt: true
+    hashtag_setup: true
+    profile_setup: true
+    price: 1490000
+    event_price: 700000
+  - id: booster
+    name: 부스터
+    monthly_reels: 12
+    monthly_edits: 12
+    monthly_uploads: 12
+    community_mgmt: true
+    hashtag_setup: true
+    profile_setup: true
+    price: 1690000
+    event_price: 800000
+stages:                     # 진행 절차
+  - id: 1
+    name: 계약 및 사전설문 제공
+  - id: 2
+    name: 계정 세팅 및 콘텐츠 기획
+  - id: 3
+    name: 콘텐츠 제작 및 업로드
+  - id: 4
+    name: 월간 인사이트 리포트 제공
+notes:
+  - 콘텐츠 제작은 원본 영상·사진 제공 시 진행
+  - 기본 수정 2회 포함 (추가 수정 시 별도 협의)
+  - 이벤트 특가는 후기 제공 및 사례 공개 동의 시 적용, 계약기간 최소 1개월

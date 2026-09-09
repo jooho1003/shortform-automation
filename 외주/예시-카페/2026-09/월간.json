@@ -1,0 +1,46 @@
+{
+  "month": "2026-09",
+  "stage": 2,
+  "items": [
+    {
+      "id": "abc12345",
+      "title": "신메뉴 시그니처 크림라떼 소개",
+      "type": "reel",
+      "reels_project": null,
+      "episode": null,
+      "status": "planned",
+      "due": "2026-09-15",
+      "uploaded_url": null,
+      "notes": ""
+    },
+    {
+      "id": "def67890",
+      "title": "수제 스콘 만드는 과정",
+      "type": "reel",
+      "reels_project": null,
+      "episode": null,
+      "status": "scripted",
+      "due": "2026-09-18",
+      "uploaded_url": null,
+      "notes": "대본 초안 완료, 촬영 일정 조율 중"
+    },
+    {
+      "id": "ghi13579",
+      "title": "매장 오픈 브이로그",
+      "type": "reel",
+      "reels_project": null,
+      "episode": null,
+      "status": "uploaded",
+      "due": "2026-09-05",
+      "uploaded_url": "https://instagram.com/reel/example1",
+      "notes": ""
+    }
+  ],
+  "report": {
+    "done": false,
+    "file": null,
+    "notes": ""
+  },
+  "memo": "예시 데이터 — 삭제해도 됩니다",
+  "updated": "2026-09-10T00:00:00.000Z"
+}

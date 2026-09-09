@@ -2,7 +2,7 @@
 name = "shortform-pipeline"
 version = "0.1.0"
 description = "숏폼 자동화 파이프라인 (B 트랙)"
-requires-python = ">=3.11"
+requires-python = ">=3.10"
 dependencies = [
     "pyyaml>=6.0",
     "yt-dlp>=2025.1.1",

@@ -15,6 +15,7 @@
 | 코드가 아직 못 하는 것 | [`docs/전략/90-구현-변경목록.md`](docs/전략/90-구현-변경목록.md) |
 | 파이프라인 원래 설계 | [`docs/설계/00-파이프라인-설계.md`](docs/설계/00-파이프라인-설계.md) |
 | 코드 돌리는 법 | [`pipeline/README.md`](pipeline/README.md) |
+| 웹 콘솔(브라우저에서 보고 조작) | [`pipeline/web/README.md`](pipeline/web/README.md) |
 
 ## 구조
 
@@ -24,11 +25,15 @@
 │  ├─ 00-작업기록.md      세션별 결정·삽질·미구현 기록
 │  ├─ 전략/               무엇을 어떻게 만들 것인가 (상시 문서)
 │  └─ 설계/               파이프라인 설계와 운영 원칙
-├─ pipeline/              코드 (Python + Remotion)
-│  ├─ shortform/          단계별 모듈
+├─ pipeline/              코드 (Python + Remotion + 웹 콘솔)
+│  ├─ shortform/          단계별 모듈 (A안·B안), inspect 브리지, 릴스 기획
 │  ├─ remotion/           렌더 컴포지션
-│  ├─ config/             키워드·목소리·조사·채널 설정
-│  └─ data/               조사 리포트, 구간 후보 (캐시는 git 제외)
+│  ├─ web/                Next.js 로컬 콘솔 — 회차·릴스 기획·외주·환경 점검
+│  ├─ prompts/            claude/codex 프롬프트 (릴스 기획)
+│  ├─ config/             키워드·목소리·조사·채널·패키지·이미지·fal 설정
+│  └─ data/               조사 리포트, 구간 후보, 잡 로그 (캐시는 git 제외)
+├─ 릴스기획/              레퍼런스 라이브러리 + 기획 프로젝트 (숏부스터식)
+├─ 외주/                  고객·사전설문·패키지·월별 산출물
 ├─ 2026-09-08/            그날 산출물 — 편 폴더(기획안·승인·컨택트시트)
 └─ 2026-09-09/            조사 리포트, 구간 후보 시트
 ```
@@ -39,12 +44,14 @@
 
 ```
 cd pipeline
-uv venv
-uv pip install -r requirements.txt
-cd remotion && npm install && cd ..
+py -3.10 -m venv .venv
+.venv\Scripts\python -m pip install -r requirements.txt
+npm install            # 워크스페이스: remotion + web
+npm run dev            # 웹 콘솔 http://localhost:3123
 ```
 
 한글 경로에서 `pip install -e .`는 파이썬 기동을 깨므로 쓰지 않는다. 자세한 건 `pipeline/README.md`.
+브라우저에서 기획안 승인·클립 선택·미리보기·단계 실행·릴스 기획·외주 관리를 하려면 `pipeline/web/README.md`.
 
 ```
 python -m shortform research                              # 주간 조사 (기획 전 필수)
@@ -57,6 +64,7 @@ python -m shortform run --track B --date <날짜> --episode 01
 - **끝까지 돈 것**: B-01 한 편을 `브리핑 포커스` 템플릿으로 55초 mp4까지 뽑았다. 업로드는 안 했다.
 - **확정된 방향**: 하이타치(@hi_tachy) 방식 — 소스를 고정하지 않고 매주 조사해 그 주에 뜬 롱폼에서 3편.
 - **구현된 것**: 조사 게이트, 구간 추출(`segments`), 방송 클립 검색·다운로드, 브리핑 포커스 렌더, 템플릿 파싱·길이 카탈로그, 피드 카드 컴포넌트(`FeedCard.tsx`).
+- **웹 콘솔** (`pipeline/web`, 2026-09-10): 회차 대시보드·게이트 승인·클립 피커·Remotion Player 미리보기·타임라인 편집·단계 실행 로그, A안 단계(기획안 파서·codex 시트/키프레임·check_frames·fal 영상), 숏부스터식 릴스 기획(라이브러리→대본→claude 분석→기획안→수정→PDF), 외주 관리(고객·설문·패키지·월별 보드), 환경 점검.
 - **아직 없는 것**: 피드 카드 **렌더 연결**(컴포넌트는 있으나 Root 미등록), TTS 선택화, 원본 오디오 유지, 오디오 정규화. `docs/전략/90-구현-변경목록.md` 1단계.
 - **결정 대기**: 피드 카드 길이 — 코드는 15~30초 강제, 제안은 35~75초 경고. `docs/00-작업기록.md` 참고.
 

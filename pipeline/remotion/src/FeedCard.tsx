@@ -4,17 +4,14 @@ import {
   Audio,
   OffthreadVideo,
   Sequence,
-  staticFile,
   useCurrentFrame,
 } from 'remotion';
 
 import type {Line, Timeline} from './Short';
-import {selectComment} from './template';
+import {resolveAsset, selectComment} from './template';
 
 const FONT = "'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif";
 const AVATAR_COLORS = ['#e8590c', '#2f9e44', '#1971c2', '#9c36b5', '#c2255c', '#0c8599'];
-
-const asset = (name: string) => staticFile(`ep/${name}`);
 
 const clamp = (lines: number): React.CSSProperties => ({
   display: '-webkit-box',
@@ -89,7 +86,9 @@ export const FeedCard: React.FC<Timeline & {theme: 'light' | 'dark'}> = ({
   bgm,
   channelLabel,
   theme,
+  assetBase,
 }) => {
+  const asset = (name: string) => resolveAsset(assetBase, name);
   const frame = useCurrentFrame();
   const now = frame / fps;
   const activeLine = lines.find((line) => now >= line.start && now < line.end);

@@ -6,13 +6,12 @@ import {
   Sequence,
   interpolate,
   spring,
-  staticFile,
   useCurrentFrame,
   useVideoConfig,
 } from 'remotion';
 
 import {FeedCard} from './FeedCard';
-import {resolveTimelineTemplate} from './template';
+import {resolveAsset, resolveTimelineTemplate} from './template';
 
 export type Word = {text: string; start: number; end: number};
 
@@ -42,13 +41,13 @@ export type Timeline = {
   template?: string;
   templateName?: string;
   channelLabel?: string;
+  /** 웹 콘솔 Player 전용. 렌더 시에는 넣지 않는다(staticFile 경로 사용). */
+  assetBase?: string;
 };
 
 const FONT = "'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif";
 const CARD_SECONDS = 3.4;
 const AVATAR_COLORS = ['#e8590c', '#2f9e44', '#1971c2', '#9c36b5', '#c2255c', '#0c8599'];
-
-const asset = (name: string) => staticFile(`ep/${name}`);
 
 /** 문장 자막. 지금 읽고 있는 단어만 노란색으로 띄운다. */
 const Subtitles: React.FC<{lines: Line[]}> = ({lines}) => {
@@ -175,8 +174,10 @@ const LegacyShort: React.FC<Timeline> = ({
   comments,
   narration,
   bgm,
+  assetBase,
 }) => {
   const toFrames = (seconds: number) => Math.round(seconds * fps);
+  const asset = (name: string) => resolveAsset(assetBase, name);
 
   return (
     <AbsoluteFill style={{backgroundColor: '#000'}}>

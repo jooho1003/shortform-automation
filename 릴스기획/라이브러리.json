@@ -1,0 +1,23 @@
+{
+  "items": [
+    {
+      "url": "https://www.youtube.com/watch?v=Tnteeo1jrUc",
+      "provider": "youtube",
+      "video_id": "Tnteeo1jrUc",
+      "title": "침착맨 아니야?",
+      "author": "스낵타운 SNACKTOWN",
+      "views": 2941632,
+      "likes": 36569,
+      "duration": 69,
+      "thumb": "https://i.ytimg.com/vi_webp/Tnteeo1jrUc/maxresdefault.webp",
+      "upload_date": "2022-07-03",
+      "id": "20260910-4yfol",
+      "tags": [
+        "test"
+      ],
+      "favorite": false,
+      "note": "",
+      "added": "2026-09-09T18:16:57.360Z"
+    }
+  ]
+}

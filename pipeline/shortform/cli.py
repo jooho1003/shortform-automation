@@ -10,20 +10,45 @@
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 
 from . import GateBlocked, MissingKey, StepFailed
+from . import inspect as inspector
 from . import state
 from .paths import Episode
-from .steps import assets, clips, discover, plan, render, research, segments, upload
 
-PIPELINE_STEPS = [
-    ("plan", plan),
-    ("clips", clips),
-    ("assets", assets),
-    ("render", render),
-    ("upload", upload),
-]
+# `shortform.steps.*`는 PIL/yt-dlp/edge-tts 같은 무거운 의존성을 끌고 온다.
+# `inspect` 서브커맨드는 이런 패키지가 없어도 동작해야 하므로, 실제로
+# 파이프라인 단계를 실행하는 커맨드에서만 지연 임포트한다.
+STEP_NAMES = ["plan", "clips", "assets", "render", "upload"]
+STEP_NAMES_A = ["plan", "images", "video", "render", "upload"]
+
+
+def step_names(track: str) -> list[str]:
+    return STEP_NAMES_A if track == "A" else STEP_NAMES
+
+
+def _pipeline_steps(track: str = "B"):
+    if track == "A":
+        from .steps import images_a, plan_a, render, upload, video_a
+
+        return [
+            ("plan", plan_a),
+            ("images", images_a),
+            ("video", video_a),
+            ("render", render),
+            ("upload", upload),
+        ]
+    from .steps import assets, clips, plan, render, upload
+
+    return [
+        ("plan", plan),
+        ("clips", clips),
+        ("assets", assets),
+        ("render", render),
+        ("upload", upload),
+    ]
 
 
 def _episode(args) -> Episode:
@@ -39,7 +64,7 @@ def cmd_new(args) -> int:
 def cmd_run(args) -> int:
     ep = _episode(args)
     only = set(args.only.split(",")) if args.only else None
-    for name, module in PIPELINE_STEPS:
+    for name, module in _pipeline_steps(ep.track):
         if only and name not in only:
             continue
         if state.is_done(ep, name) and not args.force:
@@ -56,7 +81,7 @@ def cmd_status(args) -> int:
     ep = _episode(args)
     st = state.load(ep)
     print(f"편: {ep.dir.name}")
-    for name, _ in PIPELINE_STEPS:
+    for name in step_names(ep.track):
         done = st["steps"].get(name, {})
         mark = "완료" if done.get("done") else "대기"
         print(f"  {name:8s} {mark} {done.get('at', '')}")
@@ -74,17 +99,53 @@ def cmd_status(args) -> int:
 
 
 def cmd_discover(args) -> int:
+    from .steps import discover
+
     discover.run_standalone()
     return 0
 
 
 def cmd_research(args) -> int:
+    from .steps import research
+
     research.run_standalone()
     return 0
 
 
 def cmd_segments(args) -> int:
+    from .steps import segments
+
     segments.run_standalone(args.source, args.date)
+    return 0
+
+
+def _print_json(obj) -> None:
+    print(json.dumps(obj, ensure_ascii=False, indent=2))
+
+
+def cmd_reels(args) -> int:
+    from . import reels  # yt-dlp가 필요해 지연 import
+
+    return reels.main(args)
+
+
+def cmd_inspect_list(args) -> int:
+    _print_json(inspector.run_list())
+    return 0
+
+
+def cmd_inspect_episode(args) -> int:
+    _print_json(inspector.run_episode(args.track, args.date, args.episode))
+    return 0
+
+
+def cmd_inspect_research(args) -> int:
+    _print_json(inspector.run_research())
+    return 0
+
+
+def cmd_inspect_config(args) -> int:
+    _print_json(inspector.run_config())
     return 0
 
 
@@ -127,6 +188,34 @@ def main(argv=None) -> int:
     p_seg.add_argument("--source", required=True, help="유튜브 URL 또는 영상 ID")
     p_seg.add_argument("--date", required=True, help="컨택트시트를 둘 날짜 폴더")
     p_seg.set_defaults(func=cmd_segments)
+
+    p_reels = sub.add_parser("reels", help="릴스 기획 — 레퍼런스 메타·다운로드·대본 (웹 콘솔용)")
+    reels_sub = p_reels.add_subparsers(dest="reels_cmd", required=True)
+    p_rm = reels_sub.add_parser("meta", help="URL 메타를 JSON으로")
+    p_rm.add_argument("--url", required=True)
+    p_rf = reels_sub.add_parser("fetch", help="원본 영상·자막 내려받기")
+    p_rf.add_argument("--url", required=True)
+    p_rf.add_argument("--dir", required=True, help="저장소 상대 프로젝트 폴더 (릴스기획/<id>)")
+    p_rt = reels_sub.add_parser("transcribe", help="자막 또는 whisper로 타임스탬프 대본")
+    p_rt.add_argument("--dir", required=True)
+    for p in (p_rm, p_rf, p_rt):
+        p.set_defaults(func=cmd_reels)
+
+    p_inspect = sub.add_parser("inspect", help="웹 콘솔용 읽기 전용 JSON 브릿지")
+    inspect_sub = p_inspect.add_subparsers(dest="inspect_command", required=True)
+
+    p_inspect_list = inspect_sub.add_parser("list", help="모든 편의 요약 목록")
+    p_inspect_list.set_defaults(func=cmd_inspect_list)
+
+    p_inspect_episode = inspect_sub.add_parser("episode", help="편 하나의 상세 정보")
+    add_episode_args(p_inspect_episode)
+    p_inspect_episode.set_defaults(func=cmd_inspect_episode)
+
+    p_inspect_research = inspect_sub.add_parser("research", help="최신 주간 조사 결과")
+    p_inspect_research.set_defaults(func=cmd_inspect_research)
+
+    p_inspect_config = inspect_sub.add_parser("config", help="템플릿·음성·채널 설정")
+    p_inspect_config.set_defaults(func=cmd_inspect_config)
 
     args = parser.parse_args(argv)
     try:

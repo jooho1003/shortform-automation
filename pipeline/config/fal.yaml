@@ -1,0 +1,25 @@
+# A안 영상 생성 — fal.ai (사용자 결정: 영상은 fal.ai MiniMax H3 계열)
+#
+# endpoint 는 fal 모델 ID. 계정에서 쓰는 정확한 ID로 바꾼다 (fal.ai/models 에서 복사).
+# 아래 기본값은 MiniMax Hailuo image-to-video 계열 ID이며, 참조 이미지를 여러 장 받는
+# reference-to-video 모델을 쓰려면 endpoint 와 body 의 필드 이름을 그 모델 문서에 맞춘다.
+endpoint: fal-ai/minimax/hailuo-02/standard/image-to-video
+
+# 요청 본문 템플릿. 문자열 값 안의 {prompt} {keyframe} {sheet} 가 치환된다.
+#   {keyframe} → 해당 컷 키프레임 data URI, {sheet} → 캐릭터 시트 data URI
+body:
+  prompt: "{prompt}"
+  image_url: "{keyframe}"
+  duration: "6"
+  prompt_optimizer: false
+
+# 응답에서 영상 URL을 찾는 경로(점 표기). 대부분 video.url
+video_url_path: video.url
+
+# 비용 가드. 컷당 추정 비용 × 컷 수가 편당 상한을 넘으면 시작하지 않는다.
+cost_per_cut_usd: 0.6
+max_cost_per_episode_usd: 10
+
+# 큐 폴링
+poll_interval_sec: 6
+timeout_sec: 900

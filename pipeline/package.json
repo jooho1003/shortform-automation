@@ -1,0 +1,13 @@
+{
+  "name": "shortform-pipeline-js",
+  "private": true,
+  "workspaces": [
+    "remotion",
+    "web"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w web",
+    "build": "npm run build -w web",
+    "studio": "npm run studio -w remotion"
+  }
+}

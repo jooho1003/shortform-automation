@@ -1,4 +1,16 @@
+import {staticFile} from 'remotion';
+
 export type TemplateId = 'briefing-focus' | 'feed-card-light' | 'feed-card-dark';
+
+/**
+ * 소재 파일 URL.
+ *
+ * 렌더(remotion render)에서는 render.py가 public/ep/에 옮겨 둔 파일을 staticFile로 읽는다.
+ * 웹 콘솔의 Player에서는 타임라인에 assetBase(예: "/api/media?path=<회차>/03-소재/")를 넣어
+ * 회차 폴더의 파일을 그대로 서빙받는다. assetBase가 없으면 기존 렌더 동작과 완전히 같다.
+ */
+export const resolveAsset = (assetBase: string | undefined, name: string): string =>
+  assetBase ? `${assetBase}${encodeURIComponent(name)}` : staticFile(`ep/${name}`);
 
 export type TemplateResolution =
   | {kind: 'valid'; id: TemplateId; theme: 'legacy' | 'light' | 'dark'}

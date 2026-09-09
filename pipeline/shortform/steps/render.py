@@ -19,8 +19,12 @@ def _stage(ep: Episode, timeline: dict) -> dict:
         shutil.rmtree(STAGE)
     (STAGE / "clips").mkdir(parents=True)
 
-    shutil.copy(ep.assets_dir / timeline["narration"], STAGE / "narration.mp3")
-    timeline["narration"] = "narration.mp3"
+    # A안(대사 없음)이나 원음 중심 피드 카드는 내레이션이 없을 수 있다
+    if timeline.get("narration") and (ep.assets_dir / timeline["narration"]).exists():
+        shutil.copy(ep.assets_dir / timeline["narration"], STAGE / "narration.mp3")
+        timeline["narration"] = "narration.mp3"
+    else:
+        timeline["narration"] = ""
 
     for item in timeline["lines"]:
         source = ep.assets_dir / item["clip"]
