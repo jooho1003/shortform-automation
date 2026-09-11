@@ -84,10 +84,45 @@ export interface PlanComment {
   text: string;
 }
 
+/**
+ * 렌더 경로. 기본은 remotion(코드가 mp4까지 자동으로 뽑는다).
+ * capcut은 CapCut 드래프트를 만들어 손으로 마무리하는 길이다 — CapCut은 내보내기를
+ * 자동화할 방법이 없어서 사람이 열어서 내보내야 한다.
+ */
+export const RENDER_ROUTES = ['remotion', 'capcut'] as const;
+export type RenderRoute = (typeof RENDER_ROUTES)[number];
+
+/** B안 기획안. 훅과 대본 문장이 축이다. */
 export interface Plan {
   title: string;
   hook: string;
   lines: PlanLine[];
+  template_id: string;
+  template_name: string;
+  comments: PlanComment[];
+  meta: Record<string, string>;
+}
+
+export interface PlanCut {
+  n: number;
+  start: number;
+  end: number;
+  lens: string;
+  action: string;
+  camera: string;
+  required: boolean;
+}
+
+/**
+ * A안 기획안. B안과 필드가 겹치지 않는다 — 훅·대본 대신 시놉시스·락 블록·컷표다.
+ * `planfile_a.py`가 만들고 `inspect episode`가 그대로 내보낸다.
+ */
+export interface PlanA {
+  title: string;
+  synopsis: string;
+  locks: Record<string, string>;
+  cuts: PlanCut[];
+  sound: Record<string, string>;
   template_id: string;
   template_name: string;
   comments: PlanComment[];
@@ -151,7 +186,7 @@ export interface EpisodeAssets {
 export interface EpisodeDetail {
   root: string;
   episode: EpisodeSummary;
-  plan: Plan | null;
+  plan: Plan | PlanA | null;
   plan_error: string | null;
   plan_md: string | null;
   fix_requests: {plan: string | null; clips: string | null};

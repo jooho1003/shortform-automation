@@ -40,12 +40,33 @@ def _stage(ep: Episode, timeline: dict) -> dict:
     return timeline
 
 
+def _route(ep: Episode) -> str:
+    """렌더 경로. 웹 콘솔의 라디오가 쓰고 여기서 읽는다. 읽을 수 없으면 기본값."""
+    if not ep.render_config.exists():
+        return "remotion"
+    try:
+        route = json.loads(ep.render_config.read_text(encoding="utf-8")).get("route")
+    except (json.JSONDecodeError, OSError):
+        return "remotion"
+    return route if route in ("remotion", "capcut") else "remotion"
+
+
 def run(ep: Episode) -> None:
+    if _route(ep) == "capcut":
+        raise StepFailed(
+            "이 편은 CapCut 경로입니다. CapCut은 내보내기를 자동화할 방법이 없어서 여기서 멈춥니다.\n"
+            "  1) Claude에게 CapCut 드래프트 생성을 요청하세요 (capcut MCP).\n"
+            "  2) CapCut에서 열어 확인한 뒤 직접 내보냅니다.\n"
+            f"  자동 렌더로 되돌리려면 {ep.render_config.name} 의 route를 remotion으로 바꾸세요."
+        )
+
     timeline_path = ep.assets_dir / "타임라인.json"
     if not timeline_path.exists():
         raise StepFailed(f"타임라인이 없습니다: {timeline_path}")
-    if not (REMOTION / "node_modules").exists():
-        raise StepFailed(f"Remotion 의존성이 없습니다. 먼저 실행하세요:  cd {REMOTION} && npm install")
+    # 워크스페이스로 묶은 뒤로는 npm이 의존성을 pipeline/node_modules로 끌어올린다.
+    # remotion/node_modules만 보면 설치가 돼 있어도 없다고 멈춘다.
+    if not (REMOTION / "node_modules").exists() and not (PIPELINE / "node_modules" / "remotion").exists():
+        raise StepFailed(f"Remotion 의존성이 없습니다. 먼저 실행하세요:  cd {PIPELINE} && npm install")
 
     timeline = _stage(ep, json.loads(timeline_path.read_text(encoding="utf-8")))
     props = REMOTION / "props.json"

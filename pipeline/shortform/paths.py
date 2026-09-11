@@ -56,6 +56,11 @@ class Episode:
         return self.dir / "03-소재"
 
     @property
+    def render_config(self) -> Path:
+        """렌더 경로 선택. {"route": "remotion" | "capcut"}. 없으면 remotion."""
+        return self.dir / "렌더설정.json"
+
+    @property
     def video_dir(self) -> Path:
         return self.dir / "04-영상"
 

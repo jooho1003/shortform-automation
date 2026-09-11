@@ -27,6 +27,7 @@ export interface EpisodePaths {
   clips_ok: string;
   clips_fix: string;
   assets_dir: string;
+  render_config: string;
   timeline: string;
   video_dir: string;
   final_mp4: string;
@@ -51,6 +52,7 @@ export function episodePaths(dir: string): EpisodePaths {
     clips_ok: join('02-이미지-승인.txt'),
     clips_fix: join('02-이미지-수정요청.txt'),
     assets_dir: join('03-소재'),
+    render_config: join('렌더설정.json'),
     timeline: join('03-소재', '타임라인.json'),
     video_dir: join('04-영상'),
     final_mp4: join('04-영상', 'final.mp4'),

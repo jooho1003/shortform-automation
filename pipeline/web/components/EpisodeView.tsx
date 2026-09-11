@@ -7,6 +7,7 @@ import ClipPicker from '@/components/ClipPicker';
 import GateButtons from '@/components/GateButtons';
 import PlanEditor from '@/components/PlanEditor';
 import {PlayerPane} from '@/components/PlayerPane';
+import RenderRoutePicker from '@/components/RenderRoutePicker';
 import {RunConsole} from '@/components/RunConsole';
 import {TimelineEditor} from '@/components/TimelineEditor';
 import {fmtDate, media} from '@/lib/client';
@@ -229,6 +230,7 @@ export function EpisodeView({detail, tab: initialTab}: {detail: EpisodeDetail; t
 
       {tab === 'run' ? (
         <div className="grid" style={{gap: 14}}>
+          <RenderRoutePicker dir={ep.dir} />
           <RunConsole ep={key} steps={ep.steps} />
           {ep.errors.length ? (
             <div className="card">

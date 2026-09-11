@@ -2,7 +2,7 @@
 
 import {Fragment, useState} from 'react';
 import {useRouter} from 'next/navigation';
-import type {Plan, PlanComment, PlanLine} from '@/lib/types';
+import type {Plan, PlanA, PlanComment, PlanCut, PlanLine} from '@/lib/types';
 
 const TEMPLATE_B = `# 제목 후보
 
@@ -80,10 +80,14 @@ export default function PlanEditor({
 }: {
   dir: string;
   markdown: string | null;
-  plan: Plan | null;
+  plan: Plan | PlanA | null;
   planError: string | null;
   track: 'A' | 'B';
 }) {
+  // 두 트랙의 기획안은 필드가 겹치지 않는다. track이 아니라 모양으로 갈라야
+  // 폴더명과 기획안 내용이 어긋나도 화면이 터지지 않는다.
+  const planB = plan && 'lines' in plan ? plan : null;
+  const planA = plan && 'cuts' in plan ? plan : null;
   const router = useRouter();
   const [text, setText] = useState(markdown ?? '');
   const [saving, setSaving] = useState(false);
@@ -157,34 +161,99 @@ export default function PlanEditor({
               <div className="lbl">제목</div>
               <div>{plan.title}</div>
             </div>
-            <div>
-              <div className="lbl">훅</div>
-              <div>{plan.hook}</div>
-            </div>
             <div className="row">
               <span className="badge">{plan.template_name || plan.template_id}</span>
             </div>
 
-            <table className="tbl">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>문장</th>
-                  <th>소재</th>
-                  <th>검색어</th>
-                </tr>
-              </thead>
-              <tbody>
-                {plan.lines.map((line: PlanLine) => (
-                  <tr key={line.n}>
-                    <td>{line.n}</td>
-                    <td>{line.text}</td>
-                    <td>{line.source}</td>
-                    <td>{line.queries.join(', ')}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            {planB && (
+              <>
+                <div>
+                  <div className="lbl">훅</div>
+                  <div>{planB.hook}</div>
+                </div>
+
+                <table className="tbl">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>문장</th>
+                      <th>소재</th>
+                      <th>검색어</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {planB.lines.map((line: PlanLine) => (
+                      <tr key={line.n}>
+                        <td>{line.n}</td>
+                        <td>{line.text}</td>
+                        <td>{line.source}</td>
+                        <td>{line.queries.join(', ')}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </>
+            )}
+
+            {planA && (
+              <>
+                <div>
+                  <div className="lbl">시놉시스</div>
+                  <div style={{whiteSpace: 'pre-line'}}>{planA.synopsis}</div>
+                </div>
+
+                <div>
+                  <div className="lbl">락 블록</div>
+                  <dl className="kv">
+                    {Object.entries(planA.locks).map(([k, v]) => (
+                      <Fragment key={k}>
+                        <dt>{k}</dt>
+                        <dd>{v}</dd>
+                      </Fragment>
+                    ))}
+                  </dl>
+                </div>
+
+                <table className="tbl">
+                  <thead>
+                    <tr>
+                      <th>컷</th>
+                      <th>TC</th>
+                      <th>렌즈</th>
+                      <th>액션</th>
+                      <th>카메라</th>
+                      <th>필수</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {planA.cuts.map((cut: PlanCut) => (
+                      <tr key={cut.n}>
+                        <td>{cut.n}</td>
+                        <td>
+                          {cut.start}-{cut.end}
+                        </td>
+                        <td>{cut.lens}</td>
+                        <td>{cut.action}</td>
+                        <td>{cut.camera}</td>
+                        <td>{cut.required ? '필수' : ''}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+
+                <div>
+                  <div className="lbl">음향 설계</div>
+                  <dl className="kv">
+                    {Object.entries(planA.sound).map(([k, v]) => (
+                      <Fragment key={k}>
+                        <dt>{k}</dt>
+                        <dd>{v}</dd>
+                      </Fragment>
+                    ))}
+                  </dl>
+                </div>
+              </>
+            )}
 
             {plan.comments.length > 0 && (
               <table className="tbl">

@@ -92,7 +92,14 @@ export function ResearchPanel({info}: {info: ResearchInfo | null}) {
                       {fmt(it.views)}
                     </td>
                     <td>
-                      <button className="btn sm" onClick={() => setSource(it.url)}>
+                      <button
+                        className="btn sm"
+                        onClick={() => {
+                          // 위 입력칸도 채운다 — 어떤 영상을 돌리는 중인지 화면에 남는다.
+                          setSource(it.url);
+                          run({preset: 'segments', source: it.url, date});
+                        }}
+                      >
                         구간 뽑기
                       </button>
                     </td>
