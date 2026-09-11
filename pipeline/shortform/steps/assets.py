@@ -28,8 +28,10 @@ import yaml
 
 from .. import USER_AGENT, StepFailed
 from .. import planfile
-from ..paths import BGM, CONFIG, Episode
-from ..templates import validate_duration
+from ..paths import BGM, CONFIG, DATA, Episode
+
+CACHE = DATA / "cache"
+from ..templates import load_catalog, validate_duration
 
 GAP = 0.18          # 문장 사이 간격(초)
 TICKS = 10_000_000  # edge-tts offset 단위: 100ns
@@ -118,32 +120,35 @@ def _download(url: str, out: Path) -> None:
             f.write(block)
 
 
-def _fetch_youtube(video_id: str, out: Path, start: float, seconds: float) -> None:
-    """방송 클립에서 필요한 구간만 받는다.
+def _fetch_youtube(video_id: str) -> Path:
+    """원본을 캐시에 통째로 받아 두고 경로를 돌려준다. 자르는 건 부르는 쪽이 로컬에서 한다.
 
-    3초 쓰자고 8분짜리를 통째로 받을 이유가 없다. --download-sections 로 구간만 받고,
-    --force-keyframes-at-cuts 로 자르는 지점을 정확히 맞춘다. 결과 파일은 0초부터
-    시작하므로 이후 처리에서 다시 seek 할 필요가 없다.
+    예전에는 `--download-sections`로 구간만 받았다. 그러면 yt-dlp가 원격 URL을 ffmpeg에
+    넘겨 `-ss`로 seek 하는데, 짧은 영상에서는 되지만 긴 영상에서는 사실상 멈춘다 —
+    76분 원본에서 83분을 돌고도 0바이트였다. `segments` 단계가 같은 이유로 이미 통째
+    받기로 바꿨는데(작업기록 삽질 15) 이 단계만 남아 있었다.
+
+    720p로 받는다. 최종 화면에서 클립이 차지하는 건 940px 띠의 약 70% 폭이라
+    1080p를 받아 봐야 버린다. 같은 영상에서 여러 편을 뽑을 때 캐시가 그대로 재사용된다.
     """
-    if out.exists() and out.stat().st_size > 0:
-        return
-    url = f"https://www.youtube.com/watch?v={video_id}"
-    base = [sys.executable, "-m", "yt_dlp", url,
-            "-f", "bestvideo[height<=1080]+bestaudio/best[height<=1080]",
-            "--merge-output-format", "mp4", "--no-warnings",
-            "-o", str(out.with_suffix(".%(ext)s"))]
-    attempts = [
-        base + ["--download-sections", f"*{start:.1f}-{start + seconds + 2:.1f}",
-                "--force-keyframes-at-cuts"],
-        base,  # 구간 내려받기가 안 되는 포맷이면 통째로 받는다
-    ]
-    for args in attempts:
-        result = subprocess.run(
-            args, capture_output=True, text=True, encoding="utf-8", errors="replace"
-        )
-        if out.exists() and out.stat().st_size > 0:
-            return
-    raise StepFailed(f"유튜브 클립 내려받기 실패 {video_id}\n{result.stderr[-600:]}")
+    CACHE.mkdir(parents=True, exist_ok=True)
+    existing = [p for p in CACHE.glob(f"{video_id}-src.*")
+                if p.suffix != ".part" and p.stat().st_size > 0]
+    if existing:
+        return existing[0]
+
+    result = subprocess.run(
+        [sys.executable, "-m", "yt_dlp", f"https://www.youtube.com/watch?v={video_id}",
+         "-f", "bestvideo[height<=720]+bestaudio/best[height<=720]",
+         "--merge-output-format", "mp4", "--no-warnings",
+         "-o", str(CACHE / f"{video_id}-src.%(ext)s")],
+        capture_output=True, text=True, encoding="utf-8", errors="replace",
+    )
+    found = [p for p in CACHE.glob(f"{video_id}-src.*")
+             if p.suffix != ".part" and p.stat().st_size > 0]
+    if not found:
+        raise StepFailed(f"유튜브 원본 내려받기 실패 {video_id}\n{result.stderr[-600:]}")
+    return found[0]
 
 
 def _display_size(width: int, height: int, rotation: int | float = 0) -> tuple[int, int]:
@@ -208,15 +213,19 @@ def _to_9x16(
             f"crop=1080:{BAND_H}[fgs];"
             f"[bgb][fgs]overlay=0:{BAND_Y},fps=30[v]"
         )
-        args = ["-filter_complex", video_filter, "-map", "[v]"]
+        # 필터를 쓰면 매핑이 명시로 바뀐다. 오디오는 없을 수도 있으니 `?`로 받는다.
+        args = ["-filter_complex", video_filter, "-map", "[v]", "-map", "0:a?"]
     else:
         args = ["-vf", "scale=1080:1920:force_original_aspect_ratio=increase,"
                        "crop=1080:1920,fps=30"]
 
+    # 원음을 남긴다. 원음 중심 템플릿에서는 이게 콘텐츠 자체다. TTS 템플릿에서는
+    # 렌더가 클립을 음소거하므로 남아 있어도 들리지 않는다.
     _run([
         "ffmpeg", "-y", "-ss", f"{start:.3f}", "-stream_loop", "-1", "-i", str(src),
         "-t", f"{seconds:.3f}", *args,
-        "-an", "-c:v", "libx264", "-preset", "veryfast", "-crf", "22",
+        "-c:v", "libx264", "-preset", "veryfast", "-crf", "22",
+        "-c:a", "aac", "-b:a", "192k", "-ac", "2",
         "-pix_fmt", "yuv420p", str(out),
     ])
 
@@ -232,46 +241,74 @@ def run(ep: Episode) -> None:
     for d in (tts_dir, raw_dir, clip_dir):
         d.mkdir(parents=True, exist_ok=True)
 
-    # 1. 문장별 내레이션 합성 + 단어 타이밍
-    print("  내레이션 합성 중...")
+    template = load_catalog().by_id(plan.template_id)
+    use_tts = template.narration == "tts"
+
+    # 1. 타임라인 만들기.
+    #    TTS 템플릿은 합성한 내레이션 길이가 기준이고,
+    #    원음 템플릿은 클립 구간 길이가 기준이다(TTS를 만들지 않는다).
     timeline: list[dict] = []
     cursor = 0.0
-    for line in plan.lines:
-        mp3 = tts_dir / f"{line.n:02d}.mp3"
-        speech_start, speech_end = asyncio.run(_speak(line.text, mp3, voice))
-        length = _duration(mp3)
-        timeline.append(
-            {
+    if not use_tts:
+        for line in plan.lines:
+            seconds = entries[line.n].get("seconds")
+            if not isinstance(seconds, (int, float)) or isinstance(seconds, bool) or seconds <= 0:
+                raise StepFailed(
+                    f"{line.n}번 클립에 길이(seconds)가 없습니다. "
+                    f"{template.name}는 TTS 대신 클립 구간이 길이를 정하므로 "
+                    "클립목록.json에 seconds를 적어야 합니다."
+                )
+            timeline.append({
                 "n": line.n,
                 "text": line.text,
                 "start": round(cursor, 3),
-                "end": round(cursor + length, 3),
-                "words": _distribute(
-                    line.text,
-                    cursor + speech_start,
-                    cursor + min(speech_end, length),
-                    voice.get("pronunciations", {}),
-                ),
-            }
-        )
-        cursor += length + GAP
-    total = round(cursor - GAP, 3)
-    validate_duration(plan.template_id, total)
+                "end": round(cursor + float(seconds), 3),
+                "words": [],
+            })
+            cursor += float(seconds)
+        total = round(cursor, 3)
+    else:
+        print("  내레이션 합성 중...")
+        for line in plan.lines:
+            mp3 = tts_dir / f"{line.n:02d}.mp3"
+            speech_start, speech_end = asyncio.run(_speak(line.text, mp3, voice))
+            length = _duration(mp3)
+            timeline.append(
+                {
+                    "n": line.n,
+                    "text": line.text,
+                    "start": round(cursor, 3),
+                    "end": round(cursor + length, 3),
+                    "words": _distribute(
+                        line.text,
+                        cursor + speech_start,
+                        cursor + min(speech_end, length),
+                        voice.get("pronunciations", {}),
+                    ),
+                }
+            )
+            cursor += length + GAP
+        total = round(cursor - GAP, 3)
 
-    # 2. 내레이션 하나로 합치기
-    silence = ep.assets_dir / "gap.mp3"
-    _run(["ffmpeg", "-y", "-f", "lavfi", "-i", "anullsrc=r=24000:cl=mono",
-          "-t", str(GAP), "-c:a", "libmp3lame", str(silence)])
-    concat_list = ep.assets_dir / "concat.txt"
-    parts = []
-    for index, line in enumerate(plan.lines):
-        parts.append(f"file '{(tts_dir / f'{line.n:02d}.mp3').as_posix()}'")
-        if index < len(plan.lines) - 1:
-            parts.append(f"file '{silence.as_posix()}'")
-    concat_list.write_text("\n".join(parts), encoding="utf-8")
-    narration = ep.assets_dir / "narration.mp3"
-    _run(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", str(concat_list),
-          "-c:a", "libmp3lame", "-b:a", "192k", str(narration)])
+    warning = validate_duration(plan.template_id, total)
+    if warning:
+        print(f"  {warning}")
+
+    # 2. 내레이션 하나로 합치기 (원음 템플릿은 만들지 않는다)
+    if use_tts:
+        silence = ep.assets_dir / "gap.mp3"
+        _run(["ffmpeg", "-y", "-f", "lavfi", "-i", "anullsrc=r=24000:cl=mono",
+              "-t", str(GAP), "-c:a", "libmp3lame", str(silence)])
+        concat_list = ep.assets_dir / "concat.txt"
+        parts = []
+        for index, line in enumerate(plan.lines):
+            parts.append(f"file '{(tts_dir / f'{line.n:02d}.mp3').as_posix()}'")
+            if index < len(plan.lines) - 1:
+                parts.append(f"file '{silence.as_posix()}'")
+        concat_list.write_text("\n".join(parts), encoding="utf-8")
+        narration = ep.assets_dir / "narration.mp3"
+        _run(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", str(concat_list),
+              "-c:a", "libmp3lame", "-b:a", "192k", str(narration)])
 
     # 3. 클립 내려받고 9:16으로 자르기
     print("  클립 내려받는 중...")
@@ -286,21 +323,23 @@ def run(ep: Episode) -> None:
                 raise StepFailed(f"{item['n']}번 클립이 없습니다: {out}")
         else:
             chosen = entry["candidates"][entry["chosen"]]
-            src = raw_dir / f"{item['n']:02d}.mp4"
-            origin = 0.0  # 원본에서 어디를 떠왔는지. 출처 기록용
+            origin = 0.0   # 원본에서 어디를 떠왔는지. 출처 기록용
+            cut_from = 0.0  # 받아 둔 파일 안에서 어디부터 자를지
             if chosen["provider"] == "youtube":
                 # 발췌 지점은 클립 단계에서 정해 컨택트시트로 확인받은 값이다.
                 origin = min(chosen["start"], max(0.0, chosen["duration"] - needed - 1))
                 print(f"    {item['n']}번 방송 클립 {origin:.0f}s 부근 — {chosen['author']}")
-                _fetch_youtube(chosen["id"], src, origin, needed)
+                # 캐시에는 원본이 통째로 있다. seek 이 로컬이라 즉시 끝난다.
+                src = _fetch_youtube(chosen["id"])
+                cut_from = origin
             else:
+                src = raw_dir / f"{item['n']:02d}.mp4"
                 _download(chosen["download"], src)
             display_size = _probe_display_size(src)
             item["mediaLayout"] = (
                 "landscape" if display_size[0] > display_size[1] else "portrait"
             )
-            # 받은 파일이 이미 발췌 지점부터 시작하므로 여기서 다시 건너뛰지 않는다
-            _to_9x16(src, out, needed, 0.0, display_size)
+            _to_9x16(src, out, needed, cut_from, display_size)
             credits.append(
                 {"n": item["n"], "provider": chosen["provider"], "author": chosen["author"],
                  "page": chosen["page"], "title": chosen.get("title", ""),
@@ -310,7 +349,10 @@ def run(ep: Episode) -> None:
 
     # 4. 타임라인 저장
     bgm = sorted(BGM.glob("*.mp3"))
-    payload = build_payload(plan, timeline, total, bgm[0].name if bgm else None, credits)
+    payload = build_payload(
+        plan, timeline, total, bgm[0].name if bgm else None, credits,
+        "narration.mp3" if use_tts else "",
+    )
     (ep.assets_dir / "타임라인.json").write_text(
         json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8"
     )
@@ -323,8 +365,12 @@ def build_payload(
     total: float,
     bgm: str | None,
     credits: list[dict],
+    narration: str = "narration.mp3",
 ) -> dict:
-    """네트워크나 파일 접근 없이 기획과 측정 결과를 렌더 payload로 바꾼다."""
+    """네트워크나 파일 접근 없이 기획과 측정 결과를 렌더 payload로 바꾼다.
+
+    `narration`이 빈 문자열이면 내레이션이 없다는 뜻이고, 렌더는 클립 원음을 튼다.
+    """
     channel_label = str(plan.meta.get("채널", "")).strip() or "SHORTFORM"
     return {
         "fps": 30,
@@ -338,7 +384,7 @@ def build_payload(
         "channelLabel": channel_label,
         "lines": timeline,
         "comments": [{"at": c.at, "nick": c.nick, "text": c.text} for c in plan.comments],
-        "narration": "narration.mp3",
+        "narration": narration,
         "bgm": bgm,
         "credits": credits,
     }

@@ -151,25 +151,59 @@ class TemplateCatalogTests(unittest.TestCase):
 
         validate_duration = getattr(templates, "validate_duration", None)
         self.assertTrue(callable(validate_duration))
-        validate_duration("feed-card-light", 15.0)
-        validate_duration("feed-card-light", 30.0)
-        validate_duration("feed-card-dark", 15.0)
-        validate_duration("feed-card-dark", 30.0)
+        for template_id in ("feed-card-light", "feed-card-dark"):
+            with self.subTest(template_id=template_id):
+                self.assertIsNone(validate_duration(template_id, 15.0))
+                self.assertIsNone(validate_duration(template_id, 75.0))
 
-    def test_card_duration_outside_bounds_fails(self):
+    def test_card_duration_outside_bounds_warns_but_proceeds(self):
         import shortform.templates as templates
 
         validate_duration = getattr(templates, "validate_duration", None)
         self.assertTrue(callable(validate_duration))
         for template_id, duration in (
             ("feed-card-light", 14.999),
-            ("feed-card-light", 30.001),
+            ("feed-card-light", 75.001),
             ("feed-card-dark", 14.999),
-            ("feed-card-dark", 30.001),
+            ("feed-card-dark", 75.001),
         ):
             with self.subTest(template_id=template_id, duration=duration):
-                with self.assertRaises(StepFailed):
-                    validate_duration(template_id, duration)
+                warning = validate_duration(template_id, duration)
+                self.assertIsNotNone(warning)
+                self.assertIn("15~75", warning)
+
+    def test_enforced_template_still_fails(self):
+        import shortform.templates as templates
+
+        catalog = self._load_catalog(
+            {
+                "default": "one",
+                "templates": [
+                    {"name": "첫째", "id": "one", "duration": [15, 30], "enforce_duration": True}
+                ],
+            }
+        )
+
+        self.assertIsNone(templates.validate_duration("one", 30.0, catalog))
+        with self.assertRaises(StepFailed):
+            templates.validate_duration("one", 30.001, catalog)
+
+    def test_feed_cards_use_original_sound_and_briefing_uses_tts(self):
+        import shortform.templates as templates
+
+        catalog = templates.load_catalog()
+        self.assertEqual(catalog.by_id("briefing-focus").narration, "tts")
+        self.assertEqual(catalog.by_id("feed-card-light").narration, "original")
+        self.assertEqual(catalog.by_id("feed-card-dark").narration, "original")
+
+    def test_narration_defaults_to_tts_and_rejects_unknown_mode(self):
+        base = {"name": "첫째", "id": "one", "duration": [15, 30], "enforce_duration": True}
+
+        catalog = self._load_catalog({"default": "one", "templates": [dict(base)]})
+        self.assertEqual(catalog.by_id("one").narration, "tts")
+
+        with self.assertRaises(StepFailed):
+            self._load_catalog({"default": "one", "templates": [dict(base, narration="없음")]})
 
     def test_briefing_duration_is_guidance_only(self):
         import shortform.templates as templates

@@ -11,12 +11,18 @@ from . import StepFailed
 from .paths import CONFIG
 
 
+NARRATION_MODES = ("tts", "original")
+
+
 @dataclass(frozen=True)
 class Template:
     id: str
     name: str
     duration: tuple[float, float]
     enforce_duration: bool
+    #: tts = 문장별 TTS를 합성하고 그 길이가 타임라인을 만든다.
+    #: original = TTS 없이 클립 원음을 그대로 쓴다. 길이는 클립 구간이 정한다.
+    narration: str = "tts"
 
 
 @dataclass(frozen=True)
@@ -76,6 +82,9 @@ def load_catalog(path: Path | None = None) -> Catalog:
                 raise ValueError
             if not isinstance(enforced, bool):
                 raise ValueError
+            narration = entry.get("narration", "tts")
+            if narration not in NARRATION_MODES:
+                raise ValueError
             ids.add(template_id)
             names.add(name)
             parsed.append(
@@ -84,6 +93,7 @@ def load_catalog(path: Path | None = None) -> Catalog:
                     name=name,
                     duration=(float(minimum), float(maximum)),
                     enforce_duration=enforced,
+                    narration=narration,
                 )
             )
     except (KeyError, TypeError, ValueError) as exc:
@@ -102,13 +112,20 @@ def resolve_template(name: str | None, catalog: Catalog | None = None) -> Templa
 
 def validate_duration(
     template_id: str, duration: float, catalog: Catalog | None = None
-) -> None:
+) -> str | None:
+    """범위를 벗어났을 때 강제 템플릿은 멈추고, 아니면 경고 문구를 돌려준다.
+
+    돌려준 문구는 호출한 단계가 화면에 찍는다. 조용히 넘어가면 길이가 어긋난 걸
+    렌더가 끝난 뒤에야 알게 된다.
+    """
     template = (catalog or load_catalog()).by_id(template_id)
-    if not template.enforce_duration:
-        return
     minimum, maximum = template.duration
-    if not minimum <= duration <= maximum:
-        raise StepFailed(
-            f"{template.name} 영상은 {minimum:g}~{maximum:g}초여야 합니다 "
-            f"(현재 {duration:.3f}초)."
-        )
+    if minimum <= duration <= maximum:
+        return None
+    message = (
+        f"{template.name} 영상은 {minimum:g}~{maximum:g}초여야 합니다 "
+        f"(현재 {duration:.3f}초)."
+    )
+    if template.enforce_duration:
+        raise StepFailed(message)
+    return f"경고: {message}"

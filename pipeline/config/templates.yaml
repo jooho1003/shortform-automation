@@ -1,15 +1,24 @@
 default: briefing-focus
 
 templates:
+  # narration: tts = 문장별 TTS를 합성해 그 길이가 타임라인을 만든다.
+  #            original = TTS를 만들지 않고 클립 원음을 그대로 쓴다.
+  #            생략하면 tts.
   - id: briefing-focus
     name: 브리핑 포커스
     duration: [35, 60]
     enforce_duration: false
+    narration: tts
+  # 15~75초 유연 운영 (사용자 결정 2026-09-11). 짧은 한 방(하이타치 레퍼런스 17~27초)과
+  # 대사·맥락이 필요한 예능 클립(하이타치 실측 40~75초)을 한 템플릿으로 다 받는다.
+  # 범위를 벗어나면 멈추지 않고 경고만 한다.
   - id: feed-card-light
     name: 화이트 피드 카드
-    duration: [15, 30]
-    enforce_duration: true
+    duration: [15, 75]
+    enforce_duration: false
+    narration: original
   - id: feed-card-dark
     name: 블랙 피드 카드
-    duration: [15, 30]
-    enforce_duration: true
+    duration: [15, 75]
+    enforce_duration: false
+    narration: original

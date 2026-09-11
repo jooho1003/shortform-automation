@@ -179,7 +179,8 @@ export const FeedCard: React.FC<Timeline & {theme: 'light' | 'dark'}> = ({
             >
               <OffthreadVideo
                 src={asset(line.clip)}
-                muted
+                // 내레이션이 없으면 원음이 콘텐츠다. 있으면 클립 소리는 방해만 된다.
+                muted={Boolean(narration)}
                 style={{
                   width: '100%',
                   height: '100%',
