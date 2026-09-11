@@ -35,6 +35,12 @@ source_channels:
     url: https://www.youtube.com/channel/UCDNvRZRgvkBTUkQzFoT_8rA
   - name: 노빠꾸탁재훈
     url: https://www.youtube.com/channel/UCSSkHIU1-nL_FeCjeZ_Xtvg
+  # 방송 예능 2개 추가 (사용자 지정 2026-09-11). 그동안 미뤄 둔 "방송을 소스 풀에 넣을지"를
+  # 여는 결정이다. 개인 채널과 달리 권리자가 방송사라 Content ID 위험이 더 크다.
+  - name: 유 퀴즈 온 더 튜브
+    url: https://www.youtube.com/channel/UC920m3pMPH45qztdhppZhwA
+  - name: 스트릿 월드 파이터 디렉터스 워 (The CHOOM)
+    url: https://www.youtube.com/channel/UCsjD7wxKCD8C62_idZQdGJg
 
 # 벤치마크. 이들의 최근 숏폼 성과를 보고 어떤 장면·제목이 먹히는지 배운다.
 # 그대로 베끼지 않는다. 구조만 가져온다.

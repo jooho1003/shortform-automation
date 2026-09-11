@@ -1,0 +1,26 @@
+[
+  {
+    "n": 1,
+    "text": "성인이 아니면 어린이고",
+    "source": "clip",
+    "queries": [
+      "요정재형 요정식탁 건강검진"
+    ],
+    "chosen": 0,
+    "seconds": 50.0,
+    "candidates": [
+      {
+        "provider": "youtube",
+        "id": "thd1ztcy53s",
+        "page": "https://www.youtube.com/watch?v=thd1ztcy53s",
+        "author": "요정재형",
+        "title": "\"괜찮으니까.. 저 토크 길어지면 옆구리 좀 찔러주세요 ㅠㅠ\"",
+        "duration": 4559,
+        "views": 3790724,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/thd1ztcy53s/hqdefault.jpg",
+        "start": 363.3
+      }
+    ]
+  }
+]
