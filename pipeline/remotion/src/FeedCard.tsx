@@ -191,7 +191,8 @@ export const FeedCard: React.FC<Timeline & {theme: 'light' | 'dark'}> = ({
               />
             </Sequence>
           ))}
-          <ActiveSubtitle line={activeLine} now={now} />
+          {/* 원음이 콘텐츠인 편은 클립에 방송 자막이 이미 박혀 있다. 대본 문장을 덧씌우지 않는다. */}
+          {narration ? <ActiveSubtitle line={activeLine} now={now} /> : null}
         </div>
 
         <div
@@ -220,16 +221,17 @@ export const FeedCard: React.FC<Timeline & {theme: 'light' | 'dark'}> = ({
                   height: 82,
                   borderRadius: '50%',
                   flexShrink: 0,
+                  overflow: 'hidden',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   backgroundColor: AVATAR_COLORS[commentIndex % AVATAR_COLORS.length],
                   color: '#fff',
-                  fontSize: 36,
+                  fontSize: 52,
                   fontWeight: 800,
                 }}
               >
-                {comment.nick.slice(0, 1)}
+                <span style={{filter: 'blur(9px)'}}>{comment.nick.slice(0, 1)}</span>
               </div>
               <div style={{minWidth: 0, flex: 1}}>
                 <div
@@ -242,6 +244,7 @@ export const FeedCard: React.FC<Timeline & {theme: 'light' | 'dark'}> = ({
                     lineHeight: 1.1,
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap',
+                    filter: 'blur(5px)',
                   }}
                 >
                   {comment.nick}
