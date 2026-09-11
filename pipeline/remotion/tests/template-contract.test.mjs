@@ -4,7 +4,10 @@ import {stripTypeScriptTypes} from 'node:module';
 import test from 'node:test';
 
 const templateSource = await readFile(new URL('../src/template.ts', import.meta.url), 'utf8');
-const strippedSource = stripTypeScriptTypes(templateSource, {mode: 'strip'});
+const strippedSource = stripTypeScriptTypes(templateSource, {mode: 'strip'}).replace(
+  "from 'remotion'",
+  `from '${import.meta.resolve('remotion')}'`
+);
 const templateModule = await import(
   `data:text/javascript;base64,${Buffer.from(strippedSource).toString('base64')}`
 );
