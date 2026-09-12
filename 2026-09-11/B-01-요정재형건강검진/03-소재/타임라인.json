@@ -1,0 +1,47 @@
+{
+  "fps": 30,
+  "width": 1080,
+  "height": 1920,
+  "durationSec": 50.0,
+  "title": "건강검진 결과 나온 날의 요정식탁",
+  "hook": "방금 건강검진 결과가 나왔는데",
+  "template": "feed-card-light",
+  "templateName": "화이트 피드 카드",
+  "channelLabel": "요정재형",
+  "lines": [
+    {
+      "n": 1,
+      "text": "성인이 아니면 어린이고",
+      "start": 0.0,
+      "end": 50.0,
+      "words": [],
+      "mediaLayout": "landscape",
+      "clip": "클립/01.mp4"
+    }
+  ],
+  "comments": [
+    {
+      "at": 0.0,
+      "nick": "밥친구",
+      "text": "이 조합 편안해서 계속 보게 됨"
+    },
+    {
+      "at": 28.0,
+      "nick": "초록불",
+      "text": "검진 결과 저렇게 나오면 진짜 기분 좋지"
+    }
+  ],
+  "narration": "",
+  "bgm": null,
+  "credits": [
+    {
+      "n": 1,
+      "provider": "youtube",
+      "author": "요정재형",
+      "page": "https://www.youtube.com/watch?v=thd1ztcy53s",
+      "title": "\"괜찮으니까.. 저 토크 길어지면 옆구리 좀 찔러주세요 ㅠㅠ\"",
+      "start": 363.3,
+      "seconds": 50.0
+    }
+  ]
+}
