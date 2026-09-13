@@ -15,6 +15,7 @@
 | 코드가 아직 못 하는 것 | [`docs/전략/90-구현-변경목록.md`](docs/전략/90-구현-변경목록.md) |
 | 파이프라인 원래 설계 | [`docs/설계/00-파이프라인-설계.md`](docs/설계/00-파이프라인-설계.md) |
 | 코드 돌리는 법 | [`pipeline/README.md`](pipeline/README.md) |
+| YouTube·Instagram·TikTok 게시 준비와 연결 | [`docs/전략/30-멀티플랫폼-게시.md`](docs/전략/30-멀티플랫폼-게시.md) |
 | 웹 콘솔(브라우저에서 보고 조작) | [`pipeline/web/README.md`](pipeline/web/README.md) |
 
 ## 구조

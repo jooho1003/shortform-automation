@@ -120,6 +120,26 @@ def _to_9x16(src: Path, dst: Path, seconds: float) -> None:
         raise StepFailed(f"ffmpeg 변환 실패 {src.name}: {res.stderr[-300:]}")
 
 
+def _video_prompt(plan, cut) -> str:
+    """A single-shot video prompt with the plan locks repeated for every request."""
+    locks = plan.locks
+    return (
+        "Generate one continuous vertical 9:16 shot. Do not make a montage, cutaway, split screen, "
+        "time jump, or style change. Preserve the supplied keyframe and character-sheet reference exactly; "
+        "keep identity, creature anatomy, proportions, costume, props, and all defined details consistent.\n\n"
+        f"ACTION: {cut.action}\n"
+        f"CAMERA: {cut.camera}\n"
+        f"LENS: {cut.lens or 'use the keyframe perspective'}\n"
+        f"DURATION: {cut.seconds:g} seconds\n\n"
+        f"CHARACTER:\n{locks.get('CHARACTER', '')}\n\n"
+        f"COSTUME:\n{locks.get('COSTUME', '')}\n\n"
+        f"GLOBAL STYLE:\n{locks.get('GLOBAL STYLE', '')}\n\n"
+        f"NEGATIVE:\n{locks.get('NEGATIVE', '')}\n\n"
+        "Do not add text, watermark, morphing, face changes, extra limbs, or unspecified human accessories. "
+        "Do not impose a realistic or photorealistic style; use only the GLOBAL STYLE lock."
+    )
+
+
 def run(ep: Episode) -> None:
     plan = planfile_a.load(ep.plan_md)
     cfg = _config()
@@ -149,7 +169,7 @@ def run(ep: Episode) -> None:
             print(f"  ! 컷 {cut.n:02d} 키프레임 없음 — 건너뜀")
             failed.append(cut.n)
             continue
-        prompt = f"{cut.action}. Camera: {cut.camera}{', ' + cut.lens if cut.lens else ''}. Natural motion, no morphing, no face change, no text. 9:16 vertical."
+        prompt = _video_prompt(plan, cut)
         print(f"  컷 {cut.n:02d} 생성 (fal) — {prompt[:70]}")
         try:
             _generate(cfg, key, prompt, kf, sheet, raw_dir / f"{cut.n:02d}.mp4")

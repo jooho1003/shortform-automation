@@ -1,0 +1,42 @@
+[
+  {
+    "episode": "B-02-요정재형농구부",
+    "seconds": 21.3,
+    "size_bytes": 6065107,
+    "resolution": "1080x1920",
+    "audio": "AAC",
+    "mean_volume_db": -17.0,
+    "decode": "PASS",
+    "layout": "full source width, original captions preserved"
+  },
+  {
+    "episode": "B-03-요정재형아기들",
+    "seconds": 25.0,
+    "size_bytes": 6445373,
+    "resolution": "1080x1920",
+    "audio": "AAC",
+    "mean_volume_db": -17.3,
+    "decode": "PASS",
+    "layout": "full source width, original captions preserved"
+  },
+  {
+    "episode": "B-04-요정재형아이스브레이킹",
+    "seconds": 33.266667,
+    "size_bytes": 7242468,
+    "resolution": "1080x1920",
+    "audio": "AAC",
+    "mean_volume_db": -16.8,
+    "decode": "PASS",
+    "layout": "full source width, original captions preserved"
+  },
+  {
+    "episode": "B-05-요정재형원빈",
+    "seconds": 48.533333,
+    "size_bytes": 13920020,
+    "resolution": "1080x1920",
+    "audio": "AAC",
+    "mean_volume_db": -17.9,
+    "decode": "PASS",
+    "layout": "full source width, original captions preserved"
+  }
+]

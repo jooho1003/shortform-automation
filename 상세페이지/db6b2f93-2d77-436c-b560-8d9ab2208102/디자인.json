@@ -1,0 +1,20 @@
+{
+  "revision": 4,
+  "font": "sans",
+  "headingFont": "serif",
+  "colors": {
+    "background": "#f5f1e8",
+    "text": "#16332b",
+    "accent": "#18372f",
+    "muted": "#587066"
+  },
+  "texts": {},
+  "images": {
+    "ritual": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    }
+  },
+  "textStyles": {}
+}

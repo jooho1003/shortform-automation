@@ -51,3 +51,6 @@ pipeline/data/jobs/
 2026-*/*/02-이미지/키프레임-*.png
 **/로그/
 pipeline/data/tmp/
+
+# 계정별 게시 이력과 SQLite 실행 파일
+pipeline/data/publishing.sqlite3*

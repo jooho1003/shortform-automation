@@ -217,6 +217,9 @@ def main(argv=None) -> int:
     p_inspect_config = inspect_sub.add_parser("config", help="템플릿·음성·채널 설정")
     p_inspect_config.set_defaults(func=cmd_inspect_config)
 
+    from . import publishing
+    publishing.add_parser(sub)
+
     args = parser.parse_args(argv)
     try:
         return args.func(args)

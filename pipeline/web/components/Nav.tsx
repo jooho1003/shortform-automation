@@ -8,6 +8,7 @@ const items: {href: string; label: string; icon: string; section?: string}[] = [
   {href: '/research', label: '조사·구간', icon: '🔎'},
   {href: '/reels', label: '릴스 기획', icon: '✨', section: '기획'},
   {href: '/clients', label: '외주', icon: '🤝', section: '운영'},
+  {href: '/detail-pages', label: '상세페이지 의뢰서', icon: '📄'},
   {href: '/jobs', label: '작업 로그', icon: '📜'},
   {href: '/settings', label: '환경 점검', icon: '🩺', section: '설정'},
 ];
