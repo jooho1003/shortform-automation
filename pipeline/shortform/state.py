@@ -23,6 +23,10 @@ def save(ep: Episode, state: dict) -> None:
 
 
 def is_done(ep: Episode, step: str) -> bool:
+    if step in ("assets", "video", "render", "upload"):
+        from .tts.episode import is_stale
+        if is_stale(ep):
+            return False
     return bool(load(ep)["steps"].get(step, {}).get("done"))
 
 

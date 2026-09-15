@@ -1,0 +1,9 @@
+# Install the matching CUDA torch/torchaudio wheels first; see README.md.
+torch==2.9.1
+numpy>=2,<2.3
+torchaudio==2.9.1
+qwen-tts==0.1.1
+fastapi>=0.115,<1
+uvicorn>=0.30,<1
+python-multipart>=0.0.20
+pyyaml>=6,<7

@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "status": "complete",
+  "validation_report": "pipeline/tts-service/VALIDATION.md",
+  "date": "2026-09-15",
+  "scope": "사용자가 승인한 Qwen3 음성 스튜디오 개발. 독립 추론 환경·상주 큐·세 모델 모드·웹 미리듣기·프리셋·회차 적용·기존 제작 연동·실제 장비 검증.",
+  "execution": "현재 메인 세션 직접 수행. 배정 모델 필드는 저장소의 기준을 기록하며 실제 모델 변경이나 위임을 뜻하지 않는다.",
+  "nodes": [
+    {"id":"D1","title":"구현 계약과 추론·저장·회차 연결 경계 확정","domain":"general","D1":1,"D2":2,"D3":1,"D4":2,"score":6,"tier":"powerful","agent":"main","claude_model":"opus","codex_model":"gpt-5.6-sol","depends_on":[],"outputs":["공통 TTS 계약과 실행 환경"],"override_reason":"시스템 아키텍처와 경계 설계는 메인 직접 수행","requires_approval":false},
+    {"id":"D2","title":"독립 Qwen 서비스·큐·캐시·참조 음성과 Python 어댑터 구현","domain":"general","D1":0,"D2":1,"D3":1,"D4":1,"score":3,"tier":"balanced","agent":"main","claude_model":"sonnet","codex_model":"gpt-5.6-terra","depends_on":["D1"],"outputs":["shortform/tts","tts-service"],"requires_approval":false},
+    {"id":"D3","title":"웹 API와 음성 스튜디오·회차 UI 구현","domain":"frontend","D1":0,"D2":1,"D3":1,"D4":1,"score":3,"tier":"balanced","agent":"main","claude_model":"sonnet","codex_model":"gpt-5.6-terra","depends_on":["D1"],"outputs":["/voices","/api/tts","회차 음성 설정"],"requires_approval":false},
+    {"id":"D4","title":"A/B 제작과 설정 스냅샷·오래된 결과 판정 연결","domain":"general","D1":0,"D2":1,"D3":1,"D4":1,"score":3,"tier":"balanced","agent":"main","claude_model":"sonnet","codex_model":"gpt-5.6-terra","depends_on":["D2","D3"],"outputs":["제작 파이프라인 연동과 회귀 검증"],"requires_approval":false},
+    {"id":"D5","title":"실제 GPU 합성·브라우저 동작·최종 리뷰","domain":"review","D1":0,"D2":2,"D3":0,"D4":2,"score":4,"tier":"powerful","agent":"main","claude_model":"opus","codex_model":"gpt-5.6-sol","depends_on":["D2","D3","D4"],"outputs":["실제 음성 샘플","검증 결과와 실행 안내"],"override_reason":"실제 결과와 회귀 위험의 최종 판단은 메인 직접 수행","requires_approval":false}
+  ],
+  "gates":{"G1":"PASS","G2":"PASS","G3":"PASS","G4":"PASS","G5":"PASS","powerful_ratio":0.4,"G4_reason":"아키텍처 D1과 최종 리뷰 D5만 하드 오버라이드. 개별 사유 명시.","G5_reason":"개발·로컬 의존성 설치·공개 모델 다운로드·로컬 합성은 사용자 개발 요청 범위. 유료 영상 생성·배포·업로드는 실행하지 않음."}
+}

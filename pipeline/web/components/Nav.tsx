@@ -6,6 +6,7 @@ import {usePathname} from 'next/navigation';
 const items: {href: string; label: string; icon: string; section?: string}[] = [
   {href: '/', label: '회차', icon: '🎬', section: '파이프라인'},
   {href: '/research', label: '조사·구간', icon: '🔎'},
+  {href: '/voices', label: '음성 스튜디오', icon: '🎙️'},
   {href: '/reels', label: '릴스 기획', icon: '✨', section: '기획'},
   {href: '/clients', label: '외주', icon: '🤝', section: '운영'},
   {href: '/detail-pages', label: '상세페이지 의뢰서', icon: '📄'},

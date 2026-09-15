@@ -29,6 +29,8 @@ import yaml
 from .. import USER_AGENT, StepFailed
 from .. import planfile
 from ..paths import BGM, CONFIG, DATA, Episode
+from ..tts.config import speech_text
+from ..tts.episode import load_voice, write_manifest
 
 CACHE = DATA / "cache"
 from ..templates import load_catalog, validate_duration
@@ -56,17 +58,11 @@ def _duration(path: Path) -> float:
     return float(result.stdout.strip())
 
 
-def speech_text(text: str, pronunciations: dict[str, str]) -> str:
-    """표시용 원문을 건드리지 않고 합성용 표기만 문자 그대로 치환한다."""
-    if not pronunciations:
-        return text
-    keys = sorted(pronunciations, key=len, reverse=True)
-    pattern = re.compile("|".join(re.escape(key) for key in keys))
-    return pattern.sub(lambda match: pronunciations[match.group(0)], text)
-
-
 async def _speak(text: str, out: Path, voice: dict) -> tuple[float, float]:
     """한 문장을 합성하고, 실제로 말이 시작되고 끝나는 초를 돌려준다."""
+    if voice.get("provider") == "qwen3-local":
+        from ..tts.client import synthesize
+        return await synthesize(text, out, voice)
     communicate = edge_tts.Communicate(
         speech_text(text, voice.get("pronunciations", {})),
         voice["voice"],
@@ -233,7 +229,6 @@ def _to_9x16(
 def run(ep: Episode) -> None:
     plan = planfile.load(ep.plan_md)
     entries = {e["n"]: e for e in json.loads(ep.clip_list.read_text(encoding="utf-8"))}
-    voice = yaml.safe_load((CONFIG / "voice.yaml").read_text(encoding="utf-8"))
 
     tts_dir = ep.assets_dir / "tts"
     raw_dir = ep.assets_dir / "원본"
@@ -243,6 +238,9 @@ def run(ep: Episode) -> None:
 
     template = load_catalog().by_id(plan.template_id)
     use_tts = template.narration == "tts"
+    voice = load_voice(ep, freeze=True) if use_tts else {}
+    gap_seconds = voice.get("postprocess", {}).get("sentenceGapMs", GAP * 1000) / 1000
+    audio_ext = "wav" if voice.get("provider") == "qwen3-local" else "mp3"
 
     # 1. 타임라인 만들기.
     #    TTS 템플릿은 합성한 내레이션 길이가 기준이고,
@@ -270,7 +268,7 @@ def run(ep: Episode) -> None:
     else:
         print("  내레이션 합성 중...")
         for line in plan.lines:
-            mp3 = tts_dir / f"{line.n:02d}.mp3"
+            mp3 = tts_dir / f"{line.n:02d}.{audio_ext}"
             speech_start, speech_end = asyncio.run(_speak(line.text, mp3, voice))
             length = _duration(mp3)
             timeline.append(
@@ -287,8 +285,8 @@ def run(ep: Episode) -> None:
                     ),
                 }
             )
-            cursor += length + GAP
-        total = round(cursor - GAP, 3)
+            cursor += length + gap_seconds
+        total = round(cursor - gap_seconds, 3)
 
     warning = validate_duration(plan.template_id, total)
     if warning:
@@ -296,14 +294,15 @@ def run(ep: Episode) -> None:
 
     # 2. 내레이션 하나로 합치기 (원음 템플릿은 만들지 않는다)
     if use_tts:
-        silence = ep.assets_dir / "gap.mp3"
-        _run(["ffmpeg", "-y", "-f", "lavfi", "-i", "anullsrc=r=24000:cl=mono",
-              "-t", str(GAP), "-c:a", "libmp3lame", str(silence)])
+        silence = ep.assets_dir / f"gap.{audio_ext}"
+        if gap_seconds > 0:
+            _run(["ffmpeg", "-y", "-f", "lavfi", "-i", "anullsrc=r=24000:cl=mono",
+                  "-t", str(gap_seconds), str(silence)])
         concat_list = ep.assets_dir / "concat.txt"
         parts = []
         for index, line in enumerate(plan.lines):
-            parts.append(f"file '{(tts_dir / f'{line.n:02d}.mp3').as_posix()}'")
-            if index < len(plan.lines) - 1:
+            parts.append(f"file '{(tts_dir / f'{line.n:02d}.{audio_ext}').as_posix()}'")
+            if gap_seconds > 0 and index < len(plan.lines) - 1:
                 parts.append(f"file '{silence.as_posix()}'")
         concat_list.write_text("\n".join(parts), encoding="utf-8")
         narration = ep.assets_dir / "narration.mp3"
@@ -321,6 +320,8 @@ def run(ep: Episode) -> None:
             item["mediaLayout"] = _manual_media_layout(entry)
             if not out.exists():
                 raise StepFailed(f"{item['n']}번 클립이 없습니다: {out}")
+            if voice.get("provider") == "qwen3-local" and _duration(out) + 0.1 < needed:
+                raise StepFailed(f"{item['n']}번 수동 클립이 새 음성({needed:.2f}초)보다 짧습니다. 더 긴 클립 또는 짧은 대본을 준비하세요.")
         else:
             chosen = entry["candidates"][entry["chosen"]]
             origin = 0.0   # 원본에서 어디를 떠왔는지. 출처 기록용
@@ -356,6 +357,8 @@ def run(ep: Episode) -> None:
     (ep.assets_dir / "타임라인.json").write_text(
         json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8"
     )
+    if use_tts:
+        write_manifest(ep)
     print(f"  소재 완료 — 총 {total:.1f}초, 클립 {len(timeline)}개")
 
 

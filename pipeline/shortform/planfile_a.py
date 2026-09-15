@@ -5,7 +5,9 @@
     ### CHARACTER / ### COSTUME / ### GLOBAL STYLE / ### NEGATIVE
     ## 컷표        | 컷 | TC | 렌즈 | 액션 | 카메라 | 필수 |
     ## 음향 설계   - 환경음: / - 효과음: / - 무음 구간:
-    ## AI 댓글     (선택, B안과 같은 표)
+    ## 캐릭터 시트  (캐릭터별 ### 소제목과 - 항목: 값)
+    ## 대사         | 시각 | 캐릭터 | 대사 | 연출 |
+    ## 조사 참고    (선택)
     ## 메타데이터  - 제목: / - 설명: / - 태그: / - 공개:
 
 B안 planfile과 같은 섹션 유틸을 쓴다. 웹 콘솔 inspect가 title/template_id/template_name을 읽으므로 같은 속성을 둔다.
@@ -39,12 +41,29 @@ class Cut:
 
 
 @dataclass
+class Character:
+    name: str
+    details: dict[str, str] = field(default_factory=dict)
+
+
+@dataclass
+class Dialogue:
+    at: float
+    character: str
+    text: str
+    direction: str = ""
+
+
+@dataclass
 class PlanA:
     title: str
     synopsis: str
     locks: dict[str, str]
     cuts: list[Cut]
     sound: dict[str, str]
+    characters: list[Character] = field(default_factory=list)
+    dialogues: list[Dialogue] = field(default_factory=list)
+    research_notes: list[str] = field(default_factory=list)
     comments: list[Comment] = field(default_factory=list)
     meta: dict = field(default_factory=dict)
     template_id: str = "briefing-focus"
@@ -77,8 +96,41 @@ def _tc(raw: str) -> tuple[float, float]:
     return a, b
 
 
+def _seconds(raw: str) -> float:
+    value = raw.strip()
+    if ":" in value:
+        minute, second = value.split(":", 1)
+        return float(minute) * 60 + float(second)
+    return float(value)
+
+
+def _character_sheets(markdown: str) -> list[Character]:
+    """Read the character-sheet section while preserving its ### character groups."""
+    in_section = False
+    current: Character | None = None
+    characters: list[Character] = []
+    for raw in markdown.splitlines():
+        h2 = re.match(r"^##\s+(.*)$", raw)
+        if h2:
+            in_section = "캐릭터" in h2.group(1)
+            current = None
+            continue
+        if not in_section:
+            continue
+        h3 = re.match(r"^###\s+(.+?)\s*$", raw)
+        if h3:
+            current = Character(name=h3.group(1).strip())
+            characters.append(current)
+            continue
+        item = re.match(r"^\s*[-*]\s*([^:：]+)\s*[:：]\s*(.*?)\s*$", raw)
+        if item and current:
+            current.details[item.group(1).strip()] = item.group(2).strip()
+    return [character for character in characters if character.name]
+
+
 def load(path: Path) -> PlanA:
-    sections = _sections(path.read_text(encoding="utf-8"))
+    markdown = path.read_text(encoding="utf-8")
+    sections = _sections(markdown)
 
     synopsis_body = next((body for name, body in sections.items() if "시놉시스" in name), None)
     if synopsis_body is None:
@@ -112,17 +164,37 @@ def load(path: Path) -> PlanA:
         raise StepFailed("컷표를 읽지 못했습니다. 컷·TC·렌즈·액션·카메라·필수 열이 있어야 합니다.")
     cuts.sort(key=lambda c: c.n)
 
+    characters = _character_sheets(markdown)
+
+    dialogues: list[Dialogue] = []
+    dialogue_body = next((b for n, b in sections.items() if "대사" in n or "다이얼로그" in n), "")
+    for row in _table(dialogue_body):
+        raw_at = (row.get("시각") or row.get("TC") or "").strip()
+        raw_text = (row.get("대사") or row.get("내용") or "").strip()
+        if not raw_text:
+            continue
+        try:
+            at = _seconds(raw_at.split("-", 1)[0].strip()) if raw_at else 0.0
+        except ValueError:
+            continue
+        dialogues.append(Dialogue(
+            at=at,
+            character=(row.get("캐릭터") or row.get("인물") or "").strip(),
+            text=raw_text,
+            direction=(row.get("연출") or row.get("표정") or "").strip(),
+        ))
+
+    research_notes = [
+        re.sub(r"^\s*[-*]\s*", "", line).strip()
+        for line in next((b for n, b in sections.items() if "조사" in n), "").splitlines()
+        if re.sub(r"^\s*[-*]\s*", "", line).strip()
+    ]
+
     sound = {}
     for raw in next((b for n, b in sections.items() if "음향" in n), "").splitlines():
         m = re.match(r"^\s*[-*]\s*([^:]+):\s*(.*)$", raw)
         if m:
             sound[m.group(1).strip()] = m.group(2).strip()
-
-    comments = [
-        Comment(at=float(row["시각"]), nick=row["닉네임"], text=row["내용"])
-        for row in _table(next((b for n, b in sections.items() if "댓글" in n), ""))
-        if row.get("시각", "").replace(".", "").isdigit()
-    ]
 
     meta = {}
     for raw in next((b for n, b in sections.items() if "메타" in n), "").splitlines():
@@ -131,7 +203,19 @@ def load(path: Path) -> PlanA:
             meta[m.group(1).strip()] = m.group(2).strip()
 
     title = meta.get("제목") or (synopsis.splitlines()[0][:40] if synopsis else path.parent.name)
-    return PlanA(title=title, synopsis=synopsis, locks=locks, cuts=cuts, sound=sound, comments=comments, meta=meta)
+    return PlanA(
+        title=title,
+        synopsis=synopsis,
+        locks=locks,
+        cuts=cuts,
+        sound=sound,
+        characters=characters,
+        dialogues=dialogues,
+        research_notes=research_notes,
+        # A안은 댓글 카드가 아니라 캐릭터 대사를 사용한다.
+        comments=[],
+        meta=meta,
+    )
 
 
 def lock_block_text(plan: PlanA) -> str:

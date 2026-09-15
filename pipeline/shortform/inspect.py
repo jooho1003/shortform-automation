@@ -47,6 +47,11 @@ def _parse_plan(ep: Episode):
 
 def episode_summary(ep: Episode, root: Path = ROOT) -> dict:
     st = state.load(ep)
+    from .tts.episode import is_stale
+    if is_stale(ep):
+        for step in ("assets", "video", "render", "upload"):
+            if step in st["steps"]:
+                st["steps"][step] = {**st["steps"][step], "done": False}
 
     plan = None
     plan_error = None

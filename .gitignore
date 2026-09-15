@@ -1,5 +1,11 @@
 # 파이썬
 pipeline/.venv/
+pipeline/.venv-tts/
+pipeline/data/tts/
+pipeline/data/voices/
+**/.tts.lock
+**/.tts-stage-*/
+**/.tts-previous-*/
 __pycache__/
 *.pyc
 

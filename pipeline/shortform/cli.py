@@ -71,7 +71,11 @@ def cmd_run(args) -> int:
             print(f"  건너뜀  {name}  (상태.json에 완료로 기록됨)")
             continue
         print(f"▶ {name}")
-        module.run(ep)
+        from .tts.episode import is_stale, regenerate
+        if name in ("assets", "video") and (ep.assets_dir / "타임라인.json").exists() and is_stale(ep):
+            regenerate(ep)
+        else:
+            module.run(ep)
         state.mark_done(ep, name)
     print("\n모든 단계 완료.")
     return 0
@@ -83,7 +87,7 @@ def cmd_status(args) -> int:
     print(f"편: {ep.dir.name}")
     for name in step_names(ep.track):
         done = st["steps"].get(name, {})
-        mark = "완료" if done.get("done") else "대기"
+        mark = "완료" if state.is_done(ep, name) else "대기"
         print(f"  {name:8s} {mark} {done.get('at', '')}")
     for gate, path in [
         ("기획 승인", ep.plan_ok),
@@ -219,6 +223,8 @@ def main(argv=None) -> int:
 
     from . import publishing
     publishing.add_parser(sub)
+    from .tts.episode import add_parser as add_tts_parser
+    add_tts_parser(sub)
 
     args = parser.parse_args(argv)
     try:

@@ -26,6 +26,7 @@ export type Line = {
 };
 
 export type CommentCard = {at: number; nick: string; text: string};
+export type DialogueLine = {at: number; character: string; text: string; direction?: string};
 
 export type Timeline = {
   fps: number;
@@ -36,6 +37,7 @@ export type Timeline = {
   hook: string;
   lines: Line[];
   comments: CommentCard[];
+  dialogues?: DialogueLine[];
   narration: string;
   bgm: string | null;
   template?: string;
@@ -168,10 +170,49 @@ const Comment: React.FC<{comment: CommentCard; index: number}> = ({comment, inde
   );
 };
 
+/** A안 캐릭터 대사. 댓글처럼 보이지 않도록 화자명과 말풍선으로 분리한다. */
+const Dialogue: React.FC<{dialogue: DialogueLine; index: number}> = ({dialogue, index}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const rise = spring({frame, fps, config: {damping: 200}, durationInFrames: 12});
+  const fade = interpolate(
+    frame,
+    [0, 8, CARD_SECONDS * fps - 10, CARD_SECONDS * fps],
+    [0, 1, 1, 0],
+    {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}
+  );
+  const color = AVATAR_COLORS[index % AVATAR_COLORS.length];
+
+  return (
+    <AbsoluteFill style={{justifyContent: 'flex-end', alignItems: 'center', paddingBottom: 190}}>
+      <div
+        style={{
+          opacity: fade,
+          transform: `translateY(${interpolate(rise, [0, 1], [70, 0])}px)`,
+          width: 900,
+          boxSizing: 'border-box',
+          padding: '24px 30px 28px',
+          background: 'rgba(255,255,255,0.96)',
+          border: `6px solid ${color}`,
+          borderRadius: 30,
+          boxShadow: '0 14px 40px rgba(0,0,0,0.42)',
+          fontFamily: FONT,
+        }}
+      >
+        <div style={{fontSize: 28, fontWeight: 800, color, marginBottom: 8}}>{dialogue.character || '화자'}</div>
+        <div style={{fontSize: 42, fontWeight: 700, color: '#111', lineHeight: 1.35, wordBreak: 'keep-all'}}>
+          {dialogue.text}
+        </div>
+      </div>
+    </AbsoluteFill>
+  );
+};
+
 const LegacyShort: React.FC<Timeline> = ({
   fps,
   lines,
   comments,
+  dialogues = [],
   narration,
   bgm,
   assetBase,
@@ -213,6 +254,16 @@ const LegacyShort: React.FC<Timeline> = ({
           durationInFrames={toFrames(CARD_SECONDS)}
         >
           <Comment comment={comment} index={index} />
+        </Sequence>
+      ))}
+
+      {dialogues.map((dialogue, index) => (
+        <Sequence
+          key={`dialogue-${index}`}
+          from={toFrames(dialogue.at)}
+          durationInFrames={toFrames(CARD_SECONDS)}
+        >
+          <Dialogue dialogue={dialogue} index={index} />
         </Sequence>
       ))}
 

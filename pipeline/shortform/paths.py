@@ -31,8 +31,13 @@ class Episode:
     @classmethod
     def create(cls, date: str, track: str, num: str, slug: str) -> "Episode":
         d = ROOT / date / f"{track}-{num}-{slug}"
+        is_new = not d.exists()
         d.mkdir(parents=True, exist_ok=True)
-        return cls(date, track, num, d)
+        ep = cls(date, track, num, d)
+        if is_new:
+            from .tts.episode import load_voice
+            load_voice(ep, freeze=True, inherit_default=True)
+        return ep
 
     # --- 산출물 ---
     @property

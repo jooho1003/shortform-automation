@@ -52,6 +52,9 @@ def _route(ep: Episode) -> str:
 
 
 def run(ep: Episode) -> None:
+    from ..tts.episode import is_stale
+    if is_stale(ep):
+        raise StepFailed("음성 설정 또는 대본이 변경됐습니다. 음성·타임라인을 먼저 갱신하세요.")
     if _route(ep) == "capcut":
         raise StepFailed(
             "이 편은 CapCut 경로입니다. CapCut은 내보내기를 자동화할 방법이 없어서 여기서 멈춥니다.\n"

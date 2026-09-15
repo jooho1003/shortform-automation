@@ -75,6 +75,10 @@ def _description(plan: planfile.Plan, ep: Episode) -> str:
 
 
 def run(ep: Episode) -> None:
+    from ..tts.episode import is_stale
+    from .. import state
+    if (ep.assets_dir / "voice-settings.json").exists() and (is_stale(ep) or not state.is_done(ep, "render")):
+        raise StepFailed("새 음성 설정을 반영한 렌더가 필요합니다. 기존 완성본은 업로드하지 않았습니다.")
     if not ep.upload_ok.exists():
         raise GateBlocked(
             "업로드 승인이 없습니다.\n"

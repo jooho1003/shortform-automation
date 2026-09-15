@@ -4,6 +4,7 @@ import path from 'node:path';
 import {promisify} from 'node:util';
 
 import {PIPELINE, REMOTION, ROOT, childEnv, pythonCommand} from '@/lib/paths';
+import {ttsFetch} from '@/lib/tts';
 
 export const dynamic = 'force-dynamic';
 
@@ -44,6 +45,19 @@ export async function GET() {
 
   const ff = await version('ffmpeg', ['-version']);
   checks.push({id: 'ffmpeg', label: 'ffmpeg', ok: !!ff, detail: ff ?? 'PATH에 없음', fix: 'winget install Gyan.FFmpeg 후 새 터미널', level: 'required'});
+
+  const qwenPython = path.join(PIPELINE, '.venv-tts', win ? 'Scripts/python.exe' : 'bin/python');
+  const qwenInstalled = fs.existsSync(qwenPython);
+  checks.push({id:'qwen-env',label:'Qwen3 TTS 전용 환경',ok:qwenInstalled,detail:qwenInstalled?'.venv-tts 있음':'미설치',
+    fix:'pipeline/tts-service/README.md 설치 순서 참고',level:'optional'});
+  try {
+    const response = await ttsFetch('capabilities',{},2500);
+    const qwen = await response.json();
+    checks.push({id:'qwen-service',label:'Qwen3 TTS 로컬 엔진',ok:response.ok&&qwen.available===true,
+      detail:qwen.device ? `${qwen.device} · ${(qwen.models??[]).filter((m:{tested?:boolean})=>m.tested).length}개 모델 합성 확인` : '연결됨 · 첫 합성 시 GPU 확인',level:'optional'});
+  } catch {
+    checks.push({id:'qwen-service',label:'Qwen3 TTS 로컬 엔진',ok:false,detail:'연결 안 됨',fix:'음성 스튜디오 → 엔진 시작',level:'optional'});
+  }
 
   const nm = fs.existsSync(path.join(PIPELINE, 'node_modules', 'remotion'));
   checks.push({id: 'remotion', label: 'Remotion (node_modules)', ok: nm, detail: nm ? '설치됨 (pipeline/node_modules)' : '없음', fix: 'cd pipeline && npm install', level: 'required'});

@@ -11,6 +11,7 @@ import {PlayerPane} from '@/components/PlayerPane';
 import RenderRoutePicker from '@/components/RenderRoutePicker';
 import {RunConsole} from '@/components/RunConsole';
 import {TimelineEditor} from '@/components/TimelineEditor';
+import {EpisodeVoiceSettings} from '@/components/voices/EpisodeVoiceSettings';
 import {fmtDate, media} from '@/lib/client';
 import type {EpisodeDetail, PlanA, Timeline} from '@/lib/types';
 import {STEPS_BY_TRACK, STEP_LABEL} from '@/lib/types';
@@ -165,6 +166,7 @@ export function EpisodeView({detail, tab: initialTab}: {detail: EpisodeDetail; t
             </p>
           </div>
           <PlanEditor dir={ep.dir} markdown={detail.plan_md} plan={detail.plan} planError={detail.plan_error} track={ep.track} />
+          {detail.plan ? <EpisodeVoiceSettings episodeKey={{track:ep.track,date:ep.date,num:ep.num}} compact /> : null}
         </div>
       ) : null}
 

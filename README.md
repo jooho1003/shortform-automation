@@ -10,6 +10,8 @@
 | 지금까지 뭘 했고 뭘 결정했나 | [`docs/00-작업기록.md`](docs/00-작업기록.md) |
 | 두 트랙(A안·B안)의 관계와 공통 원칙 | [`docs/전략/00-개요.md`](docs/전략/00-개요.md) |
 | B안(주력)을 어떻게 굴리나 | [`docs/전략/10-B안-예능클립.md`](docs/전략/10-B안-예능클립.md) |
+| Qwen3 TTS 미리듣기·목소리 설정·회차 적용 설계 | [docs/설계/03-Qwen3-TTS-음성스튜디오.md](docs/설계/03-Qwen3-TTS-음성스튜디오.md) |
+| Qwen3 음성 스튜디오 설치·실행·검증 | [pipeline/tts-service/README.md](pipeline/tts-service/README.md) |
 | 화면 템플릿 3종 규격 | [`docs/전략/11-템플릿-규격.md`](docs/전략/11-템플릿-규격.md) |
 | 소스 채널 17개 실측 데이터 | [`docs/전략/12-소스채널-후보.md`](docs/전략/12-소스채널-후보.md) |
 | 코드가 아직 못 하는 것 | [`docs/전략/90-구현-변경목록.md`](docs/전략/90-구현-변경목록.md) |

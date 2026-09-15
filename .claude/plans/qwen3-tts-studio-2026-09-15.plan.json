@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-09-15",
+  "scope": "기존 숏폼 웹 콘솔에 Qwen3 TTS 미리듣기·설정·프리셋·회차 적용을 추가하는 설계와 대화형 화면 시안. 운영 코드 구현, 모델 설치, 실제 합성은 이번 범위에 포함하지 않음.",
+  "execution": "설계와 최종 리뷰를 현재 메인 세션에서 직접 수행. 모델 필드는 저장소의 배정 기준이며 실제 실행 모델을 변경했다는 뜻이 아님.",
+  "nodes": [
+    {
+      "id": "T1",
+      "title": "Qwen3 기능과 기존 코드에 맞춰 음성 스튜디오의 화면·데이터·연동 구조 설계",
+      "domain": "frontend",
+      "D1": 2, "D2": 2, "D3": 0, "D4": 2,
+      "score": 6,
+      "tier": "powerful",
+      "agent": "main",
+      "claude_model": "opus",
+      "codex_model": "gpt-5.6-sol",
+      "depends_on": [],
+      "outputs": ["docs/설계/03-Qwen3-TTS-음성스튜디오.md", "대화형 음성 스튜디오 화면 시안"],
+      "override_reason": "UI·추론 서비스·기존 영상 파이프라인을 잇는 아키텍처 및 모호한 요구 해석은 메인이 직접 수행.",
+      "requires_approval": false
+    },
+    {
+      "id": "T2",
+      "title": "기능 지원 범위·기존 연동·설계 일관성과 시안 동작 최종 검토",
+      "domain": "review",
+      "D1": 0, "D2": 1, "D3": 0, "D4": 2,
+      "score": 3,
+      "tier": "powerful",
+      "agent": "main",
+      "claude_model": "opus",
+      "codex_model": "gpt-5.6-sol",
+      "depends_on": ["T1"],
+      "outputs": ["검토된 설계 문서", "시안 동작 검증 기록"],
+      "override_reason": "최종 리뷰 하드 오버라이드. 실제 기능과 시뮬레이션, 확인된 사실과 제안값을 구분하여 직접 검토.",
+      "requires_approval": false
+    }
+  ],
+  "gates": {
+    "G1": "PASS", "G2": "PASS", "G3": "PASS", "G4": "PASS", "G5": "PASS",
+    "powerful_ratio": 1,
+    "G4_reason": "두 노드 모두 아키텍처·모호한 요구 해석·최종 리뷰 하드 오버라이드이며 각 노드에 승격 사유를 기록.",
+    "G5_reason": "로컬 설계 산출물과 화면 시안 작성만 수행. 모델 다운로드·유료 호출·배포·외부 발신 없음."
+  }
+}

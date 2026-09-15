@@ -7,7 +7,7 @@ import {
   useCurrentFrame,
 } from 'remotion';
 
-import type {Line, Timeline} from './Short';
+import type {DialogueLine, Line, Timeline} from './Short';
 import {resolveAsset, selectComment} from './template';
 
 const FONT = "'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif";
@@ -76,12 +76,33 @@ const ActiveSubtitle: React.FC<{line: Line | undefined; now: number}> = ({line, 
   );
 };
 
+const DialogueCard: React.FC<{dialogue: DialogueLine}> = ({dialogue}) => (
+  <div
+    style={{
+      position: 'absolute',
+      left: 70,
+      right: 70,
+      bottom: 215,
+      padding: '22px 28px 26px',
+      borderRadius: 28,
+      background: 'rgba(255,255,255,0.96)',
+      color: '#111',
+      fontFamily: FONT,
+      boxShadow: '0 12px 34px rgba(0,0,0,0.38)',
+    }}
+  >
+    <div style={{fontSize: 24, fontWeight: 800, color: '#1971c2', marginBottom: 6}}>{dialogue.character || '화자'}</div>
+    <div style={{fontSize: 38, fontWeight: 750, lineHeight: 1.3, wordBreak: 'keep-all'}}>{dialogue.text}</div>
+  </div>
+);
+
 export const FeedCard: React.FC<Timeline & {theme: 'light' | 'dark'}> = ({
   fps,
   title,
   hook,
   lines,
   comments,
+  dialogues = [],
   narration,
   bgm,
   channelLabel,
@@ -213,7 +234,7 @@ export const FeedCard: React.FC<Timeline & {theme: 'light' | 'dark'}> = ({
             color: '#111',
           }}
         >
-          {comment ? (
+      {comment ? (
             <>
               <div
                 style={{
@@ -261,8 +282,15 @@ export const FeedCard: React.FC<Timeline & {theme: 'light' | 'dark'}> = ({
                 </div>
               </div>
             </>
-          ) : null}
+      ) : null}
+
         </div>
+
+        {dialogues.map((dialogue, index) => (
+          <Sequence key={`dialogue-${index}`} from={toFrames(dialogue.at)} durationInFrames={toFrames(3.4)}>
+            <DialogueCard dialogue={dialogue} />
+          </Sequence>
+        ))}
 
         <div
           style={{

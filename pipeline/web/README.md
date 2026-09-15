@@ -30,6 +30,7 @@ YOUTUBE_API_KEY=...    # discover
 
 | 메뉴 | 하는 일 | 파일 |
 |---|---|---|
+| 음성 스튜디오 | Qwen3 샘플 생성·재생·비교, 발음·속도 설정, 참조 음성, 프리셋, 회차 적용 | pipeline/data/tts/, pipeline/data/voices/, 회차 03-소재/voice-settings.json |
 | 회차 | 날짜별 회차 카드, 새 회차 | `<날짜>/<트랙-번호-슬러그>/` |
 | 회차 상세 (B안) | 기획안 편집·승인 → 클립 후보 클릭 선택·승인 → Player 미리보기·타임라인 편집 → 완성본·업로드 승인 → 단계 실행·로그 | `01-기획안.md`, `02-이미지/클립목록.json`, `03-소재/타임라인.json`, 게이트 txt |
 | 회차 상세 (A안) | 기획안(시놉시스·락 블록·컷표) → 시트·키프레임 검토(검사 결과) → 컷 영상 → 완성본 | 같은 규약, `02-이미지/시트.png`·`키프레임-NN.png`·`검사.json`, `03-소재/원본/`·`클립/` |
@@ -40,6 +41,8 @@ YOUTUBE_API_KEY=...    # discover
 | 환경 점검 | venv·의존성·ffmpeg·Remotion·claude·codex·키 | — |
 
 ## 안전 규칙
+
+Qwen 엔진 설치·실행 방법은 [음성 스튜디오 실행 안내](../tts-service/README.md)를 참고한다. 웹에서 **음성 스튜디오 → 엔진 시작** 후 사용할 수 있다. Qwen 관련 키는 필요하지 않으며 모델은 이 PC의 GPU에서 실행된다.
 
 - `/api/media`는 저장소 루트 밖·`pipeline/secrets`·`.env`·`.git`을 거부한다(`lib/safePath.ts`). 경로를 받는 모든 API가 이 가드를 탄다.
 - **업로드(YouTube 외부 공개)와 fal 영상 생성(과금)은 확인 다이얼로그 없이 실행되지 않는다.** API도 `confirmed: true` 없이는 거부한다.

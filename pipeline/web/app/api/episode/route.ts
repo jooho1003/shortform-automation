@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 
 import {InspectError, getEpisode} from '@/lib/inspect';
 import {resolveInRoot, PathDenied} from '@/lib/safePath';
+import {initializeEpisodeVoice} from '@/lib/tts';
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const NUM_RE = /^\d{1,3}$/;
@@ -77,5 +78,6 @@ export async function POST(req: Request) {
   }
 
   await fs.mkdir(abs, {recursive: true});
+  await initializeEpisodeVoice(track, date, paddedNum, rel);
   return Response.json({dir: rel});
 }
