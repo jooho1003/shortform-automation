@@ -22,6 +22,11 @@ npm run dev                                                                     
 FAL_KEY=...            # A안 영상 생성
 PEXELS_API_KEY=...     # B안 stock 소재
 YOUTUBE_API_KEY=...    # discover
+NAVER_CLIENT_ID=...    # 블로그 검색 API
+NAVER_CLIENT_SECRET=...
+NAVER_AD_ACCESS_LICENSE=... # 선택: 검색광고 키워드 검색량
+NAVER_AD_SECRET_KEY=...
+NAVER_AD_CUSTOMER_ID=...
 ```
 
 `환경 점검` 메뉴에서 뭐가 빠졌는지 본다.
@@ -34,6 +39,7 @@ YOUTUBE_API_KEY=...    # discover
 | 회차 | 날짜별 회차 카드, 새 회차 | `<날짜>/<트랙-번호-슬러그>/` |
 | 회차 상세 (B안) | 기획안 편집·승인 → 클립 후보 클릭 선택·승인 → Player 미리보기·타임라인 편집 → 완성본·업로드 승인 → 단계 실행·로그 | `01-기획안.md`, `02-이미지/클립목록.json`, `03-소재/타임라인.json`, 게이트 txt |
 | 회차 상세 (A안) | 기획안(시놉시스·락 블록·컷표) → 시트·키프레임 검토(검사 결과) → 컷 영상 → 완성본 | 같은 규약, `02-이미지/시트.png`·`키프레임-NN.png`·`검사.json`, `03-소재/원본/`·`클립/` |
+| 네이버 블로그 | 키워드 보드 → 개요 승인 → 근거·본문·이미지 생성 → 원고 승인 → 복사 패키지, 게시 글 순위 추적 | `블로그/<id>/`, `pipeline/data/blog/keywords/` |
 | 조사·구간 | 주간 조사 실행, 소스 채널 상위 롱폼 → 구간 후보 뽑기 | `pipeline/data/research/`, `pipeline/data/segments/` |
 | 릴스 기획 | 레퍼런스 라이브러리(즐겨찾기·태그) → 원본 받기 → 대본(자막/whisper) → 구조 분석 → 고객 설문 반영 기획안(썸네일 제목·스토리보드·촬영 가이드·대본·캡션) → 수정하기 → PDF | `릴스기획/라이브러리.json`, `릴스기획/<id>/` |
 | 외주 | 고객·사전설문·패키지·계약, 월별 보드(진행 절차 4단계·칸반), 회차/기획안 링크 | `외주/<고객>/고객.json`, `외주/<고객>/YYYY-MM/월간.json`, `config/packages.yaml` |
@@ -46,6 +52,7 @@ Qwen 엔진 설치·실행 방법은 [음성 스튜디오 실행 안내](../tts-
 
 - `/api/media`는 저장소 루트 밖·`pipeline/secrets`·`.env`·`.git`을 거부한다(`lib/safePath.ts`). 경로를 받는 모든 API가 이 가드를 탄다.
 - **업로드(YouTube 외부 공개)와 fal 영상 생성(과금)은 확인 다이얼로그 없이 실행되지 않는다.** API도 `confirmed: true` 없이는 거부한다.
+- 블로그는 `copy`가 기본이다. `draft`는 `config/blog.yaml`과 `config/naver-editor.yaml`에서 각각 켠 뒤, 사람이 직접 로그인한 전용 프로필로 임시저장까지만 한다. 자동 발행은 구현하지 않는다.
 - 타임라인 편집은 `assets`(B안)/`video`(A안)를 다시 돌리면 덮어써진다. 고친 뒤에는 `render`만 다시.
 
 ## 모델 분담 (사용자 결정)

@@ -60,3 +60,10 @@ pipeline/data/tmp/
 
 # 계정별 게시 이력과 SQLite 실행 파일
 pipeline/data/publishing.sqlite3*
+
+# 블로그 생성 미디어·복사 패키지 (기획 JSON·본문·점검은 보존)
+블로그/*/이미지/*.png
+블로그/*/이미지/*.jpg
+블로그/*/이미지/*.jpeg
+블로그/*/이미지/*.webp
+블로그/*/게시패키지/

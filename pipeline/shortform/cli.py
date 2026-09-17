@@ -153,6 +153,11 @@ def cmd_inspect_config(args) -> int:
     return 0
 
 
+def cmd_inspect_blog_keywords(args) -> int:
+    _print_json(inspector.run_blog_keywords(args.week))
+    return 0
+
+
 def main(argv=None) -> int:
     # 한국어 Windows 콘솔은 cp949라 경로와 기호가 깨진다.
     for stream in (sys.stdout, sys.stderr):
@@ -220,6 +225,13 @@ def main(argv=None) -> int:
 
     p_inspect_config = inspect_sub.add_parser("config", help="템플릿·음성·채널 설정")
     p_inspect_config.set_defaults(func=cmd_inspect_config)
+
+    p_inspect_blog = inspect_sub.add_parser("blog-keywords", help="블로그 키워드 보드")
+    p_inspect_blog.add_argument("--week")
+    p_inspect_blog.set_defaults(func=cmd_inspect_blog_keywords)
+
+    from .blog.cli import add_parser as add_blog_parser
+    add_blog_parser(sub)
 
     from . import publishing
     publishing.add_parser(sub)

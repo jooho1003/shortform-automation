@@ -12,6 +12,11 @@ dependencies = [
     "google-auth-oauthlib>=1.2",
 ]
 
+[project.optional-dependencies]
+blog = [
+    "playwright>=1.55",
+]
+
 [project.scripts]
 shortform = "shortform.cli:main"
 

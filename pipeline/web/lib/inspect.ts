@@ -9,6 +9,7 @@ import {promisify} from 'node:util';
 
 import {PIPELINE, childEnv, pythonCommand} from './paths';
 import type {ConfigInfo, EpisodeDetail, EpisodeList, ResearchInfo, Track} from './types';
+import type {BlogKeywordCandidate} from './blogTypes';
 
 const execFileAsync = promisify(execFile);
 
@@ -43,3 +44,12 @@ export const getEpisode = (track: Track, date: string, num: string) =>
 export const getConfig = () => inspect<ConfigInfo>(['config']);
 
 export const getResearch = () => inspect<ResearchInfo>(['research']);
+
+export interface BlogKeywordBoard {
+  root: string;
+  week: string | null;
+  file: string | null;
+  data: {version: number; week: string; generated_at: string; source: string; keywords: BlogKeywordCandidate[]} | null;
+}
+
+export const getBlogKeywords = (week?: string) => inspect<BlogKeywordBoard>(['blog-keywords', ...(week ? ['--week', week] : [])]);

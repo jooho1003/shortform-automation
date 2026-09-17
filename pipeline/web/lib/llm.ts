@@ -32,6 +32,10 @@ export interface LlmRequest {
   cwd?: string;
   logDir?: string;
   title?: string;
+  /** claude CLI에서만 허용할 도구. 기본은 도구 없음(이미지 첨부 시 Read). */
+  allowedTools?: string[];
+  /** claude CLI 최대 에이전트 턴. 도구가 없으면 기본 1. */
+  maxTurns?: number;
 }
 
 export interface LlmResult<T = unknown> {
@@ -85,12 +89,9 @@ export async function runLlm<T = unknown>(req: LlmRequest): Promise<LlmResult<T>
 
   if (req.provider === 'claude') {
     const args = ['-p', '--output-format', 'json', '--no-session-persistence', '--model', model];
-    // 텍스트 생성만 시킨다. 이미지 첨부가 있을 때만 Read를 허용한다.
-    if (req.images?.length) {
-      args.push('--max-turns', '6', '--allowedTools', 'Read');
-    } else {
-      args.push('--max-turns', '1');
-    }
+    const tools = [...new Set([...(req.allowedTools ?? []), ...(req.images?.length ? ['Read'] : [])])];
+    args.push('--max-turns', String(Math.max(1, Math.min(30, req.maxTurns ?? (tools.length ? 6 : 1)))));
+    if (tools.length) args.push('--allowedTools', tools.join(','));
     if (req.system) args.push('--system-prompt', req.system);
     if (req.schema) args.push('--json-schema', JSON.stringify(req.schema));
     const job = startJob({kind: 'claude', title, args, stdin: prompt, cwd: req.cwd, logDir: req.logDir});

@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 
-import {discoverJob, researchJob, segmentsJob, statusJob, stepJob, type EpisodeKey} from '@/lib/presets';
+import {blogKeywordsJob, blogPublishJob, blogRankJob, discoverJob, researchJob, segmentsJob, statusJob, stepJob, type EpisodeKey} from '@/lib/presets';
 import {JobError, listJobs, startJob} from '@/lib/runner';
 import {PathDenied, resolveInRoot} from '@/lib/safePath';
 import type {JobSpec, StepName} from '@/lib/types';
@@ -31,6 +31,9 @@ export async function GET() {
  * POST {preset: 'segments', source, date}
  */
 export async function POST(req: Request) {
+  const origin = req.headers.get('origin');
+  if (origin && origin !== new URL(req.url).origin) return Response.json({error: '다른 사이트의 요청은 허용하지 않습니다.'}, {status: 403});
+  if (!req.headers.get('content-type')?.includes('application/json')) return Response.json({error: 'JSON 요청이 필요합니다.'}, {status: 415});
   let body: Record<string, unknown>;
   try {
     body = (await req.json()) as Record<string, unknown>;
@@ -61,6 +64,23 @@ export async function POST(req: Request) {
         if (!source || source.length > 200 || /[\s"'&|;<>]/.test(source)) throw new JobError('source는 유튜브 URL 또는 영상 ID');
         if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) throw new JobError('date 형식 오류');
         spec = segmentsJob(source, date);
+        break;
+      }
+      case 'blog-keywords': {
+        const week = body.week === undefined ? undefined : String(body.week);
+        if (week && !/^\d{4}-W\d{2}$/.test(week)) throw new JobError('week는 YYYY-Www 형식');
+        spec = blogKeywordsJob(week);
+        break;
+      }
+      case 'blog-rank':
+        spec = blogRankJob();
+        break;
+      case 'blog-publish': {
+        const id = String(body.id ?? '');
+        const mode = body.mode;
+        if (!/^\d{8}-[A-Za-z0-9가-힣_-]{1,80}$/u.test(id)) throw new JobError('블로그 프로젝트 id 형식 오류');
+        if (mode !== 'copy' && mode !== 'draft') throw new JobError('mode는 copy 또는 draft');
+        spec = blogPublishJob(id, mode, body.confirmed === true);
         break;
       }
       default:

@@ -81,6 +81,11 @@ export async function GET() {
     ['FAL_KEY', 'FAL_KEY (A안 영상 생성 · fal.ai)', 'optional', 'https://fal.ai/dashboard/keys 에서 발급 → pipeline/.env 에 FAL_KEY=...'],
     ['PEXELS_API_KEY', 'PEXELS_API_KEY (B안 stock 소재)', 'optional', 'https://www.pexels.com/api/ → pipeline/.env'],
     ['YOUTUBE_API_KEY', 'YOUTUBE_API_KEY (discover 단계)', 'optional', 'Google Cloud Console · YouTube Data API v3 → pipeline/.env'],
+    ['NAVER_CLIENT_ID', 'NAVER_CLIENT_ID (블로그 검색 API)', 'optional', '네이버 개발자 센터 애플리케이션 → pipeline/.env'],
+    ['NAVER_CLIENT_SECRET', 'NAVER_CLIENT_SECRET (블로그 검색 API)', 'optional', '네이버 개발자 센터 애플리케이션 → pipeline/.env'],
+    ['NAVER_AD_CUSTOMER_ID', 'NAVER_AD_CUSTOMER_ID (검색량)', 'optional', '네이버 검색광고 API 사용 관리 → pipeline/.env'],
+    ['NAVER_AD_ACCESS_LICENSE', 'NAVER_AD_ACCESS_LICENSE (검색량)', 'optional', '네이버 검색광고 API 사용 관리 → pipeline/.env'],
+    ['NAVER_AD_SECRET_KEY', 'NAVER_AD_SECRET_KEY (검색량 서명)', 'optional', '네이버 검색광고 API 사용 관리 → pipeline/.env'],
   ] as const) {
     checks.push({id: k, label, ok: hasKey(k), detail: hasKey(k) ? (process.env[k] ? '환경변수' : 'pipeline/.env') : '없음', fix, level});
   }
@@ -90,6 +95,11 @@ export async function GET() {
 
   const chrome = fs.existsSync(path.join(PIPELINE, 'node_modules', '.remotion')) || fs.existsSync(path.join(REMOTION, 'node_modules', '.remotion'));
   checks.push({id: 'chrome', label: 'Remotion 헤드리스 크롬 (렌더)', ok: chrome, detail: chrome ? '내려받음' : '첫 렌더 때 자동 다운로드', level: 'optional'});
+
+  const playwright = await version(py.cmd, [...py.prefix, '-c', "import playwright;print('ok')"]);
+  checks.push({id: 'naver-playwright', label: 'Playwright (네이버 임시저장 옵트인)', ok: playwright === 'ok', detail: playwright === 'ok' ? '설치됨' : '없음 — copy 모드는 사용 가능', fix: '.venv\\Scripts\\python -m pip install playwright && .venv\\Scripts\\python -m playwright install chromium', level: 'optional'});
+  const naverProfile = fs.existsSync(path.join(PIPELINE, 'secrets', 'naver-profile'));
+  checks.push({id: 'naver-profile', label: '네이버 전용 로그인 프로필', ok: naverProfile, detail: naverProfile ? 'pipeline/secrets/naver-profile 있음' : '없음 — 비밀번호는 저장하지 않음', fix: 'python -m shortform blog login', level: 'optional'});
 
   return Response.json({root: ROOT, platform: process.platform, node: process.version, checks});
 }

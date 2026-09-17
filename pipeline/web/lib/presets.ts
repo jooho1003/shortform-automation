@@ -47,4 +47,23 @@ export function remotionRenderJob(ep: EpisodeKey): JobSpec {
   return stepJob(ep, 'render');
 }
 
-export type PresetName = 'step' | 'status' | 'research' | 'discover' | 'segments';
+export function blogKeywordsJob(week?: string): JobSpec {
+  return {kind: 'python', title: '블로그 키워드 발굴', args: ['blog', 'keywords', ...(week ? ['--week', week] : [])]};
+}
+
+export function blogRankJob(): JobSpec {
+  return {kind: 'python', title: '블로그 순위 추적', args: ['blog', 'rank']};
+}
+
+export function blogPublishJob(id: string, mode: 'copy' | 'draft', confirmed = false): JobSpec {
+  return {
+    kind: 'python',
+    title: `블로그 ${mode === 'draft' ? '네이버 임시저장' : '게시 패키지 점검'} · ${id}`,
+    args: ['blog', 'publish', '--id', id, '--mode', mode, ...(mode === 'draft' ? ['--execute', '--confirmed'] : [])],
+    logDir: `블로그/${id}/로그`,
+    dangerous: true,
+    confirmed,
+  };
+}
+
+export type PresetName = 'step' | 'status' | 'research' | 'discover' | 'segments' | 'blog-keywords' | 'blog-rank' | 'blog-publish';

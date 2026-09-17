@@ -1,0 +1,13 @@
+# 네이버 에디터 DOM은 공식 계약이 아니므로 기본값을 비워 둔다.
+# draft_enabled=true와 함께 실제 계정에서 확인한 값만 입력한다.
+editor_url: "https://blog.naver.com/PostWriteForm.naver?blogId={blog_id}"
+selectors:
+  ready: ""
+  title: ""
+  body: ""
+  tag: ""
+  save_draft: ""
+iframe: ""
+timeouts:
+  navigation_ms: 30000
+  selector_ms: 10000

@@ -247,3 +247,30 @@ def run_config(root: Path | None = None) -> dict:
         "voice": voice_data,
         "channels": channels_data,
     }
+
+
+def run_blog_keywords(week: str | None = None, root: Path | None = None) -> dict:
+    root = root or ROOT
+    directory = DATA / "blog" / "keywords"
+    if week and not re.fullmatch(r"\d{4}-W\d{2}", week):
+        raise StepFailed("week는 YYYY-Www 형식이어야 합니다.")
+    files = sorted(directory.glob("*.json")) if directory.exists() else []
+    target = directory / f"{week}.json" if week else (files[-1] if files else None)
+    if target is None or not target.exists():
+        return {"root": _root_posix(root), "week": week, "file": None, "data": None}
+    data = json.loads(target.read_text(encoding="utf-8-sig"))
+    statuses: dict[str, str] = {}
+    for project_file in (root / "블로그").glob("*/프로젝트.json"):
+        try:
+            project = json.loads(project_file.read_text(encoding="utf-8-sig"))
+            keyword = str(project.get("keyword", {}).get("main", "")).replace(" ", "").lower()
+            if keyword:
+                statuses[keyword] = "published" if project.get("status") == "published" else "writing"
+        except (OSError, json.JSONDecodeError):
+            continue
+    if isinstance(data, dict) and isinstance(data.get("keywords"), list):
+        for row in data["keywords"]:
+            if isinstance(row, dict):
+                key = str(row.get("main", "")).replace(" ", "").lower()
+                row["status"] = statuses.get(key, "unused")
+    return {"root": _root_posix(root), "week": target.stem, "file": _rel(target, root), "data": data}

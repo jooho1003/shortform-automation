@@ -32,6 +32,7 @@ export const CONFIG = path.join(PIPELINE, 'config');
 export const DATA = path.join(PIPELINE, 'data');
 export const OUTSOURCING = path.join(ROOT, '외주');
 export const REELS = path.join(ROOT, '릴스기획');
+export const BLOG = path.join(ROOT, '블로그');
 export const BGM = path.join(PIPELINE, 'assets', 'bgm');
 
 /** 파이썬 실행 파일. venv가 있으면 그것, 없으면 py -3 런처. */

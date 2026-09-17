@@ -31,8 +31,8 @@
 ├─ pipeline/              코드 (Python + Remotion + 웹 콘솔)
 │  ├─ shortform/          단계별 모듈 (A안·B안), inspect 브리지, 릴스 기획
 │  ├─ remotion/           렌더 컴포지션
-│  ├─ web/                Next.js 로컬 콘솔 — 회차·릴스 기획·외주·환경 점검
-│  ├─ prompts/            claude/codex 프롬프트 (릴스 기획)
+│  ├─ web/                Next.js 로컬 콘솔 — 회차·블로그·릴스 기획·외주·환경 점검
+│  ├─ prompts/            claude/codex 프롬프트 (블로그·릴스 기획)
 │  ├─ config/             키워드·목소리·조사·채널·패키지·이미지·fal 설정
 │  └─ data/               조사 리포트, 구간 후보, 잡 로그 (캐시는 git 제외)
 ├─ 릴스기획/              레퍼런스 라이브러리 + 기획 프로젝트 (숏부스터식)
@@ -60,6 +60,8 @@ npm run dev            # 웹 콘솔 http://localhost:3123
 python -m shortform research                              # 주간 조사 (기획 전 필수)
 python -m shortform segments --source <URL> --date <날짜>  # 롱폼에서 구간 후보 20개
 python -m shortform run --track B --date <날짜> --episode 01
+python -m shortform blog keywords                       # 주간 블로그 키워드 보드
+python -m shortform blog rank                           # 게시 글의 검색 순위 기록
 ```
 
 ## 지금 상태 (2026-09-10)
@@ -71,6 +73,7 @@ python -m shortform run --track B --date <날짜> --episode 01
 - **원음 중심 (2026-09-11)**: 템플릿이 내레이션 방식을 정한다. 두 피드 카드는 `narration: original` — TTS를 만들지 않고 클립 원음이 그대로 들리며, 길이는 `클립목록.json`의 `seconds`가 정한다. 브리핑 포커스는 기존대로 TTS.
 - **아직 없는 것**: BGM 덕킹(원음과 BGM이 겹친다), 묶음 기획(`batch`), 오디오 정규화(-16 LUFS), 강조 자막 표 파싱. `docs/전략/90-구현-변경목록.md`.
 - **길이 (2026-09-11 확정)**: 피드 카드 15~75초, 강제 없이 경고. 짧은 한 방과 대사 있는 예능 클립을 한 템플릿으로 받는다.
+- **네이버 블로그 (2026-09-18)**: `/blog`에서 키워드 발굴, 개요 승인, 근거 조사, 원고·이미지 생성, 점검, 복사 패키지, 순위 추적까지 처리한다. 기본은 사람이 붙여넣는 `copy`; 브라우저 임시저장 `draft`는 설정에서 명시적으로 켜야 하고 자동 발행은 하지 않는다.
 
 ## 넘지 않는 선
 

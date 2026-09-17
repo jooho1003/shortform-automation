@@ -1,0 +1,26 @@
+# 네이버 블로그 자동화 기본값. 키가 없어도 수동 키워드로 글을 만들 수 있다.
+blog_id: ""
+niche: "1인 사업자의 콘텐츠 자동화와 AI 제작"
+persona: "직접 해 본 과정을 친절하고 구체적으로 설명하는 실무자. 1인칭을 쓰되 과장하지 않고, 초보자가 바로 따라 할 수 있게 쓴다."
+seed_keywords:
+  - 콘텐츠 자동화
+  - AI 영상 제작
+  - 쇼츠 자동화
+  - 네이버 블로그 자동화
+min_volume: 0
+max_saturation: 10000
+weekly_target: 2
+length:
+  min: 1200
+  max: 3200
+banned_phrases:
+  - 무조건
+  - 100%
+  - 완치
+  - 원금 보장
+  - 수익 보장
+max_posts_per_day: 1
+min_hours_between_posts: 12
+default_publish_mode: copy
+# draft 코드는 제공하지만 계정 주인이 위험을 이해하고 true로 바꾸기 전에는 실행되지 않는다.
+draft_enabled: false
