@@ -67,3 +67,21 @@ pipeline/data/publishing.sqlite3*
 블로그/*/이미지/*.jpeg
 블로그/*/이미지/*.webp
 블로그/*/게시패키지/
+
+# 내려받은 실행 파일 (cloudflared 등)
+pipeline/data/tools/
+
+# 게시 업로드용 미디어 캐시. 해시 파일명, 편당 수십 MB
+pipeline/data/buffer-media/
+
+# C안 모션 샘플 미디어. 렌더 시 재생성
+pipeline/remotion/public/c-motion/
+
+# 카드뉴스·인스타툰 생성 미디어. 프로젝트.json만 올린다
+카드뉴스/*/출력/
+인스타툰/*/출력/
+인스타툰/*/컷/
+인스타툰/*/캐릭터/
+
+# 옵시디언 작업 공간
+.obsidian/
