@@ -14,6 +14,16 @@ const NO_CACHE = 'private, no-cache';
 // URL 에는 저장소 상대 경로만 넣고 여기서 붙인다.
 const PREFIX = 'archive/';
 const INDEX_PATH = 'index.json';
+// 기획안·자막 같은 문서는 새 탭에서 바로 읽혀야 한다. 저장된 타입이 octet-stream 이거나
+// charset 이 빠져 있으면 한글이 깨지므로(nosniff 라 브라우저가 추측도 안 한다) 여기서 고정한다.
+// text/markdown 은 브라우저에 따라 내려받기로 가서 text/plain 으로 보낸다.
+const PLAIN_TEXT = /\.(md|srt|txt)$/i;
+
+function displayType(rel, stored) {
+  if (PLAIN_TEXT.test(rel)) return 'text/plain; charset=utf-8';
+  const isText = stored.startsWith('text/') || stored.startsWith('application/json');
+  return isText && !/charset=/i.test(stored) ? `${stored}; charset=utf-8` : stored;
+}
 
 function notFound(message) {
   return new Response(message, {status: 404, headers: {'Content-Type': 'text/plain; charset=utf-8'}});
@@ -60,7 +70,7 @@ export async function onRequestGet(context) {
   if (!head) return notFound(`없는 파일입니다: ${key}`);
 
   const size = head.size;
-  const contentType = head.httpMetadata?.contentType || 'application/octet-stream';
+  const contentType = displayType(rel, head.httpMetadata?.contentType || 'application/octet-stream');
   const isIndex = rel === INDEX_PATH;
   const baseHeaders = {
     'Content-Type': contentType,

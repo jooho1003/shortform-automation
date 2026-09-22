@@ -22,6 +22,9 @@ ENV_KEYS = ("R2_ACCOUNT_ID", "R2_ACCESS_KEY_ID", "R2_SECRET_ACCESS_KEY", "R2_BUC
 # 고객이 열 때마다 다시 받지 않도록 길게 캐시한다.
 CACHE_CONTROL = "public, max-age=31536000, immutable"
 
+# mimetypes 는 OS 레지스트리를 따라가서 .md·.srt 를 모르는 PC가 있다(→ octet-stream).
+EXTRA_TYPES = {".md": "text/markdown", ".srt": "text/plain"}
+
 
 @dataclass(frozen=True)
 class R2Config:
@@ -73,6 +76,18 @@ def object_key(prefix: str, rel: str) -> str:
     return key
 
 
+def content_type(path: Path) -> str:
+    """객체에 적을 Content-Type. 텍스트에는 charset 을 붙인다 — 없으면 브라우저가 한글을 깨뜨린다."""
+    guessed = (
+        EXTRA_TYPES.get(path.suffix.lower())
+        or mimetypes.guess_type(path.name)[0]
+        or "application/octet-stream"
+    )
+    if guessed.startswith("text/") or guessed == "application/json":
+        return f"{guessed}; charset=utf-8"
+    return guessed
+
+
 def _client(cfg: R2Config):
     import boto3  # 업로드할 때만 필요하다. 로컬 내보내기에는 없어도 된다.
     from botocore.config import Config as BotoConfig
@@ -97,11 +112,10 @@ def upload(files: dict[str, Path], prefix: str, cfg: R2Config | None = None) -> 
         if not path.is_file():
             raise StepFailed(f"업로드할 파일이 없습니다: {path}")
         key = object_key(prefix, rel)
-        content_type = mimetypes.guess_type(path.name)[0] or "application/octet-stream"
         try:
             client.upload_file(
                 str(path), cfg.bucket, key,
-                ExtraArgs={"ContentType": content_type, "CacheControl": CACHE_CONTROL},
+                ExtraArgs={"ContentType": content_type(path), "CacheControl": CACHE_CONTROL},
             )
         except Exception as exc:  # boto3 예외 계층이 넓어 메시지만 정리해 올린다
             raise StepFailed(f"R2 업로드 실패 {key}: {exc}") from exc

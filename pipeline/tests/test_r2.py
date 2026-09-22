@@ -95,3 +95,21 @@ class TestUpload:
         with pytest.raises(StepFailed) as exc:
             r2.upload({"영상/x.mp4": tmp_path / "없음.mp4"}, "p")
         assert "업로드할 파일이 없습니다" in str(exc.value)
+
+
+class TestContentType:
+    @pytest.mark.parametrize("name,expected", [
+        # mimetypes 가 .md 를 모르는 PC 에서도 텍스트로 나가야 한다
+        ("01-기획안.md", "text/markdown; charset=utf-8"),
+        ("분석.srt", "text/plain; charset=utf-8"),
+        ("프로젝트.json", "application/json; charset=utf-8"),
+        ("결과.html", "text/html; charset=utf-8"),
+        ("final.mp4", "video/mp4"),
+        ("thumb.jpg", "image/jpeg"),
+        ("알수없음.zzz", "application/octet-stream"),
+    ])
+    def test_by_suffix(self, name, expected):
+        assert r2.content_type(Path(name)) == expected
+
+    def test_suffix_is_case_insensitive(self):
+        assert r2.content_type(Path("README.MD")) == "text/markdown; charset=utf-8"

@@ -162,3 +162,34 @@ class TestFileMd5:
     def test_matches_known_digest(self, tmp_path):
         p = _write(tmp_path / "a.txt", "hello")
         assert archive.file_md5(p) == "5d41402abc4b2a76b9719d911017c592"
+
+
+class TestUnchanged:
+    """발행 때 건너뛸지 판정. 내용이 같아도 타입이 틀리게 올라간 객체는 다시 올려야 한다."""
+
+    class _Client:
+        def __init__(self, head):
+            self.head = head
+
+        def head_object(self, Bucket, Key):
+            if self.head is None:
+                raise KeyError(Key)
+            return self.head
+
+    def _check(self, tmp_path, head, content_type="text/markdown; charset=utf-8"):
+        from shortform.steps import archive_publish
+
+        p = _write(tmp_path / "01-기획안.md", "기획")
+        digest = archive.file_md5(p)
+        if head is not None:
+            head = {"ContentLength": p.stat().st_size, "Metadata": {"srcmd5": digest}, **head}
+        return archive_publish._unchanged(self._Client(head), "b", "k", p, digest, content_type)
+
+    def test_same_content_and_type_is_skipped(self, tmp_path):
+        assert self._check(tmp_path, {"ContentType": "text/markdown; charset=utf-8"}) is True
+
+    def test_type_without_charset_is_reuploaded(self, tmp_path):
+        assert self._check(tmp_path, {"ContentType": "application/octet-stream"}) is False
+
+    def test_missing_object_is_uploaded(self, tmp_path):
+        assert self._check(tmp_path, None) is False

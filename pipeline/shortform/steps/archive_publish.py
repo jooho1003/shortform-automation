@@ -18,12 +18,17 @@ from ..paths import ROOT
 MD5_META = "srcmd5"
 
 
-def _unchanged(client, bucket: str, key: str, path: Path, digest: str) -> bool:
+def _unchanged(client, bucket: str, key: str, path: Path, digest: str, content_type: str) -> bool:
     try:
         head = client.head_object(Bucket=bucket, Key=key)
     except Exception:
         return False  # 없거나 못 읽으면 올린다
-    return head.get("Metadata", {}).get(MD5_META) == digest and head.get("ContentLength") == path.stat().st_size
+    # Content-Type 도 본다. 내용이 같아도 타입이 틀리게 올라간 객체(charset 없는 .md 등)는 다시 올린다.
+    return (
+        head.get("Metadata", {}).get(MD5_META) == digest
+        and head.get("ContentLength") == path.stat().st_size
+        and head.get("ContentType") == content_type
+    )
 
 
 def run(root: Path | None = None, dry_run: bool = False) -> dict:
@@ -47,12 +52,10 @@ def run(root: Path | None = None, dry_run: bool = False) -> dict:
     for rel, path in sorted(files.items()):
         key = r2.object_key("archive", rel)
         digest = archive.file_md5(path)
-        if _unchanged(client, cfg.bucket, key, path, digest):
+        content_type = r2.content_type(path)
+        if _unchanged(client, cfg.bucket, key, path, digest, content_type):
             skipped.append(rel)
             continue
-        import mimetypes
-
-        content_type = mimetypes.guess_type(path.name)[0] or "application/octet-stream"
         try:
             client.upload_file(
                 str(path), cfg.bucket, key,
