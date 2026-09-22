@@ -3,7 +3,7 @@
 import {useId, useMemo, useState} from 'react';
 import Link from 'next/link';
 
-import {DETAIL_STATUS_LABELS, detailMarkdown, sectionPrompt, type DetailProject, type DetailSection, type DetailStatus} from '@/lib/detailTypes';
+import {DETAIL_STATUS_LABELS, DETAIL_VIDEO_SOURCE_LABELS, DETAIL_VIDEO_MAX_SECONDS, DETAIL_VIDEO_MIN_SECONDS, defaultDetailVideo, detailMarkdown, sectionPrompt, type DetailProject, type DetailSection, type DetailStatus, type DetailVideo} from '@/lib/detailTypes';
 
 const CHECK_LABELS = {facts: '제품 정보와 수치 확인', labels: '표기·주의 문구 확인', mobile: '375px 화면 확인', rights: '이미지·사용 권한 확인'};
 const VISUAL_PRESETS = [
@@ -40,6 +40,37 @@ export function DetailProjectEditor({project: initialProject}: {project: DetailP
 
   function appendVisualPreset(index: number, text: string) {
     setProject((current) => ({...current, sections: current.sections.map((section, i) => i === index ? {...section, visual: section.visual ? `${section.visual}\n${text}` : text} : section)}));
+  }
+
+  function toggleVideo(index: number, on: boolean) {
+    setProject((current) => ({...current, sections: current.sections.map((section, i) => {
+      if (i !== index) return section;
+      if (!on) { const {video: _drop, ...rest} = section; return rest; }
+      return {...section, video: section.video ?? defaultDetailVideo(section.id)};
+    })}));
+  }
+
+  function updateVideo<K extends keyof DetailVideo>(index: number, key: K, value: DetailVideo[K]) {
+    setProject((current) => ({...current, sections: current.sections.map((section, i) =>
+      i === index && section.video ? {...section, video: {...section.video, [key]: value}} : section)}));
+  }
+
+  async function generateVideos() {
+    const count = project.sections.filter((s) => s.video).length;
+    if (!count || pending) return;
+    if (dirty) { setMessage('먼저 저장한 뒤 영상을 생성하세요.'); return; }
+    if (!confirm(`섹션 ${count}개의 영상을 생성합니다. fal.ai 비용이 발생합니다. 진행할까요?`)) return;
+    setPending(true);
+    setMessage(null);
+    try {
+      const response = await fetch(`/api/detail-pages/${project.id}/video`, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({confirm: true})});
+      const result = await response.json() as {job?: {id: string}; error?: string};
+      setMessage(response.ok ? `영상 생성을 시작했습니다. 작업 ${result.job?.id ?? ''} — 진행 상황은 작업 로그에서 봅니다.` : result.error ?? '영상 생성을 시작하지 못했습니다.');
+    } catch {
+      setMessage('영상 생성 요청이 실패했습니다.');
+    } finally {
+      setPending(false);
+    }
   }
 
   async function copyPrompt(section: DetailSection) {
@@ -113,6 +144,7 @@ export function DetailProjectEditor({project: initialProject}: {project: DetailP
 
           <section className="card">
             <strong>섹션 구성 ({project.sections.length}개)</strong>
+            {project.sections.some((s) => s.video) ? <button className="btn sm" disabled={pending || dirty} onClick={generateVideos}>섹션 영상 생성 (유료)</button> : null}
             <p className="faint" style={{margin: '4px 0 12px'}}>카피, 이미지 연출, 검수 상태를 각 섹션마다 정리합니다.</p>
             <div className="dp-section-list">
               {project.sections.map((section, index) => <div className="dp-section" key={section.id}>
@@ -127,6 +159,25 @@ export function DetailProjectEditor({project: initialProject}: {project: DetailP
                   <button className="btn sm" onClick={() => copyPrompt(section)}>제작 지시문 복사</button>
                   {VISUAL_PRESETS.map(([label, text]) => <button type="button" className="btn sm" key={label} onClick={() => appendVisualPreset(index, text)}>{label}</button>)}
                 </div>
+                <div className="dp-section-controls dp-status-row">
+                  <label className="lbl" htmlFor={`video-${section.id}`} style={{margin: 0}}>짧은 영상</label>
+                  <input id={`video-${section.id}`} type="checkbox" checked={!!section.video} onChange={(e) => toggleVideo(index, e.target.checked)} />
+                  {section.video ? <span className="dp-hint">{section.video.file}</span> : null}
+                </div>
+                {section.video ? <div className="dp-video-fields">
+                  <label className="lbl" htmlFor={`video-source-${section.id}`}>소재</label>
+                  <select id={`video-source-${section.id}`} className="field" value={section.video.source} onChange={(e) => updateVideo(index, 'source', e.target.value as DetailVideo['source'])}>
+                    {Object.entries(DETAIL_VIDEO_SOURCE_LABELS).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+                  </select>
+                  {section.video.source === 'image' ? <Field label="시드 이미지 (프로젝트 폴더 기준)" value={section.video.seed} onChange={(v) => updateVideo(index, 'seed', v)} /> : null}
+                  <Field multiline label="움직임 지시" value={section.video.motion} onChange={(v) => updateVideo(index, 'motion', v)} />
+                  <div className="dp-status-row">
+                    <label className="lbl" htmlFor={`video-seconds-${section.id}`} style={{margin: 0}}>길이(초)</label>
+                    <input id={`video-seconds-${section.id}`} className="field" style={{width: '6rem'}} type="number" min={DETAIL_VIDEO_MIN_SECONDS} max={DETAIL_VIDEO_MAX_SECONDS} step={1} value={section.video.seconds} onChange={(e) => updateVideo(index, 'seconds', Number(e.target.value))} />
+                    <label className="lbl" htmlFor={`video-loop-${section.id}`} style={{margin: 0}}>반복 재생</label>
+                    <input id={`video-loop-${section.id}`} type="checkbox" checked={section.video.loop} onChange={(e) => updateVideo(index, 'loop', e.target.checked)} />
+                  </div>
+                </div> : null}
                 <details className="dp-prompt"><summary>제작 지시문 미리보기</summary><pre>{sectionPrompt(project, section)}</pre></details>
               </div>)}
             </div>

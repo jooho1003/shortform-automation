@@ -12,6 +12,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from pathlib import Path
 
 from . import GateBlocked, MissingKey, StepFailed
 from . import inspect as inspector
@@ -158,6 +159,27 @@ def cmd_inspect_blog_keywords(args) -> int:
     return 0
 
 
+def cmd_detail_video(args) -> int:
+    from .steps import detail_video
+
+    report = detail_video.run(args.project)
+    if args.json:
+        _print_json(report)
+    return 0 if report["ok"] else 1
+
+
+def cmd_detail_check(args) -> int:
+    from .steps import detail_video
+    from .steps.check_detail_media import check_media
+
+    base = detail_video.project_dir(args.project)
+    project = detail_video.load_project(args.project)
+    expected = [Path(s["video"]["file"]).name for s in project.get("sections", []) if isinstance(s.get("video"), dict)]
+    report = check_media(base / detail_video.MEDIA_DIR, expected)
+    _print_json(report)
+    return 0 if report["ok"] else 1
+
+
 def main(argv=None) -> int:
     # 한국어 Windows 콘솔은 cp949라 경로와 기호가 깨진다.
     for stream in (sys.stdout, sys.stderr):
@@ -209,6 +231,18 @@ def main(argv=None) -> int:
     p_rt.add_argument("--dir", required=True)
     for p in (p_rm, p_rf, p_rt):
         p.set_defaults(func=cmd_reels)
+
+    p_detail = sub.add_parser("detail-video", help="상세페이지 섹션 영상 — 시드/제품시트 → fal i2v")
+    detail_sub = p_detail.add_subparsers(dest="detail_command", required=True)
+
+    p_detail_gen = detail_sub.add_parser("generate", help="영상이 없는 섹션을 생성한다")
+    p_detail_gen.add_argument("--project", required=True, help="상세페이지 프로젝트 ID")
+    p_detail_gen.add_argument("--json", action="store_true", help="검사 결과를 JSON으로 출력")
+    p_detail_gen.set_defaults(func=cmd_detail_video)
+
+    p_detail_check = detail_sub.add_parser("check", help="생성 없이 미디어 규격만 검사한다")
+    p_detail_check.add_argument("--project", required=True, help="상세페이지 프로젝트 ID")
+    p_detail_check.set_defaults(func=cmd_detail_check)
 
     p_inspect = sub.add_parser("inspect", help="웹 콘솔용 읽기 전용 JSON 브릿지")
     inspect_sub = p_inspect.add_subparsers(dest="inspect_command", required=True)
