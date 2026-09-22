@@ -14,6 +14,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from . import MissingKey, StepFailed
+from .paths import load_dotenv
 
 ENV_KEYS = ("R2_ACCOUNT_ID", "R2_ACCESS_KEY_ID", "R2_SECRET_ACCESS_KEY", "R2_BUCKET", "R2_PUBLIC_BASE_URL")
 
@@ -39,10 +40,12 @@ class R2Config:
 
 
 def configured() -> bool:
+    load_dotenv()
     return all(os.environ.get(k, "").strip() for k in ENV_KEYS)
 
 
 def config() -> R2Config:
+    load_dotenv()
     missing = [k for k in ENV_KEYS if not os.environ.get(k, "").strip()]
     if missing:
         raise MissingKey(

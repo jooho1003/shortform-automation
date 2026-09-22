@@ -17,7 +17,7 @@ from pathlib import Path
 from . import GateBlocked, MissingKey, StepFailed
 from . import inspect as inspector
 from . import state
-from .paths import Episode
+from .paths import Episode, load_dotenv
 
 # `shortform.steps.*`는 PIL/yt-dlp/edge-tts 같은 무거운 의존성을 끌고 온다.
 # `inspect` 서브커맨드는 이런 패키지가 없어도 동작해야 하므로, 실제로
@@ -185,6 +185,8 @@ def main(argv=None) -> int:
     for stream in (sys.stdout, sys.stderr):
         if hasattr(stream, "reconfigure"):
             stream.reconfigure(encoding="utf-8", errors="replace")
+    # 셸 환경변수가 우선. 웹에서 돌릴 때는 자식 환경에 이미 들어와 있다.
+    load_dotenv()
 
     parser = argparse.ArgumentParser(prog="shortform", description="숏폼 자동화 파이프라인")
     sub = parser.add_subparsers(dest="command", required=True)
