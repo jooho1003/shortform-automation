@@ -165,7 +165,7 @@ export function EpisodeView({detail, tab: initialTab}: {detail: EpisodeDetail; t
               승인하면 <span className="mono">01-기획-승인.txt</span>가 만들어지고 plan 단계가 통과합니다. 수정 요청은 <span className="mono">01-기획-수정요청.txt</span>에 적힙니다.
             </p>
           </div>
-          <PlanEditor dir={ep.dir} markdown={detail.plan_md} plan={detail.plan} planError={detail.plan_error} track={ep.track} />
+          <PlanEditor dir={ep.dir} markdown={detail.plan_md} plan={detail.plan} planError={detail.plan_error} track={ep.track} brief={detail.brief} />
           {detail.plan ? <EpisodeVoiceSettings episodeKey={{track:ep.track,date:ep.date,num:ep.num}} compact /> : null}
         </div>
       ) : null}

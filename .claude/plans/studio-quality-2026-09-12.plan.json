@@ -1,0 +1,14 @@
+{
+  "scope": "기존 제작 콘솔의 컷 보드·수정 요청·다음 작업 안내와 A안 생성 품질 개선. 외부 생성·게시 실행 제외.",
+  "nodes": [
+    {"id":"P1","title":"현재 계약 조회","domain":"explore","D1":0,"D2":0,"D3":0,"D4":0,"score":0,"tier":"fast","agent":"explorer","claude_model":"haiku","codex_model":"gpt-5.6-luna","depends_on":[],"산출물":"파일·타입 계약"},
+    {"id":"P2","title":"개선 범위 설계","domain":"architecture","D1":2,"D2":2,"D3":0,"D4":2,"score":6,"tier":"powerful","agent":"main","claude_model":"opus","codex_model":"gpt-5.6-sol","depends_on":["P1"],"산출물":"컷 보드 및 안전한 수정 요청 명세"},
+    {"id":"P3","title":"컷 보드와 작업 안내 구현","domain":"implementation","D1":0,"D2":1,"D3":1,"D4":1,"score":3,"tier":"balanced","agent":"studio_ui","claude_model":"sonnet","codex_model":"gpt-5.6-terra","depends_on":["P2"],"산출물":"React 제작 화면"},
+    {"id":"P4","title":"프롬프트 및 재생성 규칙 구현","domain":"implementation","D1":0,"D2":1,"D3":1,"D4":1,"score":3,"tier":"balanced","agent":"generation_quality","claude_model":"sonnet","codex_model":"gpt-5.6-terra","depends_on":["P2"],"산출물":"Python 코드·회귀 테스트"},
+    {"id":"P5","title":"통합 최종 검토","domain":"review","D1":1,"D2":2,"D3":1,"D4":2,"score":6,"tier":"powerful","agent":"main","claude_model":"opus","codex_model":"gpt-5.6-sol","depends_on":["P3","P4"],"산출물":"테스트·타입 검사·화면 확인"}
+  ],
+  "gates":{"G1":"PASS","G2":"PASS","G3":"PASS","G4":"PASS","G5":"PASS"},
+  "cost_exception":"powerful 40%: P2는 모호한 요구와 구조 판단, P5는 최종 리뷰로 직접 수행 의무. 구현은 balanced 위임.",
+  "status":"complete",
+  "validation":{"pytest":"53 passed, 11 subtests passed","typecheck":"PASS","build":"PASS (5 tracing warnings in existing filesystem/process code)","browser":"A cut selection/save/pending/run navigation and B final media verified; fixture removed","external_generation":false,"published":false}
+}

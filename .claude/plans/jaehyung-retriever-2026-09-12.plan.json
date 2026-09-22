@@ -1,0 +1,88 @@
+{
+  "gates": {
+    "G1": "PASS",
+    "G3": "PASS",
+    "G2": "PASS",
+    "G4": "PASS",
+    "G5": "PASS"
+  },
+  "authorization": "사용자 요청에 따른 B안 로컬 4편 제작 및 A안 기획 샘플. 업로드 제외.",
+  "nodes": [
+    {
+      "claude_model": "sonnet",
+      "D4": 1,
+      "tier": "balanced",
+      "depends_on": [],
+      "codex_model": "gpt-5.6-luna",
+      "산출물": "소스 및 기존 구간 목록",
+      "D2": 0,
+      "D1": 1,
+      "agent": "explorer",
+      "score": 2,
+      "domain": "explore",
+      "title": "기존 요정재형 소스와 실행 경로 확인",
+      "id": "N1",
+      "D3": 0
+    },
+    {
+      "claude_model": "opus",
+      "D4": 2,
+      "tier": "powerful",
+      "depends_on": [
+        "N1"
+      ],
+      "codex_model": "gpt-5.6-sol",
+      "산출물": "B안 4편 편집안과 A안 30초 6컷 기획 및 콘셉트 이미지 1장",
+      "D2": 1,
+      "D1": 2,
+      "agent": "main",
+      "score": 5,
+      "domain": "general",
+      "title": "구간 선정 및 A안 기획",
+      "override_reason": "모호한 요구 해석과 창작 방향 직접 결정",
+      "id": "N2",
+      "D3": 0
+    },
+    {
+      "claude_model": "haiku",
+      "D4": 0,
+      "tier": "fast",
+      "depends_on": [
+        "N2"
+      ],
+      "codex_model": "gpt-5.6-luna",
+      "산출물": "MP4 4편",
+      "D2": 1,
+      "D1": 0,
+      "agent": "worker",
+      "score": 1,
+      "domain": "mechanical",
+      "title": "확정 편집안으로 로컬 렌더",
+      "id": "N3",
+      "D3": 0
+    },
+    {
+      "claude_model": "opus",
+      "D4": 2,
+      "tier": "powerful",
+      "depends_on": [
+        "N3"
+      ],
+      "codex_model": "gpt-5.6-sol",
+      "산출물": "검증 및 전달",
+      "D2": 0,
+      "D1": 0,
+      "agent": "main",
+      "score": 2,
+      "domain": "review",
+      "title": "산출물 최종 확인",
+      "override_reason": "최종 리뷰 직접 수행",
+      "id": "N4",
+      "D3": 0
+    }
+  ],
+  "date": "2026-09-12",
+  "cost_exception": "powerful 50%: N2 요구 해석/창작 판단, N4 최종 리뷰 하드 오버라이드",
+  "render_execution": "B02 Remotion 전체 렌더. B03~05는 정적 피드카드 Remotion still + 동일 좌표 FFmpeg 원음 영상 합성. 단일 클립/댓글·TTS·BGM 없음 조건 검사. 공용 stage 순차 사용. 코드 원본 변경 없음.",
+  "completion": "완료: B02~05 MP4 4편, A안 30초 6컷 기획안 및 콘셉트 이미지. 네 영상 1080x1920/AAC/전체 디코드/실제 음량 검사 PASS. 핵심 프레임 시각 확인. 최종 전편 원본 가로 전체 표시로 보정."
+}

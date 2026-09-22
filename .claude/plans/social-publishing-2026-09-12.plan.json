@@ -1,0 +1,92 @@
+{
+  "cost_exception": "powerful 50%: P2 보안/인증, P4 최종 리뷰 및 외부 게시",
+  "assumptions": [
+    "사용자 서비스 선택 전 플랫폼 중립 게시 준비 우선",
+    "서비스·계정·일정 설정 후 명시적 send 실행",
+    "원격 결과 불명확 시 자동 재업로드 금지"
+  ],
+  "gates": {
+    "G2": "PASS",
+    "G1": "PASS",
+    "G5": "PASS",
+    "G4": "PASS",
+    "G3": "PASS"
+  },
+  "nodes": [
+    {
+      "D3": 0,
+      "id": "P1",
+      "D4": 1,
+      "claude_model": "sonnet",
+      "산출물": "경로·연결 상태",
+      "D2": 0,
+      "domain": "explore",
+      "title": "기존 게시 코드 및 연결 설정 조회",
+      "depends_on": [],
+      "agent": "explorer",
+      "codex_model": "gpt-5.6-luna",
+      "score": 2,
+      "D1": 1,
+      "tier": "balanced"
+    },
+    {
+      "D3": 0,
+      "id": "P2",
+      "D4": 2,
+      "claude_model": "opus",
+      "산출물": "공식 API 기반 연결 및 전송 계약",
+      "D2": 1,
+      "domain": "security",
+      "title": "게시 연결·계정 검증·중복 방지 설계",
+      "depends_on": [
+        "P1"
+      ],
+      "override_reason": "계정 권한과 외부 게시 경계 직접 판단",
+      "agent": "main",
+      "codex_model": "gpt-5.6-sol",
+      "score": 5,
+      "D1": 2,
+      "tier": "powerful"
+    },
+    {
+      "D3": 1,
+      "id": "P3",
+      "D4": 0,
+      "claude_model": "sonnet",
+      "산출물": "CLI·게시 목록·테스트",
+      "D2": 1,
+      "domain": "mechanical",
+      "title": "확정 명세의 게시 준비 및 테스트",
+      "depends_on": [
+        "P2"
+      ],
+      "agent": "default",
+      "codex_model": "gpt-5.6-terra",
+      "score": 2,
+      "D1": 0,
+      "tier": "balanced"
+    },
+    {
+      "claude_model": "opus",
+      "domain": "general",
+      "D1": 1,
+      "title": "최종 검증 및 연결된 계정에 게시",
+      "agent": "main",
+      "codex_model": "gpt-5.6-sol",
+      "D3": 2,
+      "override_reason": "최종 리뷰 직접 수행 및 외부 게시",
+      "depends_on": [
+        "P3"
+      ],
+      "authorization": "사용자는 4편 3플랫폼 업로드를 요청함. 대상 계정·일정 응답 전에는 게시하지 않음.",
+      "requires_approval": true,
+      "id": "P4",
+      "D4": 2,
+      "산출물": "검증 결과·실제 게시 결과 또는 연결 대기 사유",
+      "tier": "powerful",
+      "score": 6,
+      "D2": 1
+    }
+  ],
+  "date": "2026-09-12"
+}

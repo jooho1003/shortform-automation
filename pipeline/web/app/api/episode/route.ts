@@ -36,14 +36,14 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
-  let body: {track?: unknown; date?: unknown; num?: unknown; slug?: unknown};
+  let body: {track?: unknown; date?: unknown; num?: unknown; slug?: unknown; brief?: unknown};
   try {
     body = await req.json();
   } catch {
     return Response.json({error: '요청 본문이 JSON이 아닙니다.'}, {status: 400});
   }
 
-  const {track, date, num, slug} = body;
+  const {track, date, num, slug, brief} = body;
   if (track !== 'A' && track !== 'B') {
     return Response.json({error: 'track은 A 또는 B여야 합니다.'}, {status: 400});
   }
@@ -55,6 +55,9 @@ export async function POST(req: Request) {
   }
   if (typeof slug !== 'string' || !SLUG_RE.test(slug) || slug.includes('..')) {
     return Response.json({error: 'slug 형식이 올바르지 않습니다.'}, {status: 400});
+  }
+  if (brief !== undefined && (typeof brief !== 'string' || brief.length > 8000)) {
+    return Response.json({error: '제작 의도는 8,000자 이내여야 합니다.'}, {status: 400});
   }
 
   const paddedNum = num.padStart(2, '0');
@@ -78,6 +81,9 @@ export async function POST(req: Request) {
   }
 
   await fs.mkdir(abs, {recursive: true});
+  if (typeof brief === 'string' && brief.trim()) {
+    await fs.writeFile(`${abs}/00-제작의도.md`, brief.trim(), 'utf8');
+  }
   await initializeEpisodeVoice(track, date, paddedNum, rel);
   return Response.json({dir: rel});
 }

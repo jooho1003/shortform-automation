@@ -1,0 +1,197 @@
+{
+  "slug": "carousel-content",
+  "date": "2026-09-13",
+  "design": "docs/전략/37-카드뉴스-인스타툰-자동화.md",
+  "gates": {
+    "G1": "PASS",
+    "G2": "PASS",
+    "G3": "PASS",
+    "G4": "PASS",
+    "G5": "PASS"
+  },
+  "cost_note": "powerful 3/9 = 33%",
+  "assumptions": [
+    "1080×1350 JPEG 10장 이하 고정",
+    "이미지 모델은 글자 없는 이미지만 생성",
+    "게시는 confirmed 없이는 불가"
+  ],
+  "nodes": [
+    {
+      "id": "K0",
+      "title": "규격·관행·리스크 리서치",
+      "domain": "research",
+      "D1": 1,
+      "D2": 0,
+      "D3": 0,
+      "D4": 1,
+      "score": 2,
+      "tier": "balanced",
+      "agent": "general-purpose",
+      "claude_model": "sonnet",
+      "codex_model": "gpt-5.6-luna",
+      "depends_on": [],
+      "산출물": "리서치 메모(문서 37 1·6절)",
+      "status": "done"
+    },
+    {
+      "id": "K1",
+      "title": "카드뉴스·인스타툰 아키텍처 결정",
+      "domain": "architecture",
+      "D1": 2,
+      "D2": 2,
+      "D3": 1,
+      "D4": 2,
+      "score": 7,
+      "tier": "powerful",
+      "agent": "main",
+      "claude_model": "opus",
+      "codex_model": "gpt-5.6-sol",
+      "depends_on": [
+        "K0"
+      ],
+      "산출물": "docs/전략/37 2절",
+      "status": "done",
+      "override_reason": "아키텍처 결정 — 하드 오버라이드, 위임 안 함"
+    },
+    {
+      "id": "K2",
+      "title": "저장소·API·페이지·에디터·Still 컴포넌트",
+      "domain": "frontend",
+      "D1": 1,
+      "D2": 1,
+      "D3": 0,
+      "D4": 1,
+      "score": 3,
+      "tier": "balanced",
+      "agent": "main",
+      "claude_model": "sonnet",
+      "codex_model": "gpt-5.6-terra",
+      "depends_on": [
+        "K1"
+      ],
+      "산출물": "pipeline/web carousel 파일군, remotion/src/carousel",
+      "status": "done"
+    },
+    {
+      "id": "K3",
+      "title": "Pretendard 번들 + 캐러셀 렌더 스크립트(bundle 1회·renderStill N회·JPEG)",
+      "domain": "render",
+      "D1": 1,
+      "D2": 1,
+      "D3": 1,
+      "D4": 1,
+      "score": 4,
+      "tier": "balanced",
+      "agent": "worker",
+      "claude_model": "sonnet",
+      "codex_model": "gpt-5.6-terra",
+      "depends_on": [
+        "K2"
+      ],
+      "산출물": "remotion/scripts/render-carousel.mjs, /api/carousel/[kind]/[id]/render",
+      "status": "todo"
+    },
+    {
+      "id": "K4",
+      "title": "카드뉴스 원고 LLM(스키마·프롬프트)",
+      "domain": "llm-prompt",
+      "D1": 1,
+      "D2": 1,
+      "D3": 0,
+      "D4": 2,
+      "score": 4,
+      "tier": "balanced",
+      "agent": "worker",
+      "claude_model": "sonnet",
+      "codex_model": "gpt-5.6-terra",
+      "depends_on": [
+        "K2"
+      ],
+      "산출물": "prompts/carousel/cardnews-script.md, POST .../script",
+      "status": "todo"
+    },
+    {
+      "id": "K5",
+      "title": "인스타툰 기획 LLM(캐릭터 락·콘티)",
+      "domain": "llm-prompt",
+      "D1": 1,
+      "D2": 1,
+      "D3": 0,
+      "D4": 2,
+      "score": 4,
+      "tier": "balanced",
+      "agent": "worker",
+      "claude_model": "sonnet",
+      "codex_model": "gpt-5.6-terra",
+      "depends_on": [
+        "K2"
+      ],
+      "산출물": "prompts/carousel/instatoon-plan.md, POST .../plan",
+      "status": "todo"
+    },
+    {
+      "id": "K6",
+      "title": "Python carousel images: 카드 배경·캐릭터 시트·컷(codex, images_a 재사용)",
+      "domain": "image-gen",
+      "D1": 1,
+      "D2": 1,
+      "D3": 0,
+      "D4": 1,
+      "score": 3,
+      "tier": "balanced",
+      "agent": "worker",
+      "claude_model": "sonnet",
+      "codex_model": "gpt-5.6-terra",
+      "depends_on": [
+        "K4",
+        "K5"
+      ],
+      "산출물": "shortform/carousel.py, cli carousel 서브커맨드, 테스트",
+      "status": "todo"
+    },
+    {
+      "id": "K7",
+      "title": "캐러셀 게시(Buffer 이미지 assets 또는 Graph API)",
+      "domain": "publishing",
+      "D1": 1,
+      "D2": 2,
+      "D3": 2,
+      "D4": 1,
+      "score": 6,
+      "tier": "powerful",
+      "agent": "main",
+      "claude_model": "opus",
+      "codex_model": "gpt-5.6-sol",
+      "depends_on": [
+        "K3"
+      ],
+      "산출물": "buffer_api 캐러셀 확장 + 초안 1건 실검증",
+      "status": "todo",
+      "requires_approval": true,
+      "override_reason": "외부 발신(D3=2)·계정 경계"
+    },
+    {
+      "id": "K8",
+      "title": "최종 리뷰",
+      "domain": "review",
+      "D1": 1,
+      "D2": 2,
+      "D3": 1,
+      "D4": 2,
+      "score": 6,
+      "tier": "powerful",
+      "agent": "main",
+      "claude_model": "opus",
+      "codex_model": "gpt-5.6-sol",
+      "depends_on": [
+        "K3",
+        "K6",
+        "K7"
+      ],
+      "산출물": "리뷰 기록",
+      "status": "todo",
+      "override_reason": "최종 리뷰 — 하드 오버라이드"
+    }
+  ],
+  "cost_exception": "powerful 33%: 3개 모두 하드 오버라이드(K1 아키텍처, K7 외부 발신, K8 최종 리뷰) — 강등 불가"
+}

@@ -1,0 +1,70 @@
+.carousel-layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 1fr) 460px;
+  gap: 18px;
+  align-items: start;
+}
+
+@media (max-width: 1100px) {
+  .carousel-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.slide-frame {
+  overflow: hidden;
+  border-radius: 8px;
+  outline: 2px solid transparent;
+  flex: none;
+}
+
+.slide-frame.active {
+  outline-color: #ffd43b;
+}
+
+.slide-strip {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 4px 2px 10px;
+}
+
+.carousel-form {
+  display: grid;
+  gap: 10px;
+}
+
+.carousel-form label {
+  display: grid;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--muted, #9aa0aa);
+}
+
+.carousel-form textarea.field {
+  min-height: 72px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.carousel-sticky {
+  position: sticky;
+  top: 12px;
+}
+
+.lint-list {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 12px;
+}
+
+.panel-box {
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 10px;
+  display: grid;
+  gap: 8px;
+}

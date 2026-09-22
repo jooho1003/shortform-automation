@@ -1,0 +1,43 @@
+{
+  "id": "20260913-yapd8",
+  "title": "자외선 차단제 고르는 법 5가지",
+  "client": null,
+  "brand_name": "@skin.note",
+  "sponsored": true,
+  "status": "draft",
+  "caption": "광고 | 여름 선크림 고르는 법",
+  "hashtags": [],
+  "created_at": "2026-09-13T00:37:45.123Z",
+  "updated_at": "2026-09-13T00:37:45.166Z",
+  "kind": "cardnews",
+  "topic": "자외선 차단제 고르는 법 5가지",
+  "audience": "",
+  "theme": {
+    "bg": "#111318",
+    "fg": "#f5f5f2",
+    "accent": "#ffd43b"
+  },
+  "slides": [
+    {
+      "role": "cover",
+      "eyebrow": "여름 피부 가이드",
+      "title": "선크림,\n아직도 아무거나?",
+      "body": "",
+      "image": null
+    },
+    {
+      "role": "body",
+      "eyebrow": "01",
+      "title": "SPF는 50이면 충분",
+      "body": "숫자가 높다고 두 배로 막아주진 않아요.\n양을 충분히 바르는 게 더 중요합니다.",
+      "image": null
+    },
+    {
+      "role": "cta",
+      "eyebrow": "",
+      "title": "저장하고\n쇼핑할 때 꺼내보세요",
+      "body": "",
+      "image": null
+    }
+  ]
+}

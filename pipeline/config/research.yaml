@@ -50,6 +50,16 @@ benchmark_channels:
   - name: 김갈대reed
     url: https://www.youtube.com/@%EA%B9%80%EA%B0%88%EB%8C%80reed
 
+# A안 캐릭터 기획 참고군. 특정 캐릭터를 복제하지 않고 포맷·말투·반복 구조만 참고한다.
+# 검색 링크로 시작해 두고, 실제 채널을 확인한 뒤 url을 좁혀도 된다.
+ai_character_references:
+  - name: 햄찌씨
+    url: https://www.youtube.com/results?search_query=%ED%96%84%EC%B0%8C%EC%94%A8+AI+%EC%BA%90%EB%A6%AD%ED%84%B0
+    note: 작은 AI 캐릭터의 반복 포맷·표정·말투 참고
+  - name: 김크루
+    url: https://www.youtube.com/results?search_query=%EA%B9%80%ED%81%AC%EB%A3%A8+AI+%EC%BA%90%EB%A6%AD%ED%84%B0
+    note: AI 캐릭터 군상·관계·상황극 구조 참고
+
 # 우리 채널. 만들면 여기에 넣는다. 지난 편 성과가 조사에 들어간다.
 own_channel: ""
 

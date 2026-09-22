@@ -139,6 +139,20 @@ export function ResearchPanel({info}: {info: ResearchInfo | null}) {
           </table>
         </div>
       ) : null}
+      {info?.character_references?.length ? (
+        <div className="card">
+          <strong>A안 AI 캐릭터 참고군</strong>
+          <p className="faint">캐릭터를 복제하지 않고 말투·표정·관계·반복 포맷만 참고합니다. A안 자동 기획에도 전달됩니다.</p>
+          <div className="grid cols-2" style={{marginTop: 8}}>
+            {info.character_references.map((ref) => (
+              <a key={ref.name} className="card" href={ref.url} target="_blank" rel="noreferrer" style={{padding: 12}}>
+                <strong>{ref.name}</strong>
+                {ref.note ? <div className="faint" style={{marginTop: 4}}>{ref.note}</div> : null}
+              </a>
+            ))}
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

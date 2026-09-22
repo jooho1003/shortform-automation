@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-09-15",
+  "scope": "사용자 제공 영상 분석 및 C안 지식·역사 모션 숏폼 설계. 실행 코드 구현과 본편 제작은 후속 작업.",
+  "execution": "현재 메인 세션에서 직접 수행. 모델 값은 저장소의 배정 기준이며 실행 모델 변경 이력을 뜻하지 않음.",
+  "nodes": [
+    {
+      "id": "C1",
+      "title": "레퍼런스를 분석하고 C안 제작·데이터·화면 구조 설계",
+      "domain": "pm",
+      "D1": 2, "D2": 2, "D3": 0, "D4": 2,
+      "score": 6,
+      "tier": "powerful",
+      "agent": "main",
+      "claude_model": "opus",
+      "codex_model": "gpt-5.6-sol",
+      "depends_on": [],
+      "outputs": ["docs/설계/02-C안-지식역사-모션숏폼.md", "2026-09-15/C-01-트리스탄다쿠냐-설계/01-기획안.md", "2026-09-15/C-01-트리스탄다쿠냐-설계/01-스토리설계.json", "장면 탐색용 대화 컷보드"],
+      "override_reason": "C안 기존 정의 부재에 따른 요구 해석 및 파이프라인 아키텍처 결정은 메인 직접 수행 대상.",
+      "requires_approval": false
+    },
+    {
+      "id": "C2",
+      "title": "출처·시간 배분·기존 코드 연결점과 산출물 최종 검토",
+      "domain": "review",
+      "D1": 0, "D2": 1, "D3": 0, "D4": 2,
+      "score": 3,
+      "tier": "powerful",
+      "agent": "main",
+      "claude_model": "opus",
+      "codex_model": "gpt-5.6-sol",
+      "depends_on": ["C1"],
+      "outputs": ["검증된 설계 문서·기획안·컷보드"],
+      "override_reason": "최종 리뷰 하드 오버라이드 적용. 수치 근거와 구현 여부를 직접 판정.",
+      "requires_approval": false
+    }
+  ],
+  "gates": {
+    "G1": "PASS", "G2": "PASS", "G3": "PASS",
+    "G4": "PASS", "G5": "PASS",
+    "powerful_ratio": 1,
+    "G4_reason": "두 노드 모두 아키텍처·모호한 요구 해석·최종 리뷰의 하드 오버라이드. 각 노드에 사유 명시.",
+    "G5_reason": "로컬 설계 산출물만 작성하며 외부 공개·유료 생성·배포 노드 없음."
+  }
+}

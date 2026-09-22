@@ -1,0 +1,61 @@
+.page { --ink:#0d2633; --sea:#0b4c68; --cyan:#65e4ff; --sand:#f6efd9; --gold:#ffc85a; display:grid; gap:28px; color:var(--ink); }
+.hero { position:relative; overflow:hidden; display:flex; justify-content:space-between; gap:24px; min-height:300px; padding:46px 50px; border-radius:22px; color:#f6fbfd; background:radial-gradient(circle at 82% 15%,rgba(101,228,255,.32),transparent 28%),linear-gradient(135deg,#082c45,#0c6176 58%,#0b3f5d); box-shadow:0 18px 60px rgba(12,52,71,.2); }
+.hero::after { content:""; position:absolute; right:-70px; bottom:-170px; width:410px; height:410px; border:1px solid rgba(255,255,255,.16); border-radius:50%; box-shadow:0 0 0 58px rgba(255,255,255,.035),0 0 0 116px rgba(255,255,255,.025); }
+.eyebrow,.sectionTitle>span { display:block; margin-bottom:14px; color:var(--gold); font-size:12px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; }
+.hero h1 { position:relative; z-index:1; margin:0; max-width:670px; font-size:clamp(36px,5vw,64px); line-height:1.06; letter-spacing:-.055em; }
+.hero p { position:relative; z-index:1; max-width:620px; margin:22px 0 0; color:#c8e6ee; font-size:16px; line-height:1.7; }
+.status { position:relative; z-index:1; align-self:flex-start; display:flex; align-items:center; gap:9px; padding:10px 14px; border:1px solid rgba(255,255,255,.18); border-radius:999px; background:rgba(4,29,43,.4); color:#e9fbff; font-size:12px; font-weight:700; white-space:nowrap; backdrop-filter:blur(12px); }
+.liveDot { width:8px; height:8px; border-radius:50%; background:#67eda0; box-shadow:0 0 0 5px rgba(103,237,160,.13); }
+.studio { display:grid; grid-template-columns:minmax(300px,390px) minmax(0,1fr); gap:24px; align-items:start; }
+.playerShell { overflow:hidden; padding:12px; border-radius:22px; background:#071a25; box-shadow:0 16px 40px rgba(4,28,42,.18); }
+.playerShell video { display:block; width:100%; aspect-ratio:9/16; border:0; border-radius:14px; background:#02080c; object-fit:cover; }
+.playerMeta { display:flex; justify-content:space-between; padding:12px 5px 2px; color:#7da0ad; font:700 10px/1 ui-monospace,SFMono-Regular,Consolas,monospace; letter-spacing:.11em; }
+.scenePanel { display:grid; gap:18px; padding:30px; border:1px solid #dce5e8; border-radius:22px; background:#fff; box-shadow:0 15px 45px rgba(22,60,72,.08); }
+.panelHead { display:flex; align-items:center; justify-content:space-between; gap:18px; }
+.panelHead>div { display:grid; gap:4px; }
+.panelHead span,.scriptCard>span { color:#7b9199; font:700 10px/1.2 ui-monospace,SFMono-Regular,Consolas,monospace; letter-spacing:.13em; }
+.panelHead strong { font-size:22px; letter-spacing:-.03em; }
+.timeline { display:grid; grid-template-columns:1fr 1fr; gap:4px; }
+.timeline span { height:6px; border-radius:999px; background:#dce5e8; }
+.timeline .activeBar { background:var(--sea); }
+.sceneList { display:grid; gap:8px; }
+.sceneList button { display:grid; grid-template-columns:44px 1fr; gap:12px; align-items:start; width:100%; padding:15px; border:1px solid transparent; border-radius:13px; color:inherit; background:#f5f8f8; text-align:left; cursor:pointer; }
+.sceneList button:hover { border-color:#bdd1d7; }
+.sceneList .selectedScene { border-color:#2e758a; background:#eaf5f7; box-shadow:inset 4px 0 0 #0b5a73; }
+.sceneId { padding-top:2px; color:#2e758a; font:800 11px/1 ui-monospace,SFMono-Regular,Consolas,monospace; }
+.sceneList button>span:last-child { display:grid; gap:6px; }
+.sceneList strong { font-size:15px; }
+.sceneList small { color:#75868c; font-size:12px; line-height:1.5; }
+.scriptCard { padding:19px 20px; border-radius:14px; color:#f8fbfc; background:#102f3c; }
+.scriptCard p { margin:9px 0 0; font-size:16px; font-weight:700; line-height:1.65; }
+.section { padding:34px 0 10px; }
+.sectionTitle { display:grid; grid-template-columns:220px minmax(0,640px); gap:24px; align-items:start; margin-bottom:24px; }
+.sectionTitle>span { color:#0b657a; }
+.sectionTitle h2,.assetSection h2 { margin:0; font-size:34px; line-height:1.18; letter-spacing:-.045em; }
+.sectionTitle h2 { color:#eaf8fb; }
+.stepGrid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }
+.stepGrid article { min-height:190px; padding:22px; border-top:3px solid var(--sea); background:#eef4f3; }
+.stepGrid article>span { color:#6a858d; font:800 12px/1 ui-monospace,SFMono-Regular,Consolas,monospace; }
+.stepGrid h3 { margin:34px 0 10px; font-size:18px; }
+.stepGrid p,.assetDetails p { margin:0; color:#61757b; font-size:13px; line-height:1.65; }
+.assetSection { display:grid; grid-template-columns:minmax(230px,.8fr) minmax(0,1.2fr); gap:50px; padding:40px; border-radius:22px; background:var(--sand); }
+.assetSection .eyebrow { color:#8c6418; }
+.assetDetails { display:grid; gap:20px; }
+.assetDetails dl { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; margin:0; background:#ddcfaa; }
+.assetDetails dl>div { padding:16px; background:#fbf7ea; }
+.assetDetails dt { color:#8b826a; font-size:11px; }
+.assetDetails dd { margin:8px 0 0; font-size:15px; font-weight:800; }
+.assetDetails :global(.btn) { justify-self:start; }
+@media (max-width:900px) { .studio{grid-template-columns:minmax(260px,330px) minmax(0,1fr)} .stepGrid{grid-template-columns:repeat(2,1fr)} .sectionTitle{grid-template-columns:1fr} }
+@media (max-width:700px) {
+  :global(.shell):has(.page) { display:block; }
+  :global(.shell):has(.page) > :global(.nav) { position:static; height:auto; flex-direction:row; overflow-x:auto; border-right:0; border-bottom:1px solid var(--border); padding:8px 10px; }
+  :global(.shell):has(.page) > :global(.nav) :global(.brand),
+  :global(.shell):has(.page) > :global(.nav) :global(.section),
+  :global(.shell):has(.page) > :global(.nav) :global(.spacer),
+  :global(.shell):has(.page) > :global(.nav) :global(.faint) { display:none; }
+  :global(.shell):has(.page) > :global(.nav) > div { flex:0 0 auto; }
+  :global(.shell):has(.page) > :global(.nav) a { white-space:nowrap; }
+  :global(.main):has(.page) { padding:18px 16px 48px; }
+  .hero{min-height:0;padding:32px;flex-direction:column}.status{align-self:flex-start}.studio{grid-template-columns:1fr}.playerShell{width:min(100%,360px);justify-self:center}.scenePanel{padding:22px}.stepGrid{grid-template-columns:1fr}.assetSection{grid-template-columns:1fr;padding:28px;gap:24px}.assetDetails dl{grid-template-columns:1fr}.panelHead{align-items:flex-start}.sectionTitle h2,.assetSection h2{font-size:28px}
+}

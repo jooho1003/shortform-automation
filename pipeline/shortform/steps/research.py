@@ -110,7 +110,16 @@ def _markdown(data: dict) -> str:
         lines.append("")
 
     lines += [
-        "## 4. 다음",
+        "## A안 AI 캐릭터 참고군",
+        "",
+        "특정 캐릭터를 복제하지 않고 포맷·말투·관계·반복 구조만 참고한다.",
+        "",
+    ]
+    for ref in data.get("ai_character_references", []):
+        lines.append(f"- [{ref['name']}]({ref['url']}) — {ref.get('note', '')}")
+    lines += [
+        "",
+        "## 다음",
         "",
         f"위 후보 중 {data['weekly_target']}개를 골라 편 폴더를 만들고 기획안을 쓴다.",
         "이 리포트는 " + str(data["freshness_days"]) + "일간 유효하다. 지나면 조사를 다시 한다.",
@@ -163,6 +172,7 @@ def run_standalone() -> None:
         "freshness_days": config.get("freshness_days", 7),
         "sources": sources,
         "benchmarks": benchmarks,
+        "ai_character_references": config.get("ai_character_references", []),
         "own": own,
     }
     report_path().write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")

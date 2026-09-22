@@ -1,0 +1,67 @@
+{
+  "sheet": true,
+  "files": [
+    {
+      "name": "시트.png",
+      "width": 941,
+      "height": 1672,
+      "ratio_ok": true,
+      "size_ok": true,
+      "watermark_suspect": false
+    },
+    {
+      "name": "키프레임-01.png",
+      "width": 941,
+      "height": 1672,
+      "ratio_ok": true,
+      "size_ok": true,
+      "watermark_suspect": false
+    },
+    {
+      "name": "키프레임-02.png",
+      "width": 941,
+      "height": 1672,
+      "ratio_ok": true,
+      "size_ok": true,
+      "watermark_suspect": false
+    },
+    {
+      "name": "키프레임-03.png",
+      "width": 941,
+      "height": 1672,
+      "ratio_ok": true,
+      "size_ok": true,
+      "watermark_suspect": true
+    },
+    {
+      "name": "키프레임-04.png",
+      "width": 941,
+      "height": 1672,
+      "ratio_ok": true,
+      "size_ok": true,
+      "watermark_suspect": false
+    },
+    {
+      "name": "키프레임-05.png",
+      "width": 941,
+      "height": 1672,
+      "ratio_ok": true,
+      "size_ok": true,
+      "watermark_suspect": false
+    },
+    {
+      "name": "키프레임-06.png",
+      "width": 941,
+      "height": 1672,
+      "ratio_ok": true,
+      "size_ok": true,
+      "watermark_suspect": true
+    }
+  ],
+  "missing_required": [],
+  "problems": [
+    "키프레임-03.png",
+    "키프레임-06.png"
+  ],
+  "ok": true
+}

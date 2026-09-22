@@ -1,0 +1,153 @@
+{
+  "id": "20260914-first-automation",
+  "title": "30분이면 된다며 시작한 첫 자동화",
+  "client": null,
+  "brand_name": "@maker.note",
+  "sponsored": false,
+  "status": "rendered",
+  "caption": "‘반복 작업을 줄여야지’로 시작했는데, 어느새 모든 일을 한 번에 연결하고 있었습니다.\n\n첫 자동화의 목표는 완벽한 시스템이 아니라 작은 성공 하나. 오늘 가장 자주 반복한 일 한 가지만 골라보세요.\n\n여러분이 제일 먼저 줄이고 싶은 일은 뭔가요?",
+  "hashtags": [
+    "인스타툰",
+    "일상툰",
+    "공감툰",
+    "1인크리에이터",
+    "업무자동화"
+  ],
+  "created_at": "2026-09-14T09:10:00+09:00",
+  "updated_at": "2026-09-13T17:52:50.834Z",
+  "kind": "instatoon",
+  "genre": "일상툰",
+  "logline": "30분이면 끝날 줄 알고 모든 일을 한 번에 자동화하려던 1인 제작자가 밤을 새운 뒤, 반복 작업 하나만 줄여 첫 성공을 얻는다.",
+  "style": "따뜻한 한국 일상 인스타툰. 굵은 네이비 외곽선, 2.5등신, 크림·머스터드·코랄·옅은 틸의 평면 채색, 은은한 종이 질감, 표정 중심.",
+  "characters": [
+    {
+      "key": "momo",
+      "name": "모모",
+      "lock": "둥근 얼굴의 젊은 한국인 여성 1인 제작자. 짧은 검정 단발, 본인 기준 왼쪽에 작은 코랄색 직사각 머리핀, 큰 검정 눈. 오버사이즈 머스터드색 후드티, 네이비 조거 팬츠, 흰 양말. 2.5등신. 모든 컷에서 얼굴형·가르마·머리핀 위치·의상·색을 변경하지 않는다.",
+      "sheet": "인스타툰/20260914-first-automation/캐릭터/momo-reference.png"
+    }
+  ],
+  "slides": [
+    {
+      "layout": "four",
+      "panels": [
+        {
+          "scene": "밤, 모모가 노트북을 열고 소매를 걷으며 자신만만하게 시작한다.",
+          "image": "인스타툰/20260914-first-automation/컷/01.png",
+          "bubbles": [
+            {
+              "speaker": "모모",
+              "text": "자동화?\n30분이면 되지!",
+              "kind": "speech",
+              "x": 70,
+              "y": 15
+            }
+          ]
+        },
+        {
+          "scene": "모모가 복잡한 자동화 흐름을 신나게 한꺼번에 연결한다.",
+          "image": "인스타툰/20260914-first-automation/컷/02.png",
+          "bubbles": [
+            {
+              "speaker": "모모",
+              "text": "전부 연결하면\n완벽하겠지?",
+              "kind": "thought",
+              "x": 66,
+              "y": 14
+            }
+          ]
+        },
+        {
+          "scene": "오류가 쏟아지고 모모가 얼어붙는다.",
+          "image": "인스타툰/20260914-first-automation/컷/03.png",
+          "bubbles": [
+            {
+              "speaker": "모모",
+              "text": "왜 다\n빨개져…?",
+              "kind": "speech",
+              "x": 72,
+              "y": 14
+            }
+          ]
+        },
+        {
+          "scene": "해가 뜨고 커피컵 사이에서 모모가 책상에 엎드려 있다.",
+          "image": "인스타툰/20260914-first-automation/컷/04.png",
+          "bubbles": [
+            {
+              "speaker": "",
+              "text": "그리고\n다음 날 아침",
+              "kind": "narration",
+              "x": 72,
+              "y": 13
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "layout": "four",
+      "panels": [
+        {
+          "scene": "모모가 세 단계만 그려진 작은 체크리스트를 발견한다.",
+          "image": "인스타툰/20260914-first-automation/컷/05.png",
+          "bubbles": [
+            {
+              "speaker": "모모",
+              "text": "잠깐…\n하나만 하면?",
+              "kind": "thought",
+              "x": 67,
+              "y": 14
+            }
+          ]
+        },
+        {
+          "scene": "모모가 복잡한 흐름을 지우고 세 블록만 차분히 그린다.",
+          "image": "인스타툰/20260914-first-automation/컷/06.png",
+          "bubbles": [
+            {
+              "speaker": "",
+              "text": "반복 작업\n하나만 고르기",
+              "kind": "narration",
+              "x": 66,
+              "y": 13
+            }
+          ]
+        },
+        {
+          "scene": "모모가 긴장한 채 실행 버튼을 누른다.",
+          "image": "인스타툰/20260914-first-automation/컷/07.png",
+          "bubbles": [
+            {
+              "speaker": "모모",
+              "text": "이번엔…\n간다!",
+              "kind": "speech",
+              "x": 70,
+              "y": 14
+            }
+          ]
+        },
+        {
+          "scene": "성공 표시가 빛나고 모모가 따뜻한 차를 들고 활짝 웃는다.",
+          "image": "인스타툰/20260914-first-automation/컷/08.png",
+          "bubbles": [
+            {
+              "speaker": "모모",
+              "text": "됐다!",
+              "kind": "speech",
+              "x": 73,
+              "y": 15
+            },
+            {
+              "speaker": "",
+              "text": "자동화는\n작게 시작하기",
+              "kind": "narration",
+              "x": 28,
+              "y": 82
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

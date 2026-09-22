@@ -18,6 +18,7 @@ export function assertEpisodeDir(dir: string): void {
 }
 
 export interface EpisodePaths {
+  brief_md: string;
   plan_md: string;
   plan_ok: string;
   plan_fix: string;
@@ -43,6 +44,7 @@ export function episodePaths(dir: string): EpisodePaths {
   assertEpisodeDir(dir);
   const join = (...parts: string[]) => resolveInRoot([dir, ...parts].join('/'));
   return {
+    brief_md: join('00-제작의도.md'),
     plan_md: join('01-기획안.md'),
     plan_ok: join('01-기획-승인.txt'),
     plan_fix: join('01-기획-수정요청.txt'),

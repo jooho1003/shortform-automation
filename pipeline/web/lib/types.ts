@@ -121,12 +121,27 @@ export interface PlanA {
   title: string;
   synopsis: string;
   locks: Record<string, string>;
+  characters: PlanACharacter[];
+  dialogues: PlanADialogue[];
+  research_notes: string[];
   cuts: PlanCut[];
   sound: Record<string, string>;
   template_id: string;
   template_name: string;
   comments: PlanComment[];
   meta: Record<string, string>;
+}
+
+export interface PlanACharacter {
+  name: string;
+  details: Record<string, string>;
+}
+
+export interface PlanADialogue {
+  at: number;
+  character: string;
+  text: string;
+  direction: string;
 }
 
 export interface ClipCandidate {
@@ -188,6 +203,7 @@ export interface EpisodeDetail {
   episode: EpisodeSummary;
   plan: Plan | PlanA | null;
   plan_error: string | null;
+  brief: string | null;
   plan_md: string | null;
   fix_requests: {plan: string | null; clips: string | null};
   clip_list: ClipEntry[] | null;
@@ -220,6 +236,7 @@ export interface ResearchInfo {
   root: string;
   latest: {file: string; data: Record<string, unknown>} | null;
   fresh: boolean;
+  character_references: {name: string; url: string; note?: string}[];
 }
 
 // ---- 잡 러너 ----------------------------------------------------------------

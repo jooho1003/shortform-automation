@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-09-15",
+  "scope": "C안 12초 샘플 렌더와 웹 콘솔 전용 페이지 구현",
+  "nodes": [
+    {"id":"S1","title":"섬 배경 자산 생성","domain":"general","D1":1,"D2":0,"D3":0,"D4":1,"score":2,"tier":"balanced","agent":"main","claude_model":"sonnet","codex_model":"gpt-5.6-luna","depends_on":[],"outputs":["island-aerial.png"],"requires_approval":false},
+    {"id":"S2","title":"한국어 샘플 음성 생성","domain":"mechanical","D1":0,"D2":0,"D3":0,"D4":1,"score":1,"tier":"fast","agent":"main","claude_model":"haiku","codex_model":"gpt-5.6-luna","depends_on":[],"outputs":["narration.mp3"],"requires_approval":false},
+    {"id":"S3","title":"지도 모션 렌더 구조 구현","domain":"frontend","D1":1,"D2":1,"D3":1,"D4":2,"score":5,"tier":"powerful","agent":"main","claude_model":"opus","codex_model":"gpt-5.6-sol","depends_on":["S1","S2"],"outputs":["GeoStorySample composition"],"override_reason":"새 영상 데이터·레이어·모션 구조를 결정하는 아키텍처 작업","requires_approval":false},
+    {"id":"S4","title":"12초 60fps 샘플 렌더","domain":"mechanical","D1":0,"D2":0,"D3":0,"D4":1,"score":1,"tier":"fast","agent":"main","claude_model":"haiku","codex_model":"gpt-5.6-luna","depends_on":["S3"],"outputs":["sample-12s.mp4","thumb.jpg","sample-contact-sheet.jpg"],"requires_approval":false},
+    {"id":"S5","title":"C안 웹 페이지와 내비게이션 구현","domain":"frontend","D1":1,"D2":1,"D3":0,"D4":1,"score":3,"tier":"balanced","agent":"main","claude_model":"sonnet","codex_model":"gpt-5.6-terra","depends_on":["S4"],"outputs":["/c-motion page"],"requires_approval":false},
+    {"id":"S6","title":"타입·빌드·브라우저 검증","domain":"qa","D1":0,"D2":1,"D3":0,"D4":1,"score":2,"tier":"balanced","agent":"main","claude_model":"sonnet","codex_model":"gpt-5.6-terra","depends_on":["S4","S5"],"outputs":["검증 로그와 웹 캡처"],"requires_approval":false},
+    {"id":"S7","title":"최종 화면·호환성 검토","domain":"review","D1":0,"D2":1,"D3":0,"D4":2,"score":3,"tier":"powerful","agent":"main","claude_model":"opus","codex_model":"gpt-5.6-sol","depends_on":["S6"],"outputs":["완료 판정"],"override_reason":"최종 리뷰 하드 오버라이드","requires_approval":false}
+  ],
+  "gates": {
+    "G1":"PASS","G2":"PASS","G3":"PASS","G4":"PASS","G5":"PASS",
+    "powerful_ratio":0.286,
+    "G4_reason":"S3은 영상 아키텍처, S7은 최종 리뷰 하드 오버라이드이며 2/7로 30% 이하.",
+    "G5_reason":"로컬 자산·코드·렌더만 생성. 외부 게시와 업로드 없음."
+  }
+}

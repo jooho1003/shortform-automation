@@ -1,0 +1,75 @@
+{
+  "id": "20260913-1v0s2",
+  "title": "첫 출근날 엘리베이터에서 사장님을 만났다",
+  "client": null,
+  "brand_name": "",
+  "sponsored": false,
+  "status": "draft",
+  "caption": "",
+  "hashtags": [],
+  "created_at": "2026-09-13T00:37:45.187Z",
+  "updated_at": "2026-09-13T00:37:45.215Z",
+  "kind": "instatoon",
+  "genre": "일상툰",
+  "logline": "첫 출근날 엘리베이터에서 사장님을 만났다",
+  "style": "굵은 외곽선, 단순한 2등신, 파스텔 평면 채색, 배경 최소화",
+  "characters": [
+    {
+      "key": "main",
+      "name": "주인공",
+      "lock": "",
+      "sheet": null
+    }
+  ],
+  "slides": [
+    {
+      "layout": "four",
+      "panels": [
+        {
+          "scene": "엘리베이터 문이 열린다",
+          "image": null,
+          "bubbles": [
+            {
+              "speaker": "주인공",
+              "text": "첫 출근이다…!",
+              "kind": "thought",
+              "x": 50,
+              "y": 20
+            }
+          ]
+        },
+        {
+          "scene": "정장 입은 중년 남성이 탄다",
+          "image": null,
+          "bubbles": [
+            {
+              "speaker": "",
+              "text": "8시 58분",
+              "kind": "narration",
+              "x": 30,
+              "y": 12
+            }
+          ]
+        },
+        {
+          "scene": "어색한 침묵",
+          "image": null,
+          "bubbles": []
+        },
+        {
+          "scene": "남성이 웃으며 말을 건다",
+          "image": null,
+          "bubbles": [
+            {
+              "speaker": "사장",
+              "text": "신입이죠?",
+              "kind": "speech",
+              "x": 50,
+              "y": 25
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

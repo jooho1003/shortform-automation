@@ -77,8 +77,10 @@ def run(ep: Episode) -> None:
 
     ep.video_dir.mkdir(parents=True, exist_ok=True)
     print("  Remotion 렌더 중... (첫 실행은 헤드리스 Chrome 내려받느라 몇 분 걸립니다)")
+    # Windows에서 여러 1080x1920 H.264 소스를 병렬 디코딩하면 compositor가
+    # 간헐적으로 중단된다. 단일 동시성은 느리지만 긴 A안에서도 안정적이다.
     result = subprocess.run(
-        f'npx remotion render Short "{ep.final_mp4}" --props="{props}"',
+        f'npx remotion render Short "{ep.final_mp4}" --props="{props}" --concurrency=1',
         cwd=REMOTION, capture_output=True, text=True, encoding="utf-8", errors="replace", shell=True,
     )
     if result.returncode != 0:

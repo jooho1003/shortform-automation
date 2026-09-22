@@ -176,6 +176,7 @@ def run_episode(track: str, date: str, num: str, root: Path | None = None) -> di
         "episode": summary,
         "plan": plan_dict,
         "plan_error": plan_error,
+        "brief": _read_text_or_none(ep.dir / "00-제작의도.md"),
         "plan_md": plan_md,
         "fix_requests": {
             "plan": _read_text_or_none(ep.plan_fix),
@@ -198,14 +199,19 @@ def run_research(root: Path | None = None) -> dict:
     research_dir = DATA / "research"
     files = sorted(research_dir.glob("*.json")) if research_dir.exists() else []
 
+    character_references = []
+    research_config_path = CONFIG / "research.yaml"
+    if research_config_path.exists():
+        cfg = yaml.safe_load(research_config_path.read_text(encoding="utf-8")) or {}
+        character_references = cfg.get("ai_character_references", []) or []
+
     if not files:
-        return {"root": _root_posix(root), "latest": None, "fresh": False}
+        return {"root": _root_posix(root), "latest": None, "fresh": False, "character_references": character_references}
 
     latest_path = files[-1]
     data = json.loads(latest_path.read_text(encoding="utf-8"))
 
     freshness_days = 7
-    research_config_path = CONFIG / "research.yaml"
     if research_config_path.exists():
         cfg = yaml.safe_load(research_config_path.read_text(encoding="utf-8")) or {}
         freshness_days = cfg.get("freshness_days", freshness_days)
@@ -223,6 +229,7 @@ def run_research(root: Path | None = None) -> dict:
         "root": _root_posix(root),
         "latest": {"file": _rel(latest_path, root), "data": data},
         "fresh": fresh,
+        "character_references": character_references,
     }
 
 

@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "week": "2026-W38",
+  "generated_at": "2026-09-18T00:42:25.307000+09:00",
+  "source": "manual-fallback",
+  "keywords": [
+    {
+      "main": "콘텐츠 자동화",
+      "subs": [],
+      "volume_pc": 0,
+      "volume_mobile": 0,
+      "docs": 0,
+      "saturation": 0.0,
+      "week": "2026-W38",
+      "score": 0.0,
+      "status": "unused",
+      "competition": ""
+    },
+    {
+      "main": "AI 영상 제작",
+      "subs": [],
+      "volume_pc": 0,
+      "volume_mobile": 0,
+      "docs": 0,
+      "saturation": 0.0,
+      "week": "2026-W38",
+      "score": 0.0,
+      "status": "unused",
+      "competition": ""
+    },
+    {
+      "main": "쇼츠 자동화",
+      "subs": [],
+      "volume_pc": 0,
+      "volume_mobile": 0,
+      "docs": 0,
+      "saturation": 0.0,
+      "week": "2026-W38",
+      "score": 0.0,
+      "status": "unused",
+      "competition": ""
+    },
+    {
+      "main": "네이버 블로그 자동화",
+      "subs": [],
+      "volume_pc": 0,
+      "volume_mobile": 0,
+      "docs": 0,
+      "saturation": 0.0,
+      "week": "2026-W38",
+      "score": 0.0,
+      "status": "unused",
+      "competition": ""
+    }
+  ]
+}

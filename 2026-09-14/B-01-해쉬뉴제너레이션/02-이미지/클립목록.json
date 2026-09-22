@@ -1,0 +1,26 @@
+[
+  {
+    "n": 1,
+    "text": "군무에서 솔로 피니시까지, 해쉬의 New Generation",
+    "source": "clip",
+    "queries": [
+      "The CHOOM 해쉬 New Generation 풀버전"
+    ],
+    "chosen": 0,
+    "seconds": 46.4,
+    "candidates": [
+      {
+        "provider": "youtube",
+        "id": "VT5IIgrFJTI",
+        "page": "https://www.youtube.com/watch?v=VT5IIgrFJTI",
+        "author": "The CHOOM (더 춤)",
+        "title": "[#SDF/풀버전] 해쉬 'New Generation' | 라스트 스테이지 24H 1회",
+        "duration": 124,
+        "views": 128122,
+        "official": true,
+        "thumb": "https://i.ytimg.com/vi/VT5IIgrFJTI/hqdefault.jpg",
+        "start": 56.1
+      }
+    ]
+  }
+]
