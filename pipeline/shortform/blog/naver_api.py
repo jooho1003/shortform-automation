@@ -13,7 +13,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
-from ..paths import PIPELINE
+from ..paths import PIPELINE, load_dotenv
 
 
 class NaverApiError(RuntimeError):
@@ -22,22 +22,6 @@ class NaverApiError(RuntimeError):
 
 class NaverCredentialsMissing(NaverApiError):
     pass
-
-
-def _load_env() -> None:
-    """Load pipeline/.env without overwriting real environment variables."""
-    path = PIPELINE / ".env"
-    if not path.exists():
-        return
-    for raw in path.read_text(encoding="utf-8-sig").splitlines():
-        match = re.match(r"^\s*(?:export\s+)?([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)$", raw)
-        if not match:
-            continue
-        value = match.group(2).strip()
-        if len(value) >= 2 and value[0] == value[-1] and value[0] in "\"'":
-            value = value[1:-1]
-        if value and not value.startswith("#"):
-            os.environ.setdefault(match.group(1), value)
 
 
 def _json_request(url: str, headers: dict[str, str], timeout: int = 20) -> dict:
@@ -57,7 +41,7 @@ def _strip_html(value: object) -> str:
 
 
 def search_blog(query: str, *, display: int = 10, start: int = 1, sort: str = "sim") -> dict:
-    _load_env()
+    load_dotenv()
     client_id = os.environ.get("NAVER_CLIENT_ID", "")
     client_secret = os.environ.get("NAVER_CLIENT_SECRET", "")
     if not client_id or not client_secret:
@@ -100,7 +84,7 @@ def _count(value: object) -> int:
 
 def keyword_suggestions(keywords: list[str]) -> list[dict]:
     """GET /keywordstool using the official HMAC header contract."""
-    _load_env()
+    load_dotenv()
     customer = os.environ.get("NAVER_AD_CUSTOMER_ID", "")
     license_key = os.environ.get("NAVER_AD_ACCESS_LICENSE", "")
     secret = os.environ.get("NAVER_AD_SECRET_KEY", "")

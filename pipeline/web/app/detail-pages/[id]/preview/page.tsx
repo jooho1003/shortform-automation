@@ -6,6 +6,7 @@ import type {Metadata} from 'next';
 
 import {DetailError, getDetailProject} from '@/lib/detailProjects';
 import type {DetailProject, DetailSection} from '@/lib/detailTypes';
+import {detailMediaSrc} from '@/lib/detailTypes';
 import {BeautyPreview} from '@/components/detail-pages/BeautyPreview';
 import {DesignEditor} from '@/components/detail-pages/DesignEditor';
 import {getDetailDesign} from '@/lib/detailDesign';
@@ -24,6 +25,11 @@ export async function generateMetadata({params}: {params: Promise<{id: string}>}
 }
 
 function visualImage(project: DetailProject, section: DetailSection) {
+  // 섹션에 영상이 붙어 있으면 이미지 대신 영상을 보여 준다. data-media-rel 은 내보내기용 표식.
+  if (section.video) {
+    const v = section.video;
+    return <video src={detailMediaSrc(project.id, v.file)} poster={detailMediaSrc(project.id, v.poster)} data-media-rel={v.file} data-poster-rel={v.poster} autoPlay={v.loop} loop={v.loop} muted playsInline preload="metadata" aria-label={`${project.product} ${section.title}`} />;
+  }
   if (project.id === SAMPLE_ID) return <img src="/detail-samples/ongi-mug.png" alt={`${project.product} ${section.title}`} />;
   return <div className="dp-preview-placeholder">이미지 자료가 아직 없습니다<br /><small>{section.visual || '의뢰서에서 이미지 연출을 확인하세요.'}</small></div>;
 }

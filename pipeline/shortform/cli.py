@@ -12,11 +12,12 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from pathlib import Path
 
 from . import GateBlocked, MissingKey, StepFailed
 from . import inspect as inspector
 from . import state
-from .paths import Episode
+from .paths import Episode, load_dotenv
 
 # `shortform.steps.*`는 PIL/yt-dlp/edge-tts 같은 무거운 의존성을 끌고 온다.
 # `inspect` 서브커맨드는 이런 패키지가 없어도 동작해야 하므로, 실제로
@@ -158,11 +159,50 @@ def cmd_inspect_blog_keywords(args) -> int:
     return 0
 
 
+def cmd_detail_video(args) -> int:
+    from .steps import detail_video
+
+    report = detail_video.run(args.project)
+    if args.json:
+        _print_json(report)
+    return 0 if report["ok"] else 1
+
+
+def cmd_detail_check(args) -> int:
+    from .steps import detail_video
+    from .steps.check_detail_media import check_media
+
+    base = detail_video.project_dir(args.project)
+    project = detail_video.load_project(args.project)
+    expected = [Path(s["video"]["file"]).name for s in project.get("sections", []) if isinstance(s.get("video"), dict)]
+    report = check_media(base / detail_video.MEDIA_DIR, expected)
+    _print_json(report)
+    return 0 if report["ok"] else 1
+
+
+def cmd_archive_publish(args) -> int:
+    from .steps import archive_publish
+
+    result = archive_publish.run(dry_run=args.dry_run)
+    if args.json:
+        _print_json({k: v for k, v in result.items() if k != "manifest"})
+    return 0
+
+
+def cmd_archive_list(args) -> int:
+    from . import archive
+
+    _print_json(archive.build_manifest())
+    return 0
+
+
 def main(argv=None) -> int:
     # 한국어 Windows 콘솔은 cp949라 경로와 기호가 깨진다.
     for stream in (sys.stdout, sys.stderr):
         if hasattr(stream, "reconfigure"):
             stream.reconfigure(encoding="utf-8", errors="replace")
+    # 셸 환경변수가 우선. 웹에서 돌릴 때는 자식 환경에 이미 들어와 있다.
+    load_dotenv()
 
     parser = argparse.ArgumentParser(prog="shortform", description="숏폼 자동화 파이프라인")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -209,6 +249,29 @@ def main(argv=None) -> int:
     p_rt.add_argument("--dir", required=True)
     for p in (p_rm, p_rf, p_rt):
         p.set_defaults(func=cmd_reels)
+
+    p_detail = sub.add_parser("detail-video", help="상세페이지 섹션 영상 — 시드/제품시트 → fal i2v")
+    detail_sub = p_detail.add_subparsers(dest="detail_command", required=True)
+
+    p_detail_gen = detail_sub.add_parser("generate", help="영상이 없는 섹션을 생성한다")
+    p_detail_gen.add_argument("--project", required=True, help="상세페이지 프로젝트 ID")
+    p_detail_gen.add_argument("--json", action="store_true", help="검사 결과를 JSON으로 출력")
+    p_detail_gen.set_defaults(func=cmd_detail_video)
+
+    p_detail_check = detail_sub.add_parser("check", help="생성 없이 미디어 규격만 검사한다")
+    p_detail_check.add_argument("--project", required=True, help="상세페이지 프로젝트 ID")
+    p_detail_check.set_defaults(func=cmd_detail_check)
+
+    p_archive = sub.add_parser("archive", help="만든 것들을 R2에 올려 원격 뷰어에서 본다")
+    archive_sub = p_archive.add_subparsers(dest="archive_command", required=True)
+
+    p_archive_pub = archive_sub.add_parser("publish", help="바뀐 파일만 올리고 목록을 갱신한다")
+    p_archive_pub.add_argument("--dry-run", action="store_true", help="올리지 않고 대상만 보여 준다")
+    p_archive_pub.add_argument("--json", action="store_true")
+    p_archive_pub.set_defaults(func=cmd_archive_publish)
+
+    p_archive_list = archive_sub.add_parser("list", help="올릴 목록을 JSON으로 본다 (R2 불필요)")
+    p_archive_list.set_defaults(func=cmd_archive_list)
 
     p_inspect = sub.add_parser("inspect", help="웹 콘솔용 읽기 전용 JSON 브릿지")
     inspect_sub = p_inspect.add_subparsers(dest="inspect_command", required=True)

@@ -4,3 +4,4 @@ pillow>=10.0
 edge-tts>=6.1
 google-api-python-client>=2.100
 google-auth-oauthlib>=1.2
+boto3>=1.35          # Cloudflare R2(S3 호환) 업로드

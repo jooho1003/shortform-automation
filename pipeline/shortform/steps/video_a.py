@@ -8,20 +8,16 @@
 
 from __future__ import annotations
 
-import base64
 import asyncio
 import json
-import mimetypes
 import os
 import subprocess
-import time
-import urllib.error
-import urllib.request
 from pathlib import Path
 
 import yaml
 
 from .. import MissingKey, StepFailed
+from .. import fal
 from .. import planfile_a
 from ..paths import CONFIG, Episode
 from .. import state
@@ -30,87 +26,9 @@ from .assets import _speak
 from ..tts.episode import load_voice, write_manifest
 from ..tts.engine import audio_duration
 
-QUEUE = "https://queue.fal.run"
-
 
 def _config() -> dict:
     return yaml.safe_load((CONFIG / "fal.yaml").read_text(encoding="utf-8"))
-
-
-def _data_uri(path: Path) -> str:
-    mime = mimetypes.guess_type(path.name)[0] or "image/png"
-    return f"data:{mime};base64," + base64.b64encode(path.read_bytes()).decode("ascii")
-
-
-def _fill(value, vars_: dict[str, str]):
-    if isinstance(value, str):
-        for k, v in vars_.items():
-            value = value.replace("{" + k + "}", v)
-        return value
-    if isinstance(value, dict):
-        return {k: _fill(v, vars_) for k, v in value.items()}
-    if isinstance(value, list):
-        return [_fill(v, vars_) for v in value]
-    return value
-
-
-def _request(method: str, url: str, key: str, body: dict | None = None) -> dict:
-    data = json.dumps(body).encode("utf-8") if body is not None else None
-    req = urllib.request.Request(url, data=data, method=method, headers={
-        "Authorization": f"Key {key}", "Content-Type": "application/json", "Accept": "application/json",
-    })
-    try:
-        with urllib.request.urlopen(req, timeout=120) as res:
-            return json.loads(res.read().decode("utf-8") or "{}")
-    except urllib.error.HTTPError as exc:
-        raise StepFailed(f"fal {method} {url.split('/')[-1]} → {exc.code}: {exc.read().decode('utf-8', 'replace')[:400]}") from exc
-
-
-def _dig(obj, path: str):
-    cur = obj
-    for part in path.split("."):
-        if isinstance(cur, list) and part.isdigit():
-            cur = cur[int(part)]
-        elif isinstance(cur, dict):
-            cur = cur.get(part)
-        else:
-            return None
-        if cur is None:
-            return None
-    return cur
-
-
-def _generate(cfg: dict, key: str, prompt: str, keyframe: Path, sheet: Path, out: Path) -> None:
-    vars_ = {"prompt": prompt, "keyframe": _data_uri(keyframe), "sheet": _data_uri(sheet) if sheet.exists() else ""}
-    body = _fill(cfg.get("body", {"prompt": "{prompt}", "image_url": "{keyframe}"}), vars_)
-    endpoint = cfg["endpoint"].strip("/")
-    submitted = _request("POST", f"{QUEUE}/{endpoint}", key, body)
-    request_id = submitted.get("request_id")
-    status_url = submitted.get("status_url") or f"{QUEUE}/{endpoint}/requests/{request_id}/status"
-    result_url = submitted.get("response_url") or f"{QUEUE}/{endpoint}/requests/{request_id}"
-    if not request_id:
-        raise StepFailed(f"fal 큐 응답에 request_id가 없습니다: {str(submitted)[:300]}")
-
-    deadline = time.time() + int(cfg.get("timeout_sec", 900))
-    while True:
-        st = _request("GET", status_url, key)
-        s = st.get("status")
-        if s == "COMPLETED":
-            break
-        if s in ("FAILED", "ERROR"):
-            raise StepFailed(f"fal 생성 실패: {str(st)[:300]}")
-        if time.time() > deadline:
-            raise StepFailed("fal 생성이 시간 초과됐습니다.")
-        pos = st.get("queue_position")
-        print(f"    … {s}{f' (대기 {pos})' if pos is not None else ''}")
-        time.sleep(int(cfg.get("poll_interval_sec", 6)))
-
-    result = _request("GET", result_url, key)
-    video_url = _dig(result, cfg.get("video_url_path", "video.url"))
-    if not video_url:
-        raise StepFailed(f"응답에서 영상 URL을 못 찾았습니다 ({cfg.get('video_url_path')}): {str(result)[:300]}")
-    out.parent.mkdir(parents=True, exist_ok=True)
-    urllib.request.urlretrieve(video_url, out)
 
 
 def _to_9x16(src: Path, dst: Path, seconds: float) -> None:
@@ -251,7 +169,11 @@ def run(ep: Episode) -> None:
         prompt = _video_prompt(plan, cut)
         print(f"  컷 {cut.n:02d} 생성 (fal) — {prompt[:70]}")
         try:
-            _generate(cfg, key, prompt, kf, sheet, raw_dir / f"{cut.n:02d}.mp4")
+            fal.generate(cfg, key, raw_dir / f"{cut.n:02d}.mp4", {
+                "prompt": prompt,
+                "keyframe": fal.data_uri(kf),
+                "sheet": fal.data_uri(sheet) if sheet.exists() else "",
+            })
             spent += float(cfg.get("cost_per_cut_usd", 0.6))
             st = state.load(ep)
             st["fal_spent_usd"] = round(spent, 2)

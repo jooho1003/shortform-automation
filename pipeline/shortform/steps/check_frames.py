@@ -17,10 +17,20 @@ SHEET = "시트.png"
 KEYFRAME = "키프레임-{n:02d}.png"
 REPORT = "검사.json"
 CONTACT = "컨택트시트.png"
-MIN_HEIGHT = 1280
+# 짧은 변으로 잰다. 세로만 보면 9:16 비율은 맞는데 너비가 모자란 이미지(예: 941x1672)가
+# 그냥 통과한다. 정확한 9:16에서 짧은 변 720px은 세로 1280px과 같은 기준이라 기존 판정은 그대로다.
+MIN_SHORT_SIDE = 720
+# 시트는 한 장 안에 3면 턴어라운드·표정·클로즈업을 격자로 담고, 그 한 장이 모든 키프레임의
+# 아이덴티티 기준이 된다. 칸당 해상도가 남아야 하므로 프롬프트 규격(1080x1920)을 그대로 요구한다.
+SHEET_MIN_SHORT_SIDE = 1080
 RATIO = 9 / 16
 RATIO_TOL = 0.03
 FONT_PATH = "C:/Windows/Fonts/malgun.ttf"
+
+
+def min_short_side(name: str) -> int:
+    """파일별 짧은 변 하한. 시트만 더 엄격하다."""
+    return SHEET_MIN_SHORT_SIDE if name == SHEET else MIN_SHORT_SIDE
 
 
 def keyframe_path(ep: Episode, n: int) -> Path:
@@ -45,13 +55,15 @@ def run_check(ep: Episode, plan: PlanA) -> dict:
             with Image.open(path) as img:
                 w, h = img.size
                 ratio_ok = abs((w / h) - RATIO) <= RATIO_TOL
+                floor = min_short_side(path.name)
                 files.append({
                     "name": path.name, "width": w, "height": h,
-                    "ratio_ok": ratio_ok, "size_ok": h >= MIN_HEIGHT,
+                    "ratio_ok": ratio_ok, "size_ok": min(w, h) >= floor,
+                    "min_short_side": floor,
                     "watermark_suspect": _watermark_suspect(img.convert("RGB")),
                 })
         except OSError:
-            files.append({"name": path.name, "width": 0, "height": 0, "ratio_ok": False, "size_ok": False, "watermark_suspect": False, "error": "열 수 없음"})
+            files.append({"name": path.name, "width": 0, "height": 0, "ratio_ok": False, "size_ok": False, "min_short_side": min_short_side(path.name), "watermark_suspect": False, "error": "열 수 없음"})
 
     names = {f["name"] for f in files}
     missing_required = [c.n for c in plan.cuts if c.required and KEYFRAME.format(n=c.n) not in names]
@@ -101,7 +113,10 @@ def _contact_sheet(ep: Episode, plan: PlanA, files: list[dict]) -> None:
                 n = None
         cut = cut_by_n.get(n) if n else None
         draw.text((x, y + thumb_h + 6), label, fill="#fff", font=font)
-        info = f"{f['width']}x{f['height']}" + (" · 워터마크?" if f.get("watermark_suspect") else "")
+        info = f"{f['width']}x{f['height']}"
+        if not f["size_ok"] and f.get("min_short_side"):
+            info += f" · 기준 {f['min_short_side']}"
+        info += " · 워터마크?" if f.get("watermark_suspect") else ""
         if cut:
             info += f" · {cut.start:g}-{cut.end:g}s {cut.lens}"
         draw.text((x, y + thumb_h + 30), info[:38], fill="#ff8787" if bad else "#adb5bd", font=small)

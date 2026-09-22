@@ -114,6 +114,22 @@
   grid-column: 1 / -1;
 }
 
+.dp-section .dp-video-fields {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: #0a0c12;
+}
+
+.dp-hint {
+  color: var(--text-dim);
+  font: 12px/1.5 var(--mono);
+  overflow-wrap: anywhere;
+}
+
 .dp-side-by-side {
   display: grid;
   grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.65fr);

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import os
+import re
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -11,6 +13,26 @@ CONFIG = PIPELINE / "config"
 DATA = PIPELINE / "data"
 SECRETS = PIPELINE / "secrets"
 BGM = PIPELINE / "assets" / "bgm"
+
+
+def load_dotenv() -> None:
+    """pipeline/.env 를 환경변수로 올린다. 이미 있는 셸 환경변수는 덮어쓰지 않는다.
+
+    web/lib/paths.ts 의 loadDotEnv() 와 같은 역할. 웹에서 돌릴 때는 그쪽이 자식 프로세스에
+    넣어 주지만, CLI나 내보내기 스크립트를 직접 실행할 때는 아무도 안 읽어 준다.
+    """
+    path = PIPELINE / ".env"
+    if not path.exists():
+        return
+    for raw in path.read_text(encoding="utf-8-sig").splitlines():
+        match = re.match(r"^\s*(?:export\s+)?([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)$", raw)
+        if not match:
+            continue
+        value = match.group(2).strip()
+        if len(value) >= 2 and value[0] == value[-1] and value[0] in "\"'":
+            value = value[1:-1]
+        if value and not value.startswith("#"):
+            os.environ.setdefault(match.group(1), value)
 
 
 @dataclass(frozen=True)

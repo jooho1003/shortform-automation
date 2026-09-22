@@ -3,7 +3,7 @@ import path from 'node:path';
 import {randomUUID} from 'node:crypto';
 import {ROOT} from './paths';
 import {readJson, writeJsonLikePython} from './jsonio';
-import {DETAIL_STATUSES, type DetailProject} from './detailTypes';
+import {DETAIL_STATUSES, DETAIL_VIDEO_SOURCES, DETAIL_VIDEO_MAX_SECONDS, DETAIL_VIDEO_MIN_SECONDS, type DetailProject, type DetailVideo} from './detailTypes';
 
 const base = path.join(ROOT, '상세페이지');
 const idPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
@@ -25,6 +25,39 @@ function url(v: string) {
   try { const u = new URL(v); if (!['https:', 'http:'].includes(u.protocol) || u.username || u.password) throw new Error(); }
   catch { throw new DetailError('링크는 계정 정보 없는 http/https 주소여야 합니다.'); }
 }
+/**
+ * 미디어 경로는 프로젝트 폴더 안으로만 제한한다. 이 값은 그대로 /api/media 와 내보내기 HTML에
+ * 들어가므로, 절대 경로나 .. 를 허용하면 저장소 밖 파일을 가리키는 통로가 된다.
+ */
+function mediaPath(v: unknown, name: string, ext: RegExp): string {
+  const s = str(v, name, 200);
+  if (!s) throw new DetailError(`${name}: 경로가 필요합니다.`);
+  if (s.includes('\\') || s.includes('\0')) throw new DetailError(`${name}: 슬래시(/)로 구분한 상대 경로여야 합니다.`);
+  if (s.startsWith('/') || /^[a-zA-Z]:/.test(s)) throw new DetailError(`${name}: 절대 경로는 받지 않습니다.`);
+  if (s.split('/').some(part => part === '' || part === '.' || part === '..')) throw new DetailError(`${name}: 프로젝트 폴더 안의 경로여야 합니다.`);
+  if (!ext.test(s)) throw new DetailError(`${name}: 허용하지 않는 파일 형식입니다.`);
+  return s;
+}
+function video(v: unknown): DetailVideo {
+  const b = obj(v);
+  if (!DETAIL_VIDEO_SOURCES.includes(b.source as DetailVideo['source'])) throw new DetailError('영상 소재 방식을 확인해 주세요.');
+  const seconds = b.seconds;
+  if (typeof seconds !== 'number' || !Number.isFinite(seconds) || seconds < DETAIL_VIDEO_MIN_SECONDS || seconds > DETAIL_VIDEO_MAX_SECONDS) {
+    throw new DetailError(`영상 길이는 ${DETAIL_VIDEO_MIN_SECONDS}~${DETAIL_VIDEO_MAX_SECONDS}초여야 합니다.`);
+  }
+  if (typeof b.loop !== 'boolean') throw new DetailError('반복 재생은 체크 값이어야 합니다.');
+  const source = b.source as DetailVideo['source'];
+  return {
+    source,
+    // 제품 시트 경로는 파이프라인이 정하므로 시드는 이미지 방식일 때만 받는다.
+    seed: source === 'image' ? mediaPath(b.seed, '시드 이미지', /\.(png|jpg|jpeg|webp)$/i) : '',
+    motion: str(b.motion, '움직임 지시', 2000),
+    seconds,
+    loop: b.loop,
+    file: mediaPath(b.file, '영상 파일', /\.(mp4|webm)$/i),
+    poster: mediaPath(b.poster, '포스터', /\.(png|jpg|jpeg|webp)$/i),
+  };
+}
 function validate(input: unknown): Omit<DetailProject, 'id' | 'createdAt' | 'updatedAt' | 'revision'> {
   const b = obj(input);
   const text = Object.fromEntries(['title','client','product','target','objective','keyMessage','facts','evidence','brand','referenceUrls','assetNotes','deliveryUrl','deadline','revisionNote'].map(k => [k, str(b[k], k, ['title','client','product'].includes(k) ? 200 : 8000)])) as Pick<DetailProject, 'title'|'client'|'product'|'target'|'objective'|'keyMessage'|'facts'|'evidence'|'brand'|'referenceUrls'|'assetNotes'|'deliveryUrl'|'deadline'|'revisionNote'>;
@@ -40,7 +73,8 @@ function validate(input: unknown): Omit<DetailProject, 'id' | 'createdAt' | 'upd
     if (!/^[a-zA-Z0-9-]+$/.test(id) || seen.has(id)) throw new DetailError('섹션 ID가 중복되거나 올바르지 않습니다.');
     seen.add(id);
     if (!['todo','ready','changes'].includes(s.review as string)) throw new DetailError('섹션 검수 상태를 확인해 주세요.');
-    return {id, title: str(s.title,'섹션 제목',200), copy: str(s.copy,'카피'), visual: str(s.visual,'이미지 연출'), review: s.review as DetailProject['sections'][number]['review']};
+    const base = {id, title: str(s.title,'섹션 제목',200), copy: str(s.copy,'카피'), visual: str(s.visual,'이미지 연출'), review: s.review as DetailProject['sections'][number]['review']};
+    return s.video === undefined || s.video === null ? base : {...base, video: video(s.video)};
   });
   const c = obj(b.checks);
   for (const k of ['facts','labels','mobile','rights']) if (typeof c[k] !== 'boolean') throw new DetailError('검수 항목은 체크 값이어야 합니다.');

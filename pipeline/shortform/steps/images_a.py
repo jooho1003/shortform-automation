@@ -10,12 +10,9 @@
 
 from __future__ import annotations
 
-import os
 import hashlib
 import json
 import re
-import subprocess
-import sys
 import uuid
 from datetime import datetime
 from pathlib import Path
@@ -23,6 +20,7 @@ from pathlib import Path
 import yaml
 
 from .. import GateBlocked, StepFailed
+from .. import codex
 from ..paths import CONFIG, Episode
 from .. import planfile_a
 from .check_frames import KEYFRAME, SHEET, run_check
@@ -31,34 +29,6 @@ from .check_frames import KEYFRAME, SHEET, run_check
 def _config() -> dict:
     path = CONFIG / "images.yaml"
     return yaml.safe_load(path.read_text(encoding="utf-8")) if path.exists() else {"provider": "manual"}
-
-
-def _codex(prompt: str, cwd: Path, images: list[Path], cfg: dict) -> str:
-    """codex exec 를 돌리고 마지막 메시지를 돌려준다. 파일 생성은 codex가 한다."""
-    args = [
-        "codex", "exec",
-        "-m", cfg.get("codex_model", "gpt-5.6-terra"),
-        "-c", f"model_reasoning_effort={cfg.get('reasoning_effort', 'medium')}",
-        "--sandbox", "workspace-write", "--skip-git-repo-check", "--ephemeral", "--color", "never",
-        "-C", str(cwd), "--add-dir", str(cwd),
-    ]
-    for img in images:
-        args += ["-i", str(img)]
-    args.append("-")
-    try:
-        res = subprocess.run(
-            args, input=prompt, capture_output=True, text=True, encoding="utf-8", errors="replace",
-            timeout=int(cfg.get("timeout", 600)), shell=(os.name == "nt"), env={**os.environ, "PYTHONUTF8": "1"},
-        )
-    except FileNotFoundError as exc:
-        raise StepFailed("codex CLI가 없습니다. npm install -g @openai/codex") from exc
-    except subprocess.TimeoutExpired as exc:
-        raise StepFailed("codex 호출이 시간 초과됐습니다.") from exc
-    for line in (res.stdout or "").splitlines()[-12:]:
-        print("    codex│ " + line[:160])
-    if res.returncode != 0:
-        raise StepFailed(f"codex 종료 코드 {res.returncode}\n{(res.stderr or res.stdout)[-600:]}")
-    return res.stdout
 
 
 def _sheet_prompt(plan, out: Path, hint: str, instruction: str = "") -> str:
@@ -220,7 +190,7 @@ def run(ep: Episode) -> None:
     if not sheet.exists():
         if provider == "codex":
             print("  캐릭터 시트 생성 중 (codex)...")
-            _codex(_sheet_prompt(plan, sheet, hint, revision_instruction if revision_sheet else ""), ep.clips_dir, [], cfg)
+            codex.run(_sheet_prompt(plan, sheet, hint, revision_instruction if revision_sheet else ""), ep.clips_dir, [], cfg)
         if not sheet.exists():
             raise StepFailed(
                 f"캐릭터 시트가 없습니다: {sheet}\n"
@@ -245,7 +215,7 @@ def run(ep: Episode) -> None:
             # codex가 이미지는 만들고도 샌드박스 저장에 간헐적으로 실패한다(실측 4회 중 2회). 한 번 더 시도한다.
             for attempt in (1, 2):
                 print(f"  키프레임 {cut.n:02d} 생성 중 (codex, {attempt}/2)... {cut.action[:40]}")
-                _codex(
+                codex.run(
                     _keyframe_prompt(plan, cut, sheet, out, hint,
                                      revision_instruction if cut.n in revision_cuts else ""),
                     ep.clips_dir, [sheet], cfg,

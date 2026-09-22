@@ -95,7 +95,7 @@ def test_revision_archives_only_selected_original_and_passes_instruction(monkeyp
 
     monkeypatch.setattr(images_a.planfile_a, "load", lambda _: _plan())
     monkeypatch.setattr(images_a, "_config", lambda: {"provider": "codex"})
-    monkeypatch.setattr(images_a, "_codex", generate)
+    monkeypatch.setattr(images_a.codex, "run", generate)
     monkeypatch.setattr(images_a, "run_check", _fake_report)
     with pytest.raises(GateBlocked):
         images_a.run(ep)
@@ -127,7 +127,7 @@ def test_failed_revision_keeps_request_and_retry_does_not_rearchive(monkeypatch,
         out.write_bytes(b"new-1")
         return ""
 
-    monkeypatch.setattr(images_a, "_codex", fail_second)
+    monkeypatch.setattr(images_a.codex, "run", fail_second)
     with pytest.raises(StepFailed, match="temporary"):
         images_a.run(ep)
     assert ep.clips_fix.exists()
@@ -141,7 +141,7 @@ def test_failed_revision_keeps_request_and_retry_does_not_rearchive(monkeypatch,
         out.write_bytes(b"new-2")
         return ""
 
-    monkeypatch.setattr(images_a, "_codex", finish)
+    monkeypatch.setattr(images_a.codex, "run", finish)
     with pytest.raises(GateBlocked):
         images_a.run(ep)
     assert calls.count(KEYFRAME.format(n=1)) == 1
@@ -180,7 +180,7 @@ def test_optional_selected_cut_is_generated_and_bad_versions_or_empty_notes_are_
         out.write_bytes(b"new")
         return ""
 
-    monkeypatch.setattr(images_a, "_codex", generate)
+    monkeypatch.setattr(images_a.codex, "run", generate)
     with pytest.raises(GateBlocked):
         images_a.run(ep)
     assert generated == [KEYFRAME.format(n=3)]
@@ -218,7 +218,7 @@ def test_corrupt_selected_output_keeps_repair_request(monkeypatch, tmp_path):
                                               "error": "열 수 없음"}],
                 "missing_required": [1, 2], "problems": [KEYFRAME.format(n=3)]}
 
-    monkeypatch.setattr(images_a, "_codex", generate)
+    monkeypatch.setattr(images_a.codex, "run", generate)
     monkeypatch.setattr(images_a, "run_check", corrupt_report)
     with pytest.raises(StepFailed, match="검사에 실패"):
         images_a.run(ep)
