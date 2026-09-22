@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>작업 아카이브</title>
+<style>
+  :root {
+    --bg: #0f1117; --elev: #161a24; --border: #262c3a;
+    --text: #e6e8ee; --dim: #9aa3b5; --faint: #646c7d; --accent: #ffb703;
+    --font: 'Pretendard', 'Malgun Gothic', 'Apple SD Gothic Neo', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font); }
+  header { padding: 22px 16px 14px; border-bottom: 1px solid var(--border); }
+  h1 { margin: 0 0 12px; font-size: 19px; }
+  .tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tab { padding: 6px 13px; border: 1px solid var(--border); border-radius: 999px; background: var(--elev);
+         color: var(--dim); font-size: 13px; cursor: pointer; font-family: inherit; }
+  .tab[aria-selected="true"] { background: var(--accent); color: #1a1200; border-color: var(--accent); font-weight: 600; }
+  main { padding: 16px; }
+  .grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); }
+  .card { background: var(--elev); border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+          display: flex; flex-direction: column; }
+  .thumb { aspect-ratio: 9 / 16; background: #0a0c12; display: flex; align-items: center; justify-content: center;
+           color: var(--faint); font-size: 12px; }
+  .thumb.wide { aspect-ratio: 3 / 2; }
+  .thumb img, .thumb video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .body { padding: 11px 12px 13px; display: flex; flex-direction: column; gap: 5px; }
+  .title { font-size: 14px; font-weight: 600; line-height: 1.35; }
+  .meta { font-size: 11px; color: var(--faint); }
+  .links { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+  .links a { font-size: 11px; color: var(--dim); border: 1px solid var(--border); border-radius: 6px;
+             padding: 3px 8px; text-decoration: none; }
+  .links a:hover { color: var(--text); border-color: var(--dim); }
+  .empty, .error { color: var(--dim); font-size: 14px; padding: 40px 4px; text-align: center; }
+  .error { color: #ff8787; }
+  dialog { border: 1px solid var(--border); border-radius: 12px; background: var(--elev); color: var(--text);
+           padding: 0; max-width: min(96vw, 520px); width: 100%; }
+  dialog::backdrop { background: rgba(0,0,0,.72); }
+  dialog video { width: 100%; display: block; background: #000; }
+  dialog .close { display: block; width: 100%; padding: 11px; background: none; border: 0; border-top: 1px solid var(--border);
+                  color: var(--dim); font-family: inherit; font-size: 13px; cursor: pointer; }
+  @media (max-width: 480px) { .grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); } }
+</style>
+</head>
+<body>
+<header>
+  <h1>작업 아카이브</h1>
+  <div class="tabs" id="tabs" role="tablist"></div>
+</header>
+<main><div id="content" class="empty">불러오는 중…</div></main>
+
+<dialog id="player">
+  <video id="playerVideo" controls playsinline></video>
+  <button class="close" id="playerClose">닫기</button>
+</dialog>
+
+<script>
+const KINDS = [
+  {key: 'all', label: '전체'},
+  {key: 'episode', label: '영상'},
+  {key: 'detail', label: '상세페이지'},
+  {key: 'reels', label: '릴스기획'},
+];
+// 키 세그먼트를 각각 인코딩한다. 한글과 슬래시가 섞여도 서버가 원래 키로 되돌릴 수 있다.
+const src = (key) => '/r2/' + key.split('/').map(encodeURIComponent).join('/');
+
+let items = [];
+let active = 'all';
+
+const content = document.getElementById('content');
+const tabs = document.getElementById('tabs');
+const dialog = document.getElementById('player');
+const playerVideo = document.getElementById('playerVideo');
+
+document.getElementById('playerClose').onclick = () => dialog.close();
+dialog.addEventListener('close', () => { playerVideo.pause(); playerVideo.removeAttribute('src'); playerVideo.load(); });
+
+function el(tag, props = {}, children = []) {
+  const node = Object.assign(document.createElement(tag), props);
+  for (const child of children) node.append(child);
+  return node;
+}
+
+function card(item) {
+  const thumb = el('div', {className: item.kind === 'detail' ? 'thumb wide' : 'thumb'});
+  if (item.poster) thumb.append(el('img', {src: src(item.poster), alt: '', loading: 'lazy'}));
+  else if (item.images[0]) thumb.append(el('img', {src: src(item.images[0]), alt: '', loading: 'lazy'}));
+  else thumb.textContent = item.page ? 'HTML 시안' : '미리보기 없음';
+
+  if (item.video) {
+    thumb.style.cursor = 'pointer';
+    thumb.onclick = () => { playerVideo.src = src(item.video); dialog.showModal(); playerVideo.play().catch(() => {}); };
+  }
+
+  const links = el('div', {className: 'links'});
+  if (item.video) links.append(el('a', {href: src(item.video), target: '_blank', rel: 'noopener', textContent: '영상'}));
+  if (item.page) links.append(el('a', {href: src(item.page), target: '_blank', rel: 'noopener', textContent: '상세페이지 열기'}));
+  for (const doc of item.docs) {
+    links.append(el('a', {href: src(doc), target: '_blank', rel: 'noopener', textContent: doc.split('/').pop()}));
+  }
+
+  return el('div', {className: 'card'}, [
+    thumb,
+    el('div', {className: 'body'}, [
+      el('div', {className: 'title', textContent: item.title}),
+      el('div', {className: 'meta', textContent: [item.date, item.subtitle].filter(Boolean).join(' · ')}),
+      links,
+    ]),
+  ]);
+}
+
+function render() {
+  const shown = active === 'all' ? items : items.filter((i) => i.kind === active);
+  content.className = shown.length ? 'grid' : 'empty';
+  content.replaceChildren(...(shown.length ? shown.map(card) : [document.createTextNode('아직 없습니다.')]));
+}
+
+function renderTabs(counts) {
+  tabs.replaceChildren(...KINDS.map(({key, label}) => {
+    const n = key === 'all' ? items.length : (counts[key] || 0);
+    const button = el('button', {className: 'tab', textContent: `${label} ${n}`, type: 'button'});
+    button.setAttribute('role', 'tab');
+    button.setAttribute('aria-selected', String(key === active));
+    button.onclick = () => { active = key; renderTabs(counts); render(); };
+    return button;
+  }));
+}
+
+fetch('/r2/index.json')
+  .then((r) => { if (!r.ok) throw new Error(`목록을 불러오지 못했습니다 (${r.status})`); return r.json(); })
+  .then((data) => { items = data.items || []; renderTabs(data.counts || {}); render(); })
+  .catch((err) => {
+    content.className = 'error';
+    content.textContent = `${err.message} — 로컬에서 'python -m shortform archive publish' 를 먼저 실행하세요.`;
+  });
+</script>
+</body>
+</html>

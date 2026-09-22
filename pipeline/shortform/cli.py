@@ -180,6 +180,22 @@ def cmd_detail_check(args) -> int:
     return 0 if report["ok"] else 1
 
 
+def cmd_archive_publish(args) -> int:
+    from .steps import archive_publish
+
+    result = archive_publish.run(dry_run=args.dry_run)
+    if args.json:
+        _print_json({k: v for k, v in result.items() if k != "manifest"})
+    return 0
+
+
+def cmd_archive_list(args) -> int:
+    from . import archive
+
+    _print_json(archive.build_manifest())
+    return 0
+
+
 def main(argv=None) -> int:
     # 한국어 Windows 콘솔은 cp949라 경로와 기호가 깨진다.
     for stream in (sys.stdout, sys.stderr):
@@ -245,6 +261,17 @@ def main(argv=None) -> int:
     p_detail_check = detail_sub.add_parser("check", help="생성 없이 미디어 규격만 검사한다")
     p_detail_check.add_argument("--project", required=True, help="상세페이지 프로젝트 ID")
     p_detail_check.set_defaults(func=cmd_detail_check)
+
+    p_archive = sub.add_parser("archive", help="만든 것들을 R2에 올려 원격 뷰어에서 본다")
+    archive_sub = p_archive.add_subparsers(dest="archive_command", required=True)
+
+    p_archive_pub = archive_sub.add_parser("publish", help="바뀐 파일만 올리고 목록을 갱신한다")
+    p_archive_pub.add_argument("--dry-run", action="store_true", help="올리지 않고 대상만 보여 준다")
+    p_archive_pub.add_argument("--json", action="store_true")
+    p_archive_pub.set_defaults(func=cmd_archive_publish)
+
+    p_archive_list = archive_sub.add_parser("list", help="올릴 목록을 JSON으로 본다 (R2 불필요)")
+    p_archive_list.set_defaults(func=cmd_archive_list)
 
     p_inspect = sub.add_parser("inspect", help="웹 콘솔용 읽기 전용 JSON 브릿지")
     inspect_sub = p_inspect.add_subparsers(dest="inspect_command", required=True)

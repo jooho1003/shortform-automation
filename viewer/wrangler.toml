@@ -1,0 +1,14 @@
+# Cloudflare Pages 뷰어 설정.
+#
+# 버킷은 공개하지 않는다. 아래 R2 바인딩으로 함수가 직접 읽고,
+# 인증은 Cloudflare Access 가 앞단에서 맡는다(대시보드 설정, 코드 없음).
+#
+# bucket_name 은 pipeline/.env 의 R2_BUCKET 과 같아야 한다.
+
+name = "shortform-archive"
+compatibility_date = "2026-09-22"
+pages_build_output_dir = "public"
+
+[[r2_buckets]]
+binding = "ARCHIVE"
+bucket_name = "CHANGE_ME"

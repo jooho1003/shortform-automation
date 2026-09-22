@@ -17,6 +17,10 @@ FULL = {
 
 @pytest.fixture
 def env(monkeypatch):
+    # 실제 pipeline/.env 가 테스트 환경을 다시 채우지 않게 막는다.
+    # 여기서 보는 것은 os.environ 을 읽는 규칙이지 .env 로딩이 아니다.
+    monkeypatch.setattr(r2, "load_dotenv", lambda: None)
+
     def apply(**overrides):
         values = {**FULL, **overrides}
         for k in r2.ENV_KEYS:
