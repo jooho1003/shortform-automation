@@ -11,4 +11,4 @@ pages_build_output_dir = "public"
 
 [[r2_buckets]]
 binding = "ARCHIVE"
-bucket_name = "CHANGE_ME"
+bucket_name = "r2-bucket"
