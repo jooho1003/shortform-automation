@@ -204,6 +204,11 @@ def main(argv=None) -> int:
     # 셸 환경변수가 우선. 웹에서 돌릴 때는 자식 환경에 이미 들어와 있다.
     load_dotenv()
 
+    effective = sys.argv[1:] if argv is None else argv
+    if effective and effective[0] == "studio":
+        from .studio.cli import main as studio_main
+        return studio_main(effective[1:])
+
     parser = argparse.ArgumentParser(prog="shortform", description="숏폼 자동화 파이프라인")
     sub = parser.add_subparsers(dest="command", required=True)
 

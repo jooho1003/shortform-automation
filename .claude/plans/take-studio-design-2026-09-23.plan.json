@@ -1,0 +1,12 @@
+{
+  "feature": "take-studio-design",
+  "date": "2026-09-23",
+  "scope": "design-only",
+  "nodes": [
+    {"id":"research","title":"레퍼런스와 기존 구현 조사","domain":"product-analysis","D1":1,"D2":1,"D3":0,"D4":2,"score":4,"tier":"powerful","agent":"main","claude_model":"opus","codex_model":"gpt-5.6-sol","depends_on":[],"output":"관찰 근거 및 기능 대응표","override":"모호한 요구 해석은 메인이 직접 수행"},
+    {"id":"design","title":"제품·화면·데이터·실행 구조 설계","domain":"architecture","D1":1,"D2":2,"D3":0,"D4":2,"score":5,"tier":"powerful","agent":"main","claude_model":"opus","codex_model":"gpt-5.6-sol","depends_on":["research"],"output":"07-Take-Studio-UIUX-설계.md","override":"아키텍처는 메인이 직접 수행"},
+    {"id":"prototype-review","title":"인터랙션 시안 및 최종 검토","domain":"design-review","D1":1,"D2":1,"D3":0,"D4":2,"score":4,"tier":"powerful","agent":"main","claude_model":"opus","codex_model":"gpt-5.6-sol","depends_on":["design"],"output":"take-studio.html 및 검증 기록","override":"화면 설계와 최종 리뷰는 메인이 직접 수행"}
+  ],
+  "gates":{"G1":"PASS","G2":"PASS","G3":"PASS","G4":"PASS: 각 노드는 요구 해석·아키텍처·최종 리뷰 하드 오버라이드 대상","G5":"PASS: 로컬 설계 산출물만 작성, 외부 변경 없음"},
+  "result":"PASS"
+}

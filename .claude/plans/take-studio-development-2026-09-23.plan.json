@@ -1,0 +1,111 @@
+{
+  "feature": "take-studio-development",
+  "date": "2026-09-23",
+  "scope": "S0-S3 functional first release, director controls where supported",
+  "nodes": [
+    {
+      "id": "storage",
+      "title": "파일 저장·테이크·승인 계약",
+      "domain": "architecture",
+      "D1": 1,
+      "D2": 2,
+      "D3": 1,
+      "D4": 2,
+      "score": 6,
+      "tier": "powerful",
+      "agent": "main",
+      "claude_model": "opus",
+      "codex_model": "gpt-5.6-sol",
+      "depends_on": [],
+      "output": "파일 저장·테이크·승인 계약",
+      "override": "아키텍처·다중 시스템 실행·제품 설계·최종 리뷰는 메인이 직접 수행"
+    },
+    {
+      "id": "engine",
+      "title": "기존 엔진 어댑터·불변 출력·작업 복구",
+      "domain": "execution",
+      "D1": 1,
+      "D2": 2,
+      "D3": 1,
+      "D4": 2,
+      "score": 6,
+      "tier": "powerful",
+      "agent": "main",
+      "claude_model": "opus",
+      "codex_model": "gpt-5.6-sol",
+      "depends_on": [
+        "storage"
+      ],
+      "output": "기존 엔진 어댑터·불변 출력·작업 복구",
+      "override": "아키텍처·다중 시스템 실행·제품 설계·최종 리뷰는 메인이 직접 수행"
+    },
+    {
+      "id": "ui",
+      "title": "프로젝트·캔버스·비교·편집 UI",
+      "domain": "frontend",
+      "D1": 1,
+      "D2": 2,
+      "D3": 1,
+      "D4": 2,
+      "score": 6,
+      "tier": "powerful",
+      "agent": "main",
+      "claude_model": "opus",
+      "codex_model": "gpt-5.6-sol",
+      "depends_on": [
+        "storage"
+      ],
+      "output": "프로젝트·캔버스·비교·편집 UI",
+      "override": "아키텍처·다중 시스템 실행·제품 설계·최종 리뷰는 메인이 직접 수행"
+    },
+    {
+      "id": "verify",
+      "title": "회귀·출력·브라우저 최종 검증",
+      "domain": "review",
+      "D1": 1,
+      "D2": 2,
+      "D3": 1,
+      "D4": 2,
+      "score": 6,
+      "tier": "powerful",
+      "agent": "main",
+      "claude_model": "opus",
+      "codex_model": "gpt-5.6-sol",
+      "depends_on": [
+        "engine",
+        "ui"
+      ],
+      "output": "회귀·출력·브라우저 최종 검증",
+      "override": "아키텍처·다중 시스템 실행·제품 설계·최종 리뷰는 메인이 직접 수행"
+    }
+  ],
+  "gates": {
+    "G1": "PASS",
+    "G2": "PASS",
+    "G3": "PASS",
+    "G4": "PASS",
+    "G5": "PASS"
+  },
+  "cost_override": "보안/아키텍처/제품 설계/최종 검토 직접 수행",
+  "authorization": "사용자가 설계에 따른 개발을 요청함; 유료 생성 테스트와 배포는 하지 않음",
+  "status": "implemented",
+  "integration": {
+    "authorization": "사용자가 커밋과 머지를 명시적으로 요청함",
+    "source_branch": "feat/take-studio",
+    "target_branch": "master",
+    "remote": "origin/master",
+    "scope": "Take Studio 구현·설계·검증 파일만 포함; 기존 session-notes 및 sh.exe.stackdump 제외",
+    "gates": {"G1": "PASS", "G2": "PASS", "G3": "PASS", "G4": "PASS", "G5": "PASS"},
+    "validation": "기존 73개 테스트·타입 검사·빌드 통과 결과 유지. 원격 기준 변경 없음. staged diff와 merge tree 검증."
+  },
+  "validation": {
+    "python": "73 passed",
+    "typescript": "passed",
+    "build": "passed; existing 8 tracing warnings",
+    "real_export": "1080x1920 H.264 + AAC; Korean captions; range download 206",
+    "legacy_import": "A 2026-09-13 01: 5 shots, 13 assets",
+    "browser": "automation unavailable: debugger/navigation timeout",
+    "paid_generation": "mocked; no billable test calls",
+    "production_deployment": "not run"
+  }
+}
