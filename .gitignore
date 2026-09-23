@@ -1,4 +1,5 @@
 # 파이썬
+pipeline/data/studio/
 pipeline/.venv/
 pipeline/.venv-tts/
 pipeline/data/tts/

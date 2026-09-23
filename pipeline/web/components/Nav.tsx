@@ -4,6 +4,7 @@ import Link from 'next/link';
 import {usePathname} from 'next/navigation';
 
 const items: {href: string; label: string; icon: string; section?: string}[] = [
+  {href: '/studio', label: 'Take Studio', icon: '◈', section: '제작 스튜디오'},
   {href: '/', label: '회차', icon: '🎬', section: '파이프라인'},
   {href: '/research', label: '조사·구간', icon: '🔎'},
   {href: '/voices', label: '음성 스튜디오', icon: '🎙️'},

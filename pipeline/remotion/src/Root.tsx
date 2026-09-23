@@ -7,6 +7,7 @@ import {SLIDE_HEIGHT, SLIDE_WIDTH, type CardSlideProps, type ToonSlideProps} fro
 import {GeoStory, type GeoStoryProps} from './c-motion/GeoStory';
 import {BlogThumb, type BlogThumbProps} from './blog/Thumb';
 import {Short, Timeline} from './Short';
+import {Studio, studioDimensions, studioFrames, type StudioProps} from './Studio';
 
 const fallback: Timeline = {
   fps: 30,
@@ -48,6 +49,7 @@ const blogThumbFallback: BlogThumbProps = {
 export const RemotionRoot: React.FC = () => {
   return (
     <>
+    <Composition id="Studio" component={Studio} defaultProps={{clips: [], audio: null, ratio: '9:16'} as StudioProps} fps={30} width={1080} height={1920} durationInFrames={30} calculateMetadata={({props}) => ({...studioDimensions(props.ratio), durationInFrames: studioFrames(props.clips)})} />
     <Still id="CardSlide" component={CardSlide} defaultProps={cardFallback} width={SLIDE_WIDTH} height={SLIDE_HEIGHT} />
     <Still id="ToonSlide" component={ToonSlide} defaultProps={toonFallback} width={SLIDE_WIDTH} height={SLIDE_HEIGHT} />
     <Still id="BlogThumb" component={BlogThumb} defaultProps={blogThumbFallback} width={1200} height={630} />

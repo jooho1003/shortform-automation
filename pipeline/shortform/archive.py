@@ -160,9 +160,28 @@ def scan_reels(root: Path) -> list[Item]:
     return items
 
 
+def scan_studio(root: Path) -> list[Item]:
+    """Only explicitly included exports; never upload project prompts or private refs."""
+    items = []
+    for file in (root / "pipeline/data/studio/projects").glob("*/project.json"):
+        project = json.loads(file.read_text(encoding="utf-8"))
+        assets = {a["id"]: a for a in project.get("assets", [])}
+        for export in project.get("exports", []):
+            if not export.get("archive"):
+                continue
+            asset = assets.get(export["assetId"])
+            if not asset:
+                continue
+            video = (root / asset["path"]).resolve()
+            if not video.is_relative_to(file.parent.resolve()) or not video.is_file():
+                continue
+            items.append(Item(kind="episode", id=f"studio/{project['id']}/{export['id']}", title=export["snapshot"]["title"], date=export["createdAt"][:10], subtitle="Take Studio · 출력본", video=video.relative_to(root.resolve()).as_posix()))
+    return items
+
+
 def build_manifest(root: Path | None = None) -> dict:
     root = root or ROOT
-    items = scan_episodes(root) + scan_detail_pages(root) + scan_reels(root)
+    items = scan_episodes(root) + scan_detail_pages(root) + scan_reels(root) + scan_studio(root)
     return {
         "version": 1,
         "items": [asdict(item) for item in items],
