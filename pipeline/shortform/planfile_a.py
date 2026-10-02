@@ -3,10 +3,11 @@
     # 시놉시스
     ## 락 블록
     ### CHARACTER / ### COSTUME / ### GLOBAL STYLE / ### NEGATIVE
-    ## 컷표        | 컷 | TC | 렌즈 | 액션 | 카메라 | 필수 |
+    ## 컷표        | 컷 | TC | 뷰 | 시작 | 렌즈 | 액션 | 끝 프레임 | 카메라 | 보이는 사람 | 필수 | 모션(선택, 영어) |
+    ## 세트        (선택) - S1: 장소 / - V1: 고정 카메라 뷰. 체인 기획안(끝 프레임 열이 있는 것)은 뷰가 여기 있어야 한다
     ## 음향 설계   - 환경음: / - 효과음: / - 무음 구간:
     ## 캐릭터 시트  (캐릭터별 ### 소제목과 - 항목: 값)
-    ## 대사         | 시각 | 캐릭터 | 대사 | 연출 |
+    ## 대사         | 시각 | 캐릭터 | 대사 | 연출 | 영어(선택) |
     ## 조사 참고    (선택)
     ## 메타데이터  - 제목: / - 설명: / - 태그: / - 공개:
 
@@ -23,6 +24,7 @@ from . import StepFailed
 from .planfile import Comment, _sections, _table
 
 LOCK_KEYS = ("CHARACTER", "COSTUME", "GLOBAL STYLE", "NEGATIVE")
+START_MODES = ("새로", "이어서", "각도변경")
 
 
 @dataclass
@@ -34,6 +36,17 @@ class Cut:
     action: str
     camera: str
     required: bool
+    motion: str = ""  # 영상 모델용 짧은 영어 모션 프롬프트(컷표 '모션' 열). 있으면 액션·락 블록 대신 이것만 보낸다.
+    # 설계 10: 컷마다 시작·끝 프레임. '이어서'는 앞 컷의 끝 프레임이 이 컷의 시작이다(체인).
+    # '각도변경'은 같은 순간을 다른 뷰에서 — 앞 컷 끝 프레임을 자세 참조로 붙여 새로 만든다.
+    view: str = ""
+    start_mode: str = "새로"
+    end_action: str = ""  # 비어 있으면 끝 프레임을 만들지 않는 구형 기획안
+    visible: str = ""     # 이 컷에 보이는 사람. 비어 있으면 '없음'으로 프롬프트에 들어간다
+
+    @property
+    def chained(self) -> bool:
+        return self.start_mode == "이어서"
 
     @property
     def seconds(self) -> float:
@@ -52,6 +65,7 @@ class Dialogue:
     character: str
     text: str
     direction: str = ""
+    english: str = ""  # 자막 아래 줄에 붙는 영어 번역. 없으면 한 줄만 나간다.
 
 
 @dataclass
@@ -61,6 +75,7 @@ class PlanA:
     locks: dict[str, str]
     cuts: list[Cut]
     sound: dict[str, str]
+    sets: dict[str, str] = field(default_factory=dict)
     characters: list[Character] = field(default_factory=list)
     dialogues: list[Dialogue] = field(default_factory=list)
     research_notes: list[str] = field(default_factory=list)
@@ -94,6 +109,38 @@ def _tc(raw: str) -> tuple[float, float]:
     if b <= a:
         raise StepFailed(f"컷표 TC 구간이 비었습니다: {raw!r}")
     return a, b
+
+
+def uses_chain(cuts: list[Cut]) -> bool:
+    """끝 프레임 열이 하나라도 채워져 있으면 체인 기획안이다. 구형 기획안은 검증을 건너뛴다."""
+    return any(c.end_action for c in cuts)
+
+
+def _validate_chain(cuts: list[Cut], sets: dict[str, str]) -> None:
+    """설계 10 §5. 체인이 깨지면 영상 경계가 안 이어지므로 파싱 단계에서 막는다."""
+    if not uses_chain(cuts):
+        return
+    prev: Cut | None = None
+    for c in cuts:
+        if c.start_mode not in START_MODES:
+            raise StepFailed(f"컷 {c.n} 시작 열은 {'/'.join(START_MODES)} 중 하나여야 합니다: {c.start_mode!r}")
+        if not c.end_action:
+            raise StepFailed(f"컷 {c.n} 끝 프레임이 비어 있습니다. 체인 기획안은 모든 컷에 끝 프레임이 필요합니다.")
+        if not c.view:
+            raise StepFailed(f"컷 {c.n} 뷰가 비어 있습니다.")
+        if sets and c.view not in sets:
+            raise StepFailed(f"컷 {c.n} 뷰 {c.view}가 '## 세트' 절에 없습니다.")
+        if abs((c.end - c.start) - round(c.end - c.start)) > 1e-6:
+            raise StepFailed(f"컷 {c.n} 길이가 정수 초가 아닙니다 ({c.end - c.start:g}초). 영상 모델이 정수 초만 받습니다.")
+        if prev is None:
+            if c.start_mode != "새로":
+                raise StepFailed(f"첫 컷 {c.n}은 '새로'여야 합니다.")
+        else:
+            if abs(c.start - prev.end) > 1e-6:
+                raise StepFailed(f"컷 {prev.n}→{c.n} TC가 이어지지 않습니다 ({prev.end:g} → {c.start:g}).")
+            if c.chained and c.view != prev.view:
+                raise StepFailed(f"컷 {c.n} '이어서'는 앞 컷과 같은 뷰여야 합니다 ({prev.view} → {c.view}).")
+        prev = c
 
 
 def _seconds(raw: str) -> float:
@@ -159,10 +206,22 @@ def load(path: Path) -> PlanA:
             action=row.get("액션", "").strip(),
             camera=row.get("카메라", "").strip(),
             required=(row.get("필수", "").strip() in ("필수", "O", "o", "✓", "Y", "y", "yes")),
+            motion=(row.get("모션") or row.get("motion") or "").strip(),
+            view=row.get("뷰", "").strip(),
+            start_mode=(row.get("시작") or "").strip() or "새로",
+            end_action=(row.get("끝 프레임") or row.get("끝") or "").strip(),
+            visible=(row.get("보이는 사람") or "").strip(),
         ))
     if not cuts:
         raise StepFailed("컷표를 읽지 못했습니다. 컷·TC·렌즈·액션·카메라·필수 열이 있어야 합니다.")
     cuts.sort(key=lambda c: c.n)
+
+    sets: dict[str, str] = {}
+    for raw in next((b for n, b in sections.items() if n.strip() == "세트"), "").splitlines():
+        m = re.match(r"^\s*[-*]\s*([SV]\d+)\s*[:：]\s*(.*)$", raw)
+        if m:
+            sets[m.group(1)] = m.group(2).strip()
+    _validate_chain(cuts, sets)
 
     characters = _character_sheets(markdown)
 
@@ -182,6 +241,7 @@ def load(path: Path) -> PlanA:
             character=(row.get("캐릭터") or row.get("인물") or "").strip(),
             text=raw_text,
             direction=(row.get("연출") or row.get("표정") or "").strip(),
+            english=(row.get("영어") or row.get("영문") or row.get("English") or "").strip(),
         ))
 
     research_notes = [
@@ -209,6 +269,7 @@ def load(path: Path) -> PlanA:
         locks=locks,
         cuts=cuts,
         sound=sound,
+        sets=sets,
         characters=characters,
         dialogues=dialogues,
         research_notes=research_notes,
