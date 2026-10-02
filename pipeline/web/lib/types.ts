@@ -111,6 +111,11 @@ export interface PlanCut {
   action: string;
   camera: string;
   required: boolean;
+  motion?: string;
+  view?: string;
+  start_mode?: '새로' | '이어서' | '각도변경' | string;
+  end_action?: string;
+  visible?: string;
 }
 
 /**

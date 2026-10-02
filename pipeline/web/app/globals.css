@@ -595,6 +595,23 @@ dialog.modal::backdrop {
   font-size: 12px;
 }
 
+/* 스토리보드 (설계 10 §6) */
+.sb-sheets { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.sb-thumb { display: grid; gap: 4px; font-size: 12px; color: var(--info); }
+.sb-thumb img { width: 100%; aspect-ratio: 9 / 16; object-fit: contain; background: #000; border-radius: 6px; display: block; }
+.sb-thumb-missing, .sb-thumb-shared { display: grid; place-items: center; aspect-ratio: 9 / 16; padding: 8px; text-align: center; color: var(--text-dim); background: var(--bg-elev2); border: 1px dashed var(--border); border-radius: 6px; }
+.sb-thumb-shared { border-style: solid; }
+.sb-band { display: grid; gap: 8px; }
+.sb-ruler, .sb-track { position: relative; height: 22px; background: var(--bg-elev2); border-radius: 4px; overflow: hidden; }
+.sb-track { height: 36px; }
+.sb-cut-mark { position: absolute; top: 0; bottom: 0; border-left: 1px solid var(--border); padding-left: 4px; font-size: 11px; color: var(--text-dim); line-height: 22px; }
+.sb-speech { position: absolute; top: 4px; bottom: 4px; padding: 0 6px; font-size: 11px; line-height: 28px; color: #000; border-radius: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sb-gap { position: absolute; top: 0; bottom: 0; background: repeating-linear-gradient(45deg, var(--danger), var(--danger) 4px, transparent 4px, transparent 8px); opacity: .6; }
+.sb-groups { display: grid; gap: 18px; }
+.sb-group { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0 12px; row-gap: 12px; }
+.sb-card-chained { border-left: 3px solid var(--ok); }
+.sb-frames { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 6px; }
+.sb-arrow { color: var(--text-dim); }
 .pending-fix {
   margin: 10px 0;
   padding: 11px 12px;

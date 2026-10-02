@@ -4,7 +4,8 @@ import Link from 'next/link';
 import {useEffect, useState} from 'react';
 
 import ClipPicker from '@/components/ClipPicker';
-import CutBoard, {formatFixRequest} from '@/components/CutBoard';
+import Storyboard from '@/components/Storyboard';
+import {formatFixRequest} from '@/lib/storyboard';
 import GateButtons from '@/components/GateButtons';
 import PlanEditor from '@/components/PlanEditor';
 import {PlayerPane} from '@/components/PlayerPane';
@@ -207,12 +208,12 @@ export function EpisodeView({detail, tab: initialTab}: {detail: EpisodeDetail; t
             </div>
           </div>
           <FrameCheck dir={ep.dir} />
-          <CutBoard key={`images-board-${detail.fix_requests.clips ?? 'none'}`} dir={ep.dir} plan={planA} images={detail.assets.images} clips={detail.assets.clips} pendingFix={detail.fix_requests.clips} onGoToRun={() => setTab('run')} />
+          <Storyboard key={`images-board-${detail.fix_requests.clips ?? 'none'}`} dir={ep.dir} plan={planA} images={detail.assets.images} clips={detail.assets.clips} timeline={detail.timeline} pendingFix={detail.fix_requests.clips} onGoToRun={() => setTab('run')} />
         </div>
       ) : null}
 
       {tab === 'cuts' ? (
-        <CutBoard key={`cuts-board-${detail.fix_requests.clips ?? 'none'}`} dir={ep.dir} plan={planA} images={detail.assets.images} clips={detail.assets.clips} pendingFix={detail.fix_requests.clips} onGoToRun={() => setTab('run')} />
+        <Storyboard key={`cuts-board-${detail.fix_requests.clips ?? 'none'}`} dir={ep.dir} plan={planA} images={detail.assets.images} clips={detail.assets.clips} timeline={detail.timeline} pendingFix={detail.fix_requests.clips} onGoToRun={() => setTab('run')} />
       ) : null}
 
       {tab === 'video' ? (

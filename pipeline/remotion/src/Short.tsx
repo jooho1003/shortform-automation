@@ -2,6 +2,7 @@ import React from 'react';
 import {
   AbsoluteFill,
   Audio,
+  Img,
   OffthreadVideo,
   Sequence,
   interpolate,
@@ -26,7 +27,7 @@ export type Line = {
 };
 
 export type CommentCard = {at: number; nick: string; text: string};
-export type DialogueLine = {at: number; character: string; text: string; direction?: string};
+export type DialogueLine = {at: number; character: string; text: string; direction?: string; english?: string; speechStart?: number; speechEnd?: number};
 
 export type Timeline = {
   fps: number;
@@ -43,6 +44,8 @@ export type Timeline = {
   template?: string;
   templateName?: string;
   channelLabel?: string;
+  /** 오른쪽 아래 반투명 채널 마크 PNG(03-소재/워터마크.png). 없으면 안 그린다. */
+  watermark?: string;
   /** 웹 콘솔 Player 전용. 렌더 시에는 넣지 않는다(staticFile 경로 사용). */
   assetBase?: string;
 };
@@ -170,51 +173,56 @@ const Comment: React.FC<{comment: CommentCard; index: number}> = ({comment, inde
   );
 };
 
-/** A안 캐릭터 대사. 댓글처럼 보이지 않도록 화자명과 말풍선으로 분리한다. */
-const Dialogue: React.FC<{dialogue: DialogueLine; index: number}> = ({dialogue, index}) => {
+/** A안 캐릭터 대사. 김크루식 자막 — 화면 아래쪽에 한글 굵은 흰 글씨, 그 밑에 작은 영어 번역. 카드·화자명 없음. */
+const Dialogue: React.FC<{dialogue: DialogueLine; frames: number}> = ({dialogue, frames}) => {
   const frame = useCurrentFrame();
-  const {fps} = useVideoConfig();
-  const rise = spring({frame, fps, config: {damping: 200}, durationInFrames: 12});
-  const fade = interpolate(
-    frame,
-    [0, 8, CARD_SECONDS * fps - 10, CARD_SECONDS * fps],
-    [0, 1, 1, 0],
-    {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}
-  );
-  const color = AVATAR_COLORS[index % AVATAR_COLORS.length];
+  const fade = interpolate(frame, [0, 4, frames - 4, frames], [0, 1, 1, 0], {
+    extrapolateLeft: 'clamp',
+    extrapolateRight: 'clamp',
+  });
+  const stroke = {
+    textShadow: '0 4px 14px rgba(0,0,0,0.75), 0 0 2px rgba(0,0,0,0.9)',
+    WebkitTextStroke: '3px rgba(0,0,0,0.6)',
+    paintOrder: 'stroke fill',
+  } as const;
 
   return (
-    <AbsoluteFill style={{justifyContent: 'flex-end', alignItems: 'center', paddingBottom: 190}}>
-      <div
-        style={{
-          opacity: fade,
-          transform: `translateY(${interpolate(rise, [0, 1], [70, 0])}px)`,
-          width: 900,
-          boxSizing: 'border-box',
-          padding: '24px 30px 28px',
-          background: 'rgba(255,255,255,0.96)',
-          border: `6px solid ${color}`,
-          borderRadius: 30,
-          boxShadow: '0 14px 40px rgba(0,0,0,0.42)',
-          fontFamily: FONT,
-        }}
-      >
-        <div style={{fontSize: 28, fontWeight: 800, color, marginBottom: 8}}>{dialogue.character || '화자'}</div>
-        <div style={{fontSize: 42, fontWeight: 700, color: '#111', lineHeight: 1.35, wordBreak: 'keep-all'}}>
-          {dialogue.text}
-        </div>
+    <AbsoluteFill style={{justifyContent: 'flex-end', alignItems: 'center', paddingBottom: 300, paddingLeft: 44, paddingRight: 44}}>
+      <div style={{opacity: fade, textAlign: 'center', fontFamily: FONT, color: '#fff'}}>
+        {/* textWrap balance: "한마디 해 / 봐." 처럼 마지막 어절만 떨어지는 줄바꿈을 피한다 */}
+        <div style={{fontSize: 56, fontWeight: 900, lineHeight: 1.3, wordBreak: 'keep-all', textWrap: 'balance', ...stroke}}>{dialogue.text}</div>
+        {dialogue.english ? (
+          <div style={{fontSize: 36, fontWeight: 700, lineHeight: 1.3, marginTop: 6, ...stroke}}>{dialogue.english}</div>
+        ) : null}
       </div>
     </AbsoluteFill>
   );
 };
 
+/** 대사 자막은 다음 대사가 시작될 때까지 남는다. 마지막 대사는 영상 끝까지. */
+const dialogueFrames = (dialogues: DialogueLine[], index: number, durationSec: number, fps: number): number => {
+  const next = dialogues.slice(index + 1).map((d) => d.at).filter((at) => at > dialogues[index].at);
+  const end = next.length ? Math.min(...next) : durationSec;
+  return Math.max(1, Math.round((end - dialogues[index].at) * fps));
+};
+
+/** 오른쪽 아래 반투명 채널 마크. */
+const Watermark: React.FC<{src: string}> = ({src}) => (
+  <Img
+    src={src}
+    style={{position: 'absolute', right: 40, bottom: 120, width: 340, opacity: 0.72, pointerEvents: 'none'}}
+  />
+);
+
 const LegacyShort: React.FC<Timeline> = ({
   fps,
+  durationSec,
   lines,
   comments,
   dialogues = [],
   narration,
   bgm,
+  watermark,
   assetBase,
 }) => {
   const toFrames = (seconds: number) => Math.round(seconds * fps);
@@ -257,15 +265,16 @@ const LegacyShort: React.FC<Timeline> = ({
         </Sequence>
       ))}
 
-      {dialogues.map((dialogue, index) => (
-        <Sequence
-          key={`dialogue-${index}`}
-          from={toFrames(dialogue.at)}
-          durationInFrames={toFrames(CARD_SECONDS)}
-        >
-          <Dialogue dialogue={dialogue} index={index} />
-        </Sequence>
-      ))}
+      {dialogues.map((dialogue, index) => {
+        const frames = dialogueFrames(dialogues, index, durationSec, fps);
+        return (
+          <Sequence key={`dialogue-${index}`} from={toFrames(dialogue.at)} durationInFrames={frames}>
+            <Dialogue dialogue={dialogue} frames={frames} />
+          </Sequence>
+        );
+      })}
+
+      {watermark ? <Watermark src={asset(watermark)} /> : null}
 
       {narration ? <Audio src={asset(narration)} /> : null}
       {bgm ? <Audio src={asset(bgm)} volume={0.1} loop /> : null}
