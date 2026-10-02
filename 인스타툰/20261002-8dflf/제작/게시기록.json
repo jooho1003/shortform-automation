@@ -1,0 +1,29 @@
+{
+    "status":  "published",
+    "account":  "hansul_toon",
+    "url":  "https://www.instagram.com/p/Dd_tVkOE5Ru/",
+    "verified_at":  "2026-10-02T14:38:34.7436403Z",
+    "slide_count":  10,
+    "aspect_ratio":  "4:5",
+    "caption_submitted":  "한술툰 〈고민만 말하면 내 탓이라는 친구〉 3/3\n부탁할 수도 있고, 원하는 걸 말할 수도 있죠. 같은 행동을 하는 친구를 깎아내리는 게 문제였어요.\n※ 창작 사연입니다.\n#한술툰 #인스타툰 #친구관계",
+    "caption_observation":  "공유 직후 제출 캡션 확인. 후속 검증 시 Instagram에 수정됨 표시와 창작 사연 문구 없는 캡션 관찰; 외부 수정 유지.",
+    "files":  [
+                  "출력/01.jpg",
+                  "출력/02.jpg",
+                  "출력/03.jpg",
+                  "출력/04.jpg",
+                  "출력/05.jpg",
+                  "출력/06.jpg",
+                  "출력/07.jpg",
+                  "출력/08.jpg",
+                  "출력/09.jpg",
+                  "출력/10.jpg"
+              ],
+    "verification":  [
+                         "첫 시도 login_required 오류, 재로그인 후 기존 게시물 2개로 미게시 확인",
+                         "두 번째 시도 게시물 공유됨 확인",
+                         "실제 게시물 작성자 hansul_toon 및 제목 3/3 확인",
+                         "9장 톡! 알림 및 미소 질문 위·보리 답변 아래 시각 확인",
+                         "img_index=10 마지막 장 -끝- 원본 이미지 시각 확인"
+                     ]
+}

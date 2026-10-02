@@ -1,0 +1,63 @@
+{
+  "verifiedAt": "2026-10-02T12:10:03.040Z",
+  "status": "rendered",
+  "images": [
+    {
+      "file": "01.jpg",
+      "width": 1080,
+      "height": 1350
+    },
+    {
+      "file": "02.jpg",
+      "width": 1080,
+      "height": 1350
+    },
+    {
+      "file": "03.jpg",
+      "width": 1080,
+      "height": 1350
+    },
+    {
+      "file": "04.jpg",
+      "width": 1080,
+      "height": 1350
+    },
+    {
+      "file": "05.jpg",
+      "width": 1080,
+      "height": 1350
+    },
+    {
+      "file": "06.jpg",
+      "width": 1080,
+      "height": 1350
+    },
+    {
+      "file": "07.jpg",
+      "width": 1080,
+      "height": 1350
+    },
+    {
+      "file": "08.jpg",
+      "width": 1080,
+      "height": 1350
+    },
+    {
+      "file": "09.jpg",
+      "width": 1080,
+      "height": 1350
+    },
+    {
+      "file": "10.jpg",
+      "width": 1080,
+      "height": 1350
+    }
+  ],
+  "checks": [
+    "10 images loaded in local editor",
+    "All generated dialogue visually reviewed",
+    "08 cake photo sender corrected to Sujin",
+    "cover 2/3 and final -계속- checked",
+    "first published part preserved"
+  ]
+}

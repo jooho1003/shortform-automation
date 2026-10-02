@@ -1,0 +1,12 @@
+﻿{
+    "status":  "awaiting_target_account_login",
+    "target_account":  "hansul_toon",
+    "attempted_at":  "2026-10-02T20:22:06.1382016+09:00",
+    "uploaded_file_count":  10,
+    "caption_file":  "출력/캡션.txt",
+    "wrong_account":  "2week_ho",
+    "removed_post_url":  "https://www.instagram.com/p/Dd_XCvckzeV/",
+    "removed":  true,
+    "removal_evidence":  "Instagram displayed: 게시물이 삭제되었습니다",
+    "note":  "Composer displayed hansul_toon immediately before sharing, but published author was 2week_ho. Deleted only the just-created post. Target publication remains incomplete."
+}

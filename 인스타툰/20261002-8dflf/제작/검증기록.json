@@ -1,0 +1,26 @@
+{
+    "status":  "rendered",
+    "images":  10,
+    "dimensions":  "1080x1350",
+    "allEditorImagesLoaded":  true,
+    "lint":  [
+
+             ],
+    "previousEpisodesUnchanged":  true,
+    "zipContents":  [
+                        "01.jpg",
+                        "02.jpg",
+                        "03.jpg",
+                        "04.jpg",
+                        "05.jpg",
+                        "06.jpg",
+                        "07.jpg",
+                        "08.jpg",
+                        "09.jpg",
+                        "10.jpg",
+                        "캡션.txt"
+                    ],
+    "published":  false,
+    "verified_at":  "2026-10-02T14:22:38.2835708Z",
+    "slide9_revision":  "09-수정01.png: 톡! 알림, 미소 질문 위·보리 답변 아래. JPG 및 ZIP 갱신."
+}
