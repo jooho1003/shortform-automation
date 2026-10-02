@@ -37,6 +37,12 @@ def _stage(ep: Episode, timeline: dict) -> dict:
     if timeline.get("bgm"):
         shutil.copy(BGM / timeline["bgm"], STAGE / "bgm.mp3")
         timeline["bgm"] = "bgm.mp3"
+
+    if timeline.get("watermark") and (ep.assets_dir / timeline["watermark"]).exists():
+        shutil.copy(ep.assets_dir / timeline["watermark"], STAGE / "watermark.png")
+        timeline["watermark"] = "watermark.png"
+    else:
+        timeline["watermark"] = ""
     return timeline
 
 

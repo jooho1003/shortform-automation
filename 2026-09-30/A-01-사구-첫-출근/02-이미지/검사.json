@@ -1,0 +1,192 @@
+{
+  "sheet": true,
+  "files": [
+    {
+      "name": "시트-세트.png",
+      "width": 1080,
+      "height": 1920,
+      "ratio_ok": true,
+      "size_ok": true,
+      "min_short_side": 720,
+      "watermark_suspect": false
+    },
+    {
+      "name": "시트-인물.png",
+      "width": 1080,
+      "height": 1920,
+      "ratio_ok": true,
+      "size_ok": true,
+      "min_short_side": 720,
+      "watermark_suspect": false
+    },
+    {
+      "name": "시트.png",
+      "width": 1080,
+      "height": 1920,
+      "ratio_ok": true,
+      "size_ok": true,
+      "min_short_side": 1080,
+      "watermark_suspect": false
+    },
+    {
+      "name": "키프레임-01.png",
+      "width": 1080,
+      "height": 1920,
+      "ratio_ok": true,
+      "size_ok": true,
+      "min_short_side": 720,
+      "watermark_suspect": false
+    },
+    {
+      "name": "키프레임-01-끝.png",
+      "width": 1080,
+      "height": 1920,
+      "ratio_ok": true,
+      "size_ok": true,
+      "min_short_side": 720,
+      "watermark_suspect": false
+    },
+    {
+      "name": "키프레임-02-끝.png",
+      "width": 1080,
+      "height": 1920,
+      "ratio_ok": true,
+      "size_ok": true,
+      "min_short_side": 720,
+      "watermark_suspect": false
+    },
+    {
+      "name": "키프레임-03.png",
+      "width": 1080,
+      "height": 1920,
+      "ratio_ok": true,
+      "size_ok": true,
+      "min_short_side": 720,
+      "watermark_suspect": false
+    },
+    {
+      "name": "키프레임-03-끝.png",
+      "width": 1080,
+      "height": 1920,
+      "ratio_ok": true,
+      "size_ok": true,
+      "min_short_side": 720,
+      "watermark_suspect": false
+    },
+    {
+      "name": "키프레임-04-끝.png",
+      "width": 1080,
+      "height": 1920,
+      "ratio_ok": true,
+      "size_ok": true,
+      "min_short_side": 720,
+      "watermark_suspect": false
+    },
+    {
+      "name": "키프레임-05.png",
+      "width": 1080,
+      "height": 1920,
+      "ratio_ok": true,
+      "size_ok": true,
+      "min_short_side": 720,
+      "watermark_suspect": true
+    },
+    {
+      "name": "키프레임-05-끝.png",
+      "width": 941,
+      "height": 1672,
+      "ratio_ok": true,
+      "size_ok": true,
+      "min_short_side": 720,
+      "watermark_suspect": true
+    },
+    {
+      "name": "키프레임-06-끝.png",
+      "width": 1080,
+      "height": 1920,
+      "ratio_ok": true,
+      "size_ok": true,
+      "min_short_side": 720,
+      "watermark_suspect": true
+    },
+    {
+      "name": "키프레임-07.png",
+      "width": 1080,
+      "height": 1920,
+      "ratio_ok": true,
+      "size_ok": true,
+      "min_short_side": 720,
+      "watermark_suspect": false
+    },
+    {
+      "name": "키프레임-07-끝.png",
+      "width": 1080,
+      "height": 1920,
+      "ratio_ok": true,
+      "size_ok": true,
+      "min_short_side": 720,
+      "watermark_suspect": false
+    },
+    {
+      "name": "키프레임-08.png",
+      "width": 1080,
+      "height": 1920,
+      "ratio_ok": true,
+      "size_ok": true,
+      "min_short_side": 720,
+      "watermark_suspect": false
+    },
+    {
+      "name": "키프레임-08-끝.png",
+      "width": 1080,
+      "height": 1920,
+      "ratio_ok": true,
+      "size_ok": true,
+      "min_short_side": 720,
+      "watermark_suspect": false
+    },
+    {
+      "name": "키프레임-09.png",
+      "width": 1080,
+      "height": 1920,
+      "ratio_ok": true,
+      "size_ok": true,
+      "min_short_side": 720,
+      "watermark_suspect": false
+    },
+    {
+      "name": "키프레임-09-끝.png",
+      "width": 1080,
+      "height": 1920,
+      "ratio_ok": true,
+      "size_ok": true,
+      "min_short_side": 720,
+      "watermark_suspect": false
+    },
+    {
+      "name": "키프레임-10-끝.png",
+      "width": 1080,
+      "height": 1920,
+      "ratio_ok": true,
+      "size_ok": true,
+      "min_short_side": 720,
+      "watermark_suspect": false
+    },
+    {
+      "name": "키프레임-11-끝.png",
+      "width": 1080,
+      "height": 1920,
+      "ratio_ok": true,
+      "size_ok": true,
+      "min_short_side": 720,
+      "watermark_suspect": false
+    }
+  ],
+  "missing_required": [],
+  "problems": [
+    "키프레임-05.png",
+    "키프레임-05-끝.png",
+    "키프레임-06-끝.png"
+  ],
+  "ok": true
+}
