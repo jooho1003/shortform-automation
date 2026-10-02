@@ -154,12 +154,47 @@ def _synthesize(ep: Episode, plan, voice: dict) -> list[tuple[Path, float, float
     out: list[tuple[Path, float, float]] = []
     for index, dialogue in enumerate(plan.dialogues, 1):
         path = tts_dir / f"dialogue-{index:02d}.mp3"
-        begin, finish = asyncio.run(_speak(dialogue.text, path, _voice_for(voice, getattr(dialogue, "character", ""))))
-        if finish <= begin:
-            # 문장 경계 이벤트가 없으면 파일 길이로 대신한다. 0초 구간이면 공백 검사가 엉뚱하게 실패한다.
-            begin, finish = 0.0, audio_duration(path)
+        asyncio.run(_speak(dialogue.text, path, _voice_for(voice, getattr(dialogue, "character", ""))))
+        # Edge의 문장 경계 이벤트는 문장 뒤 쉼까지 발화로 세어 실제 소리보다 0.5~1초 길게 나온다
+        # (1화 실측: 5.2초 소리를 6.1초로 보고). 공백·겹침 판정은 소리가 있는 구간으로 해야 하므로
+        # 합성 결과 오디오에서 직접 잰다.
+        begin, finish = _speech_bounds(path)
         out.append((path, dialogue.at + begin, dialogue.at + finish))
     return out
+
+
+SILENCE_DB = -45  # 이보다 작은 소리는 무음으로 본다. Edge mp3의 앞뒤 무음은 디지털 0에 가깝다.
+
+
+def _trimmed_seconds(path: Path, filters: str) -> float:
+    res = subprocess.run(
+        ["ffmpeg", "-v", "error", "-i", str(path), "-af", filters, "-f", "null", "-"],
+        capture_output=True, text=True, encoding="utf-8", errors="replace",
+    )
+    if res.returncode != 0:
+        raise StepFailed(f"발화 구간 측정 실패 {path.name}: {res.stderr[-300:]}")
+    # -f null 은 길이를 안 알려 주므로 실제로 잘라 wav 로 쓰고 잰다
+    tmp = path.with_suffix(".trim.wav")
+    res = subprocess.run(
+        ["ffmpeg", "-v", "error", "-y", "-i", str(path), "-af", filters, str(tmp)],
+        capture_output=True, text=True, encoding="utf-8", errors="replace",
+    )
+    if res.returncode != 0:
+        raise StepFailed(f"발화 구간 측정 실패 {path.name}: {res.stderr[-300:]}")
+    try:
+        return audio_duration(tmp)
+    finally:
+        tmp.unlink(missing_ok=True)
+
+
+def _speech_bounds(path: Path) -> tuple[float, float]:
+    """mp3 안에서 실제 소리가 시작·끝나는 초. 앞 무음을 떼면 시작, 앞뒤 무음을 떼면 길이가 나온다."""
+    total = audio_duration(path)
+    lead_trim = f"silenceremove=start_periods=1:start_threshold={SILENCE_DB}dB"
+    without_lead = _trimmed_seconds(path, lead_trim)
+    speech = _trimmed_seconds(path, f"{lead_trim},areverse,{lead_trim},areverse")
+    begin = max(0.0, total - without_lead)
+    return round(begin, 3), round(begin + speech, 3)
 
 
 def _build_audio(ep: Episode, plan, synthesized: list[tuple[Path, float, float]]) -> str:

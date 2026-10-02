@@ -92,17 +92,25 @@ def test_fal_chain_body_fills_start_end_and_duration():
     assert video_a._needs_end_frame({"body": {"image_url": "{keyframe}"}}) is False
 
 
-def test_synthesize_falls_back_to_file_duration(monkeypatch, tmp_path: Path):
-    # Edge가 문장 경계 이벤트를 안 주면 (0,0)이 온다. 그러면 파일 길이로 구간을 잡아야 공백 검사가 뜻대로 돈다.
+def test_synthesize_measures_speech_from_audio_not_edge_events(monkeypatch, tmp_path: Path):
+    # Edge 경계 이벤트는 문장 뒤 쉼까지 발화로 세어 길게 나온다. 구간은 오디오에서 잰 값을 써야 한다.
     async def fake_speak(text, out, voice):
         out.write_bytes(b"mp3")
-        return 0.0, 0.0
+        return 0.0, 9.0  # 일부러 틀린 Edge 값
     monkeypatch.setattr(video_a, "_speak", fake_speak)
-    monkeypatch.setattr(video_a, "audio_duration", lambda p: 2.5)
+    monkeypatch.setattr(video_a, "_speech_bounds", lambda p: (0.2, 2.7))
     plan = SimpleNamespace(dialogues=[SimpleNamespace(at=1.0, character="사구", text="넵!")])
     ep = SimpleNamespace(assets_dir=tmp_path)
     [(path, start, end)] = video_a._synthesize(ep, plan, {"provider": "edge-tts", "voice": "v"})
-    assert path.name == "dialogue-01.mp3" and (start, end) == (1.0, 3.5)
+    assert path.name == "dialogue-01.mp3" and (start, end) == (1.2, 3.7)
+
+
+def test_speech_bounds_strips_leading_and_trailing_silence(monkeypatch, tmp_path: Path):
+    # 전체 4.0초, 앞 무음 떼면 3.8초, 앞뒤 떼면 3.0초 → 소리는 0.2~3.2초
+    monkeypatch.setattr(video_a, "audio_duration", lambda p: 4.0)
+    calls = iter([3.8, 3.0])
+    monkeypatch.setattr(video_a, "_trimmed_seconds", lambda path, filters: next(calls))
+    assert video_a._speech_bounds(tmp_path / "x.mp3") == (0.2, 3.2)
 
 
 def test_dialogue_payload_carries_speech_windows():
