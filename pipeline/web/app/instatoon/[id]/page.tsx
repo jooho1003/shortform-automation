@@ -26,6 +26,7 @@ export default async function InstatoonDetailPage({params}: {params: Promise<{id
           <h1>{project.title}</h1>
           <p>
             <Link href="/instatoon">← 인스타툰</Link> · 파일은 인스타툰/{project.id}/프로젝트.json
+            {project.brand_name === '한술툰' && <> · <Link href="/instatoon/hansul">한술툰 작업실</Link></>}
           </p>
         </div>
       </div>

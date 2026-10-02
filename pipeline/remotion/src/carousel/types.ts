@@ -62,6 +62,8 @@ export type ToonLayout = 'single' | 'two' | 'four';
 
 export type ToonSlideData = {
   layout: ToonLayout;
+  /** 말풍선·글씨까지 그려진 완성 페이지는 테두리와 별도 푸터 없이 표시한다. */
+  fullBleed?: boolean;
   panels: ToonPanel[];
 };
 

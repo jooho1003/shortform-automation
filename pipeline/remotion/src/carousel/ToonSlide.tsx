@@ -51,6 +51,16 @@ const PanelView: React.FC<{panel: ToonPanel | undefined; assetBase?: string}> = 
 );
 
 export const ToonSlide: React.FC<ToonSlideProps> = ({slide, index, total, title, sponsored, assetBase}) => {
+  const artwork = slide.layout === 'single' && slide.fullBleed ? slide.panels[0] : undefined;
+  if (artwork?.image) {
+    return (
+      <div style={{position: 'relative', width: SLIDE_WIDTH, height: SLIDE_HEIGHT, background: '#fff', fontFamily: CAROUSEL_FONT}}>
+        <img src={carouselAsset(assetBase, artwork.image)} alt={title} style={{width: '100%', height: '100%', objectFit: 'contain'}} />
+        {artwork.bubbles.map((b, i) => <BubbleView key={i} bubble={b} />)}
+        {sponsored && index === 0 ? <AdMark /> : null}
+      </div>
+    );
+  }
   const count = PANELS_PER_LAYOUT[slide.layout];
   const grid: React.CSSProperties =
     slide.layout === 'single'

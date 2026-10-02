@@ -187,7 +187,7 @@ function cleanSlides(kind: CarouselKind, raw: unknown): CardSlideData[] | ToonSl
         y: num(b.y, 0, 100, 20),
       })),
     }));
-    return {layout, panels};
+    return {layout, panels, ...(layout === 'single' && s.fullBleed === true ? {fullBleed: true} : {})};
   });
 }
 

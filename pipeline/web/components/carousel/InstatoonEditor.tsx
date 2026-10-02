@@ -87,6 +87,13 @@ export function InstatoonEditor({project, lint: initialLint}: {project: Instatoo
               </div>
             </div>
 
+            {slide.fullBleed && (
+              <p className="faint" style={{lineHeight: 1.6}}>
+                손글씨·말풍선이 포함된 완성 이미지입니다. 그림 속 대사를 바꾸려면 수정한 콘티로 해당 장을 다시 그려야 합니다.
+                {slide.panels[0]?.image && <> <a href={`${MEDIA_BASE}${encodeURIComponent(slide.panels[0].image)}`} target="_blank" rel="noreferrer">원본 이미지 열기</a></>}
+              </p>
+            )}
+
             {slide.panels.slice(0, PANELS_PER_LAYOUT[slide.layout]).map((p, pi) => (
               <div key={pi} className="panel-box">
                 <label>
@@ -180,6 +187,11 @@ export function InstatoonEditor({project, lint: initialLint}: {project: Instatoo
                   캐릭터 시트 이미지 (정면·3/4·측면 + 표정 4~6)
                   <input className="field mono" placeholder={`인스타툰/${doc.id}/캐릭터/${c.key}.png`} value={c.sheet ?? ''} onChange={(e) => setChar(ci, (x) => ({...x, sheet: e.target.value.trim() || null}))} />
                 </label>
+                {c.sheet && doc.characters.findIndex((character) => character.sheet === c.sheet) === ci && (
+                  <a href={`${MEDIA_BASE}${encodeURIComponent(c.sheet)}`} target="_blank" rel="noreferrer" aria-label={`${c.name} 캐릭터 기준 시트 원본 열기`}>
+                    <img src={`${MEDIA_BASE}${encodeURIComponent(c.sheet)}`} alt={`${doc.characters.filter((character) => character.sheet === c.sheet).map((character) => character.name).join(' · ')} 캐릭터 기준 시트`} style={{display: 'block', width: '100%', height: 'auto', borderRadius: 8}} />
+                  </a>
+                )}
               </div>
             ))}
           </div>
