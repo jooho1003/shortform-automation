@@ -27,13 +27,18 @@ function Thumb({file, label, missing}: {file?: string; label: string; missing: s
 function DialogueBand({plan, timeline}: {plan: PlanA; timeline: Timeline | null}) {
   const total = Math.max(...plan.cuts.map((c) => c.end), 1);
   const {windows, estimated} = useMemo(() => speechWindows(plan.dialogues, timeline?.dialogues ?? null), [plan.dialogues, timeline]);
-  const gaps = coverageGaps(windows, total);
+  // 대사가 없는 기획안(힐링물)은 공백 검사 대상이 아니다. 빨간 띠 대신 그 사실만 적는다.
+  const gaps = plan.dialogues.length ? coverageGaps(windows, total) : [];
   const pct = (t: number) => `${(t / total) * 100}%`;
   return (
     <section className="card sb-band">
       <div className="row" style={{justifyContent: 'space-between'}}>
         <strong>대사 띠 · {total}초</strong>
-        <span className={`badge ${gaps.length ? 'danger' : 'ok'}`}>{gaps.length ? `대사 없는 구간 ${gaps.length}곳` : '모든 구간에 대사 있음'}{estimated ? ' · 글자 수 추정' : ' · 실측'}</span>
+        {plan.dialogues.length === 0 ? (
+          <span className="badge">대사 없는 기획안</span>
+        ) : (
+          <span className={`badge ${gaps.length ? 'danger' : 'ok'}`}>{gaps.length ? `대사 없는 구간 ${gaps.length}곳` : '모든 구간에 대사 있음'}{estimated ? ' · 글자 수 추정' : ' · 실측'}</span>
+        )}
       </div>
       <div className="sb-ruler">
         {plan.cuts.map((c) => <span key={c.n} className="sb-cut-mark" style={{left: pct(c.start), width: pct(c.end - c.start)}}>{c.n}</span>)}
