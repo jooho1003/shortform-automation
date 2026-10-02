@@ -1,0 +1,17 @@
+{
+  "body_sha256": "89db44b0a9755e7020f7bad9bc22c13e8967f24e91462bfb75a93c87965f73e6",
+  "images": [
+    {
+      "file": "이미지/00-대표-보정.jpg",
+      "sha256": "5ecc992e5a7b5a0488c85accf1b5e8914c3b4957a8b04118d02d37aaaf6919c8"
+    },
+    {
+      "file": "이미지/01-보정.jpg",
+      "sha256": "f0705d9b0e9270f3dd5caf55b8c46c4feafcbd97a1c1ceef254fb1d5b4a44e3f"
+    },
+    {
+      "file": "이미지/02-보정.jpg",
+      "sha256": "3cd04c9f42822962c1e4b13e5b16ffe2db8a0963092b826af455b10eab58ec96"
+    }
+  ]
+}

@@ -5,6 +5,7 @@ import path from 'node:path';
 import YAML from 'yaml';
 
 import {blogDocument} from './blogRender';
+import {reactionEmojis, readableBody, vaguePhrases} from './blogText';
 import type {
   BlogBundle,
   BlogConfig,
@@ -18,7 +19,7 @@ import type {
   BlogRankPoint,
   BlogState,
 } from './blogTypes';
-import {BLOG_STATUSES} from './blogTypes';
+import {BLOG_STATUSES, SELF_PAID_CATEGORY} from './blogTypes';
 import {exists, readJson, readText, removeIfExists, writeJsonLikePython, writeText} from './jsonio';
 import {BLOG, CONFIG, ROOT} from './paths';
 
@@ -48,6 +49,7 @@ const DEFAULT_CONFIG: BlogConfig = {
   weekly_target: 2,
   length: {min: 1200, max: 3200},
   banned_phrases: ['무조건', '100%', '완치', '원금 보장', '수익 보장'],
+  vague_phrases: [],
   max_posts_per_day: 1,
   min_hours_between_posts: 12,
   default_publish_mode: 'copy',
@@ -103,6 +105,7 @@ export async function loadBlogConfig(): Promise<BlogConfig> {
       length: {...DEFAULT_CONFIG.length, ...(parsed.length ?? {})},
       seed_keywords: uniqueStrings(parsed.seed_keywords, 100),
       banned_phrases: uniqueStrings(parsed.banned_phrases, 100),
+      vague_phrases: uniqueStrings(parsed.vague_phrases, 100),
       default_publish_mode: parsed.default_publish_mode === 'draft' ? 'draft' : 'copy',
       draft_enabled: parsed.draft_enabled === true,
       max_posts_per_day: Math.min(3, Math.max(1, Number(parsed.max_posts_per_day) || 1)),
@@ -325,14 +328,6 @@ export async function bodyApprovalValid(id: string): Promise<boolean> {
 
 const firstParagraph = (body: string) => body.split(/\n\s*\n/).find((part) => part.trim() && !part.trim().startsWith('#')) ?? '';
 const plainBody = (body: string) => body.replace(/!\[[^\]]*\]\([^)]+\)/g, ' ').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/[*#>|`_-]/g, ' ').replace(/\s+/g, ' ').trim();
-const readableBody = (body: string) => body
-  .replace(/!\[([^\]]*)\]\([^)]+\)/g, (_match, alt: string) => alt ? `[이미지: ${alt}]` : '[이미지]')
-  .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-  .replace(/^#{2,3}\s+/gm, '')
-  .replace(/^>\s?/gm, '')
-  .replace(/\*\*([^*\n]+)\*\*/g, '$1')
-  .replace(/\n{3,}/g, '\n\n')
-  .trim();
 const words = (body: string) => plainBody(body).toLowerCase().split(/\s+/).filter(Boolean);
 function ngrams(body: string): Set<string> {
   const values = words(body);
@@ -364,6 +359,12 @@ export async function lintBlog(id: string): Promise<BlogLintReport> {
   if (length < config.length.min) error('length.short', `본문 ${length}자 — 최소 ${config.length.min}자보다 짧습니다.`);
   if (length > config.length.max) warn('length.long', `본문 ${length}자 — 권장 최대 ${config.length.max}자를 넘습니다.`);
   for (const phrase of config.banned_phrases) if (phrase && (project.title.includes(phrase) || body.includes(phrase))) error('phrase.banned', `금칙 표현 “${phrase}”가 포함되어 있습니다.`);
+  for (const phrase of vaguePhrases(body, config.vague_phrases)) warn('phrase.vague', `막연한 평가 “${phrase}…” 대신 직접 본 장면이나 먹은 느낌으로 바꿔 보세요.`);
+  const emojis = reactionEmojis(body);
+  if (emojis.length > 3) warn('emoji.count', `감탄 이모지가 ${emojis.length}개입니다. 1~3개로 줄이세요(위치 블록 기호는 제외).`);
+  const repeated = [...new Set(emojis.filter((emoji, index) => emojis.indexOf(emoji) !== index))];
+  if (repeated.length) warn('emoji.repeat', `같은 이모지를 반복했습니다: ${repeated.join(' ')}`);
+  if (project.category === SELF_PAID_CATEGORY && project.disclosure !== 'none') error('category.disclosure', '광고·협찬·제휴 글은 내돈내산 카테고리에 넣을 수 없습니다.');
   if (project.disclosure !== 'none') {
     const start = plainBody(body).slice(0, 160);
     if (!/(광고|협찬|제휴|수수료|경제적 이해관계)/.test(start)) error('disclosure.missing', '광고·협찬·제휴 글은 첫머리에 경제적 이해관계를 밝혀야 합니다.');
@@ -398,8 +399,15 @@ export async function lintBlog(id: string): Promise<BlogLintReport> {
   return report;
 }
 
-export async function setBlogGate(id: string, gate: 'outline' | 'body', action: 'ok' | 'fix', note = ''): Promise<BlogBundle> {
+export async function setBlogGate(id: string, gate: 'outline' | 'body', action: 'ok' | 'fix', note = '', category?: string): Promise<BlogBundle> {
   const project = await getBlogProject(id);
+  const nextCategory = category === undefined ? project.category : cleanText(category, 100);
+  if (gate === 'body' && action === 'ok' && nextCategory !== project.category) {
+    // 점검(lintBlog)이 파일에서 카테고리를 다시 읽으므로 승인 전에 먼저 저장한다.
+    if (nextCategory === SELF_PAID_CATEGORY && project.disclosure !== 'none') throw new BlogError('광고·협찬·제휴 글은 내돈내산 카테고리에 넣을 수 없습니다.');
+    project.category = nextCategory;
+    await atomicJson(projectFile(id), project);
+  }
   if (gate === 'outline') {
     const outline = await readJson<BlogOutline>(projectFile(id, OUTLINE));
     if (!outline) throw new BlogError('승인할 개요가 없습니다.');

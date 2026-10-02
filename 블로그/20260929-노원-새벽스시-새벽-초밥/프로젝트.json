@@ -1,0 +1,36 @@
+{
+  "id": "20260929-노원-새벽스시-새벽-초밥",
+  "version": 1,
+  "revision": 16,
+  "status": "review",
+  "keyword": {
+    "main": "노원 새벽스시",
+    "subs": [],
+    "volume_pc": 0,
+    "volume_mobile": 0,
+    "docs": 0,
+    "saturation": 0,
+    "week": "2026-W40"
+  },
+  "intent": "새벽 시간에 노원에서 초밥을 먹은 실제 방문 후기",
+  "title": "노원 새벽스시, 새벽 1시에 먹은 내돈내산 초밥 후기",
+  "title_candidates": [
+    "노원 새벽스시, 새벽 1시에 먹은 내돈내산 초밥 후기",
+    "노원역 근처 새벽 초밥, 새벽스시 방문 후기",
+    "새벽 1시 노원에서 초밥이 생각날 때, 새벽스시"
+  ],
+  "category": "맛집",
+  "tags": [
+    "노원맛집",
+    "노원초밥",
+    "새벽스시"
+  ],
+  "disclosure": "none",
+  "publish": {
+    "mode": "copy",
+    "post_url": null,
+    "published_at": null
+  },
+  "createdAt": "2026-09-29T13:42:16.288Z",
+  "updatedAt": "2026-09-30T08:45:12.002Z"
+}

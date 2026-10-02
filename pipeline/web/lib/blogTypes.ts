@@ -1,5 +1,7 @@
 export const BLOG_STATUSES = ['keyword', 'outline', 'facts', 'draft', 'images', 'review', 'ready', 'drafted', 'published'] as const;
 export type BlogStatus = (typeof BLOG_STATUSES)[number];
+export const SELF_PAID_CATEGORY = '내돈내산';
+export const BLOG_CATEGORIES = ['맛집', SELF_PAID_CATEGORY];
 export type BlogDisclosure = 'none' | 'ad' | 'sponsored' | 'affiliate';
 export type BlogPublishMode = 'copy' | 'draft';
 
@@ -113,6 +115,7 @@ export interface BlogConfig {
   weekly_target: number;
   length: {min: number; max: number};
   banned_phrases: string[];
+  vague_phrases: string[];
   max_posts_per_day: number;
   min_hours_between_posts: number;
   default_publish_mode: BlogPublishMode;

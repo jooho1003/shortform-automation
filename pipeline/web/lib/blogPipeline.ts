@@ -53,6 +53,7 @@ async function withLlmLock<T>(task: () => Promise<T>): Promise<T> {
 
 async function prompt(name: string, values: Record<string, string>): Promise<string> {
   let value = await fs.readFile(path.join(PIPELINE, 'prompts', 'blog', `${name}.md`), 'utf8');
+  if (value.includes('{{style}}')) values = {...values, style: await fs.readFile(path.join(PIPELINE, 'prompts', 'blog', 'style.md'), 'utf8')};
   for (const [key, replacement] of Object.entries(values)) value = value.replaceAll(`{{${key}}}`, replacement);
   return value;
 }

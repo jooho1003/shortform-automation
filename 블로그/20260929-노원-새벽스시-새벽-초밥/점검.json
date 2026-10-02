@@ -1,0 +1,24 @@
+{
+  "errors": [],
+  "warnings": [
+    {
+      "code": "phrase.vague",
+      "message": "막연한 평가 “퀄리티가 좋…” 대신 직접 본 장면이나 먹은 느낌으로 바꿔 보세요."
+    },
+    {
+      "code": "phrase.vague",
+      "message": "막연한 평가 “퀄리티도 괜찮…” 대신 직접 본 장면이나 먹은 느낌으로 바꿔 보세요."
+    },
+    {
+      "code": "phrase.vague",
+      "message": "막연한 평가 “선택지가 다양…” 대신 직접 본 장면이나 먹은 느낌으로 바꿔 보세요."
+    },
+    {
+      "code": "phrase.vague",
+      "message": "막연한 평가 “종류도 다양…” 대신 직접 본 장면이나 먹은 느낌으로 바꿔 보세요."
+    }
+  ],
+  "checked_at": "2026-09-30T08:45:11.994Z",
+  "body_sha256": "89db44b0a9755e7020f7bad9bc22c13e8967f24e91462bfb75a93c87965f73e6",
+  "approval_valid": true
+}

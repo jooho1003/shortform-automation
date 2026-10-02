@@ -1,0 +1,16 @@
+{
+  "errors": [],
+  "warnings": [
+    {
+      "code": "emoji.count",
+      "message": "감탄 이모지가 6개입니다. 1~3개로 줄이세요(위치 블록 기호는 제외)."
+    },
+    {
+      "code": "emoji.repeat",
+      "message": "같은 이모지를 반복했습니다: 🥑 🥪"
+    }
+  ],
+  "checked_at": "2026-09-30T10:08:52.873Z",
+  "body_sha256": "30aa6bbf3413d46ea55d6fc242f453d2e5e1904fc586a75117d9d72ff6c94e37",
+  "approval_valid": true
+}

@@ -59,6 +59,12 @@ export function markdownToHtml(markdown: string): string {
       closeList();
       continue;
     }
+    if (/^\s*---\s*$/.test(line)) {
+      flushParagraph();
+      closeList();
+      output.push('<hr>');
+      continue;
+    }
     const heading = line.match(/^(##|###)\s+(.+)$/);
     if (heading) {
       flushParagraph();
@@ -98,7 +104,11 @@ export function markdownToHtml(markdown: string): string {
     if (quote) {
       flushParagraph();
       closeList();
-      output.push(`<blockquote>${renderInline(quote[1])}</blockquote>`);
+      const quoteLines = [quote[1]];
+      while (i + 1 < lines.length && /^>\s?(.*)$/.test(lines[i + 1])) {
+        quoteLines.push(lines[++i].replace(/^>\s?/, ''));
+      }
+      output.push(`<blockquote>${quoteLines.map(renderInline).join('<br>')}</blockquote>`);
       continue;
     }
     if (/^!\[[^\]]*\]\([^)]+\)$/.test(line.trim())) {
@@ -116,5 +126,5 @@ export function markdownToHtml(markdown: string): string {
 }
 
 export function blogDocument(title: string, markdown: string): string {
-  return `<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(title)}</title><style>body{margin:0;background:#f4f5f7;color:#222;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",sans-serif}article{box-sizing:border-box;max-width:720px;margin:0 auto;background:#fff;min-height:100vh;padding:44px 36px;line-height:1.85;word-break:keep-all}h1{font-size:32px;line-height:1.35;margin:0 0 36px}h2{font-size:25px;margin:42px 0 16px}h3{font-size:20px;margin:30px 0 12px}p{margin:0 0 20px}strong{background:linear-gradient(transparent 62%,#dff5ea 0)}a{color:#16865a}blockquote{margin:24px 0;padding:15px 20px;border-left:4px solid #18a66a;background:#f4fbf7}ul,ol{padding-left:24px;margin:0 0 22px}li{margin:8px 0}table{border-collapse:collapse;width:100%;margin:24px 0;font-size:14px}th,td{border:1px solid #dfe3e8;padding:10px;text-align:left}th{background:#f5f7f9}img{display:block;max-width:100%;height:auto;margin:28px auto;border-radius:12px}figure{margin:28px 0}@media(max-width:640px){article{padding:28px 20px}h1{font-size:27px}}</style></head><body><article><h1>${escapeHtml(title)}</h1>${markdownToHtml(markdown)}</article></body></html>`;
+  return `<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(title)}</title><style>body{margin:0;background:#f4f5f7;color:#222;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",sans-serif}article{box-sizing:border-box;max-width:720px;margin:0 auto;background:#fff;min-height:100vh;padding:44px 36px;line-height:1.85;word-break:keep-all}h1{font-size:32px;line-height:1.35;margin:0 0 36px}h2{font-size:25px;margin:42px 0 16px}h3{font-size:20px;margin:30px 0 12px}p{margin:0 0 20px}strong{background:linear-gradient(transparent 62%,#dff5ea 0)}a{color:#16865a}blockquote{margin:24px 0;padding:15px 20px;border-left:4px solid #18a66a;background:#f4fbf7}ul,ol{padding-left:24px;margin:0 0 22px}li{margin:8px 0}hr{border:0;border-top:1px solid #ddd;margin:38px 0}table{border-collapse:collapse;width:100%;margin:24px 0;font-size:14px}th,td{border:1px solid #dfe3e8;padding:10px;text-align:left}th{background:#f5f7f9}img{display:block;max-width:100%;height:auto;margin:28px auto;border-radius:12px}figure{margin:28px 0}img[alt*="리트리버"]{width:220px;max-width:70%;border-radius:0}@media(max-width:640px){article{padding:28px 20px}h1{font-size:27px}}</style></head><body><article><h1>${escapeHtml(title)}</h1>${markdownToHtml(markdown)}</article></body></html>`;
 }

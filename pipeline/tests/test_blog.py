@@ -11,7 +11,7 @@ import pytest
 import yaml
 
 from shortform import inspect as inspector
-from shortform.blog import keywords, naver_api, naver_editor, publish, serp
+from shortform.blog import images, keywords, naver_api, naver_editor, publish, serp
 
 
 @pytest.fixture
@@ -102,6 +102,44 @@ def test_inspect_blog_keywords(tmp_path, monkeypatch):
     result = inspector.run_blog_keywords("2026-W38", root=tmp_path)
     assert result["data"]["week"] == "2026-W38"
     assert result["data"]["keywords"][0]["status"] == "writing"
+
+
+def test_manual_blog_images_use_visit_photos_only(tmp_path, monkeypatch):
+    project_id = "20260929-sushi"
+    project_dir = tmp_path / "블로그" / project_id
+    photo_dir = project_dir / "이미지"
+    photo_dir.mkdir(parents=True)
+    (project_dir / "프로젝트.json").write_text(json.dumps({"keyword": {"main": "노원 새벽스시"}}, ensure_ascii=False), encoding="utf-8")
+    (project_dir / "개요.json").write_text(json.dumps({"images": [{"kind": "body", "alt": "초밥 접시", "brief": "생성하지 않음"}]}), encoding="utf-8")
+    (photo_dir / "00-대표.jpg").write_bytes(b"real cover")
+    (photo_dir / "01.jpeg").write_bytes(b"real body")
+    (photo_dir / "01-보정.jpg").write_bytes(b"corrected real body")
+    config_dir = tmp_path / "config"
+    config_dir.mkdir()
+    (config_dir / "blog.yaml").write_text("image_source: manual\n", encoding="utf-8")
+    monkeypatch.setattr(images, "ROOT", tmp_path)
+    monkeypatch.setattr(images, "CONFIG", config_dir)
+    monkeypatch.setattr(images.subprocess, "run", lambda *a, **kw: pytest.fail("image generation should not run"))
+
+    result = images.generate(project_id)
+
+    assert [item["file"] for item in result] == ["이미지/00-대표.jpg", "이미지/01-보정.jpg"]
+    assert all(item["prompt"] == "실제 방문 사진" for item in result)
+
+
+def test_manual_blog_images_require_visit_photo(tmp_path, monkeypatch):
+    project_id = "20260929-sushi"
+    project_dir = tmp_path / "블로그" / project_id
+    project_dir.mkdir(parents=True)
+    (project_dir / "프로젝트.json").write_text("{}", encoding="utf-8")
+    config_dir = tmp_path / "config"
+    config_dir.mkdir()
+    (config_dir / "blog.yaml").write_text("image_source: manual\n", encoding="utf-8")
+    monkeypatch.setattr(images, "ROOT", tmp_path)
+    monkeypatch.setattr(images, "CONFIG", config_dir)
+
+    with pytest.raises(Exception, match="실제 방문 사진이 없습니다"):
+        images.generate(project_id)
 
 
 def test_blog_cli_paths_reject_traversal(tmp_path, monkeypatch):

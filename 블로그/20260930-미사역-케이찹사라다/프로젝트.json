@@ -1,0 +1,37 @@
+{
+  "id": "20260930-미사역-케이찹사라다",
+  "version": 1,
+  "revision": 13,
+  "status": "published",
+  "keyword": {
+    "main": "미사역 케이찹사라다",
+    "subs": [],
+    "volume_pc": 0,
+    "volume_mobile": 0,
+    "docs": 0,
+    "saturation": 0,
+    "week": "2026-W40"
+  },
+  "intent": "미사역 근처 케이찹사라다 하남미사점의 실제 방문 사진과 메뉴·가격 안내",
+  "title": "미사역 케이찹사라다, 아보카도새우사라다 내돈내산 후기 🥑",
+  "title_candidates": [
+    "미사역 케이찹사라다, 아보카도새우사라다 내돈내산 후기 🥑"
+  ],
+  "category": "카페·디저트",
+  "tags": [
+    "미사역간식",
+    "미사역빵집",
+    "하남미사맛집",
+    "케이찹사라다",
+    "케이찹사라다하남미사점",
+    "사라다빵"
+  ],
+  "disclosure": "none",
+  "publish": {
+    "mode": "copy",
+    "post_url": "https://blog.naver.com/chip109/224427340878",
+    "published_at": "2026-09-30T09:16:10.355583+00:00"
+  },
+  "createdAt": "2026-09-30T08:33:03.587Z",
+  "updatedAt": "2026-09-30T10:08:52.929Z"
+}

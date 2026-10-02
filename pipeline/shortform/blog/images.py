@@ -43,6 +43,15 @@ def _codex(prompt: str, output: Path) -> None:
         raise StepFailed(f"본문 이미지 생성 실패: {output.name}\n{(result.stderr or result.stdout)[-500:]}")
 
 
+def _visit_photo(image_dir: Path, stem: str) -> Path:
+    for name in (f"{stem}-보정", stem):
+        for suffix in (".jpg", ".jpeg", ".png"):
+            photo = image_dir / f"{name}{suffix}"
+            if photo.is_file():
+                return photo
+    raise StepFailed(f"실제 방문 사진이 없습니다: {image_dir / stem}(.jpg/.jpeg/.png)")
+
+
 def generate(project_id: str) -> list[dict]:
     project_dir = ROOT / "블로그" / project_id
     if not project_dir.is_dir() or project_dir.name != project_id or project_dir.parent != ROOT / "블로그":
@@ -51,18 +60,21 @@ def generate(project_id: str) -> list[dict]:
     outline = _load(project_dir / "개요.json", {})
     image_dir = project_dir / "이미지"
     image_dir.mkdir(parents=True, exist_ok=True)
-    thumb = image_dir / "00-대표.jpg"
-    if not thumb.exists():
+    blog_config = CONFIG / "blog.yaml"
+    settings = yaml.safe_load(blog_config.read_text(encoding="utf-8")) if blog_config.exists() else {}
+    manual = settings.get("image_source") == "manual"
+    thumb = _visit_photo(image_dir, "00-대표") if manual else image_dir / "00-대표.jpg"
+    if not manual and not thumb.exists():
         result = subprocess.run(["node", "scripts/render-blog-thumb.mjs", project_id], cwd=PIPELINE / "remotion", capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=180)
         if result.returncode != 0 or not thumb.exists():
             raise StepFailed(f"대표 이미지 렌더 실패\n{result.stdout[-500:]}\n{result.stderr[-500:]}")
-    metadata = [{"n": 0, "file": "이미지/00-대표.jpg", "alt": f"{project.get('keyword', {}).get('main', '')} 대표 이미지", "prompt": "Remotion BlogThumb", "kind": "thumb"}]
+    metadata = [{"n": 0, "file": f"이미지/{thumb.name}", "alt": f"{project.get('keyword', {}).get('main', '')} 대표 이미지", "prompt": "실제 방문 사진" if manual else "Remotion BlogThumb", "kind": "thumb"}]
     body_specs = [spec for spec in outline.get("images", []) if isinstance(spec, dict) and spec.get("kind") == "body"]
     for index, spec in enumerate(body_specs, 1):
-        out = image_dir / f"{index:02d}.png"
-        if not out.exists():
+        out = _visit_photo(image_dir, f"{index:02d}") if manual else image_dir / f"{index:02d}.png"
+        if not manual and not out.exists():
             _codex(str(spec.get("brief", "블로그 주제를 설명하는 자연스러운 장면")), out)
-        metadata.append({"n": index, "file": f"이미지/{out.name}", "alt": str(spec.get("alt", "")).strip(), "prompt": str(spec.get("brief", "")).strip(), "kind": "body"})
+        metadata.append({"n": index, "file": f"이미지/{out.name}", "alt": str(spec.get("alt", "")).strip(), "prompt": "실제 방문 사진" if manual else str(spec.get("brief", "")).strip(), "kind": "body"})
     (image_dir / "이미지.json").write_text(json.dumps(metadata, ensure_ascii=False, indent=2), encoding="utf-8")
     return metadata
 

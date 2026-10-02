@@ -1,0 +1,33 @@
+{
+  "body_sha256": "de16e2b1cb21bd94b03bd523215767945abff142a11c6141e286bcd5654ba627",
+  "images": [
+    {
+      "file": "이미지/00-오리숯불구이.png",
+      "sha256": "1fa05edcc936ad9c6af8593c9daa5b2e7bb851d3424ed2622cdb467a7dd5fd57"
+    },
+    {
+      "file": "이미지/01-주차장풍경.png",
+      "sha256": "0436240efbcf801178c8178567153be9db11856e2f51ac751c61c57627873569"
+    },
+    {
+      "file": "이미지/02-숯불세팅.png",
+      "sha256": "c9799b1388a22fa988603bc672b23bfe59a22de4c85c6f1baaa8e6ab964ab27e"
+    },
+    {
+      "file": "이미지/03-오리구이와부추.png",
+      "sha256": "04708639d8906447d5a7214d25e96a809a13b2a4d8e2c54dcd326a66a9822d44"
+    },
+    {
+      "file": "이미지/04-비빔국수.png",
+      "sha256": "ebc5cd805b500769eed6965d54ddce81f89e8bf41cd8e298242dbddb439c9fe4"
+    },
+    {
+      "file": "이미지/05-리트리버-오리구이.png",
+      "sha256": "9547edbec34c5ee37f5e03754b5fbd78227a84e48eb7400295f20d591d992c2f"
+    },
+    {
+      "file": "이미지/06-고기구이-평점.png",
+      "sha256": "6cf7cf2b57f78c6da56883d4cc01df1338a85998a1fedefa666922a84ef66219"
+    }
+  ]
+}

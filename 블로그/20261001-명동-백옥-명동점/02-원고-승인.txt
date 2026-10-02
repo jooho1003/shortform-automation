@@ -1,0 +1,21 @@
+{
+  "body_sha256": "4b965b123dee6adb240bbbf7a0449343c12e0ddec1ff33b6d3a2edd50060d72f",
+  "images": [
+    {
+      "file": "이미지/00-돼지곰탕.jpg",
+      "sha256": "9814e62b7c3ab6e8e074ad9831cb300c0c6da54020f37159fcba813788c37de6"
+    },
+    {
+      "file": "이미지/01-배추만두.jpg",
+      "sha256": "0d0720c0850661d1433bf46fe4110ee39514aba32b2aa122ad3383e63fe4e2bf"
+    },
+    {
+      "file": "이미지/02-리트리버-곰탕.png",
+      "sha256": "64432e160efec95d1d143fe8fe748c92e230b6efc223b791ed88fc5f3073178d"
+    },
+    {
+      "file": "이미지/03-한식평점.png",
+      "sha256": "f5fbe785db191ba3f4ccb303d66261e3319bbf34a13563b70d91ffbfcc8c7ca9"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+[
+  {
+    "id": "location",
+    "claim": "백옥 명동의 주소는 서울 중구 명동8길 8-23이다.",
+    "source_url": "https://www.tabling.co.kr/place/67eb74c803740c14d399367b",
+    "quote": "서울 중구 명동8길 8-23",
+    "checked_at": "2026-10-01"
+  },
+  {
+    "id": "menu",
+    "claim": "백옥 명동의 메뉴에 배추만두 4pc가 있다.",
+    "source_url": "https://www.tabling.co.kr/place/67eb74c803740c14d399367b",
+    "quote": "배추만두 4pc",
+    "checked_at": "2026-10-01"
+  }
+]
