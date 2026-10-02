@@ -27,8 +27,14 @@ class _Ep:
         return self.clips_dir / cf.CONTACT
 
 
-def _plan(required=(1,)):
-    cuts = [type("Cut", (), {"n": n, "required": True, "start": 0.0, "end": 2.0, "lens": "50mm"})() for n in required]
+def _cut(n, start_mode="새로", end_action="", required=True):
+    return type("Cut", (), {"n": n, "required": required, "start": float(3 * (n - 1)), "end": float(3 * n),
+                            "lens": "50mm", "start_mode": start_mode, "end_action": end_action,
+                            "chained": start_mode == "이어서"})()
+
+
+def _plan(required=(1,), cuts=None):
+    cuts = cuts if cuts is not None else [_cut(n) for n in required]
     return type("P", (), {"cuts": cuts})()
 
 
@@ -90,7 +96,7 @@ class TestRunCheck:
     def test_missing_required_cut(self, tmp_path):
         _png(tmp_path / cf.SHEET, (1080, 1920))
         report = cf.run_check(_Ep(tmp_path), _plan(required=(1, 2)))
-        assert report["missing_required"] == [1, 2]
+        assert report["missing_required"] == ["키프레임-01.png", "키프레임-02.png"]
         assert report["ok"] is False
 
     def test_contact_sheet_is_written(self, tmp_path):
@@ -99,3 +105,45 @@ class TestRunCheck:
         cf.run_check(_Ep(tmp_path), _plan())
         assert (tmp_path / cf.CONTACT).is_file()
         assert (tmp_path / cf.REPORT).is_file()
+
+
+class TestFrameNames:
+    def test_required_frames_for_legacy_plan(self):
+        # 끝 프레임 열이 없는 기획안은 시작 프레임만 필수다
+        assert cf.required_frames(_plan(required=(1, 2))) == ["키프레임-01.png", "키프레임-02.png"]
+
+    def test_required_frames_for_chain_plan(self):
+        plan = _plan(cuts=[_cut(1, "새로", "멈춤"), _cut(2, "이어서", "사원증"), _cut(3, "각도변경", "입 열림")])
+        assert cf.required_frames(plan) == [
+            "키프레임-01.png", "키프레임-01-끝.png",
+            "키프레임-02-끝.png",
+            "키프레임-03.png", "키프레임-03-끝.png",
+        ]
+
+    def test_chained_cut_starts_from_previous_end(self):
+        plan = _plan(cuts=[_cut(1, "새로", "a"), _cut(2, "이어서", "b")])
+        assert cf.start_frame_name(plan, plan.cuts[1]) == "키프레임-01-끝.png"
+        assert cf.start_frame_name(plan, plan.cuts[0]) == "키프레임-01.png"
+        assert cf.end_frame_name(plan.cuts[1]) == "키프레임-02-끝.png"
+
+    def test_frame_cut_parses_start_and_end(self):
+        assert cf.frame_cut("키프레임-07.png") == (7, "start")
+        assert cf.frame_cut("키프레임-07-끝.png") == (7, "end")
+        assert cf.frame_cut("시트-세트.png") == (None, "")
+
+
+class TestChainCheck:
+    def test_missing_end_frame_is_reported_by_name(self, tmp_path: Path):
+        _png(tmp_path / cf.SHEET, (1080, 1920))
+        _png(tmp_path / cf.KEYFRAME.format(n=1), (1080, 1920))
+        plan = _plan(cuts=[_cut(1, "새로", "a"), _cut(2, "이어서", "b")])
+        report = cf.run_check(_Ep(tmp_path), plan)
+        assert report["missing_required"] == ["키프레임-01-끝.png", "키프레임-02-끝.png"]
+        assert report["ok"] is False
+
+    def test_files_are_ordered_sheets_then_cut_pairs(self, tmp_path: Path):
+        for name in (cf.KEYFRAME.format(n=2), cf.END_KEYFRAME.format(n=1), cf.KEYFRAME.format(n=1), cf.SET_SHEET, cf.SHEET):
+            _png(tmp_path / name, (1080, 1920))
+        plan = _plan(cuts=[_cut(1, "새로", "a"), _cut(2, "각도변경", "b")])
+        report = cf.run_check(_Ep(tmp_path), plan)
+        assert [f["name"] for f in report["files"]] == [cf.SET_SHEET, cf.SHEET, "키프레임-01.png", "키프레임-01-끝.png", "키프레임-02.png"]

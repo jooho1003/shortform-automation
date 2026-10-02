@@ -6,15 +6,20 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont, ImageStat
 
+from .. import StepFailed
 from ..paths import Episode
 from ..planfile_a import PlanA
 
 SHEET = "시트.png"
 KEYFRAME = "키프레임-{n:02d}.png"
+END_KEYFRAME = "키프레임-{n:02d}-끝.png"
+SET_SHEET = "시트-세트.png"
+_FRAME_RE = re.compile(r"키프레임-(\d{2})(-끝)?\.png")
 REPORT = "검사.json"
 CONTACT = "컨택트시트.png"
 # 짧은 변으로 잰다. 세로만 보면 9:16 비율은 맞는데 너비가 모자란 이미지(예: 941x1672)가
@@ -37,6 +42,47 @@ def keyframe_path(ep: Episode, n: int) -> Path:
     return ep.clips_dir / KEYFRAME.format(n=n)
 
 
+def frame_cut(name: str) -> tuple[int | None, str]:
+    """'키프레임-07-끝.png' → (7, 'end'). 프레임 파일이 아니면 (None, '')."""
+    m = _FRAME_RE.fullmatch(name)
+    if not m:
+        return None, ""
+    return int(m.group(1)), "end" if m.group(2) else "start"
+
+
+def end_frame_name(cut) -> str:
+    return END_KEYFRAME.format(n=cut.n)
+
+
+def start_frame_name(plan: PlanA, cut) -> str:
+    """이 컷 영상의 시작 이미지. '이어서' 컷은 파일을 따로 두지 않고 앞 컷의 끝 프레임을 쓴다(체인)."""
+    if getattr(cut, "start_mode", "새로") != "이어서":
+        return KEYFRAME.format(n=cut.n)
+    prev = max((c for c in plan.cuts if c.n < cut.n), key=lambda c: c.n, default=None)
+    if prev is None:
+        raise StepFailed(f"컷 {cut.n}은 '이어서'인데 앞 컷이 없습니다.")
+    return END_KEYFRAME.format(n=prev.n)
+
+
+def required_frames(plan: PlanA) -> list[str]:
+    """필수 컷에 있어야 하는 파일. 체인 기획안은 시작(비체인 컷)+끝(전부), 구형은 시작만."""
+    names: list[str] = []
+    for c in plan.cuts:
+        if not c.required:
+            continue
+        if getattr(c, "start_mode", "새로") != "이어서":
+            names.append(KEYFRAME.format(n=c.n))
+        if getattr(c, "end_action", ""):
+            names.append(END_KEYFRAME.format(n=c.n))
+    return names
+
+
+def _order(path: Path) -> tuple:
+    """시트들 먼저(이름순), 그다음 컷 번호 → 시작 → 끝. 기본 정렬은 '-끝'이 '.'보다 앞이라 끝이 먼저 온다."""
+    n, kind = frame_cut(path.name)
+    return (1, n, 1 if kind == "end" else 0, "") if n is not None else (0, 0, 0, path.name)
+
+
 def _watermark_suspect(img: Image.Image) -> bool:
     """오른쪽 아래 모서리가 주변보다 유난히 대비가 높으면 의심. 오탐이 있어도 사람이 확인하면 된다."""
     w, h = img.size
@@ -48,7 +94,7 @@ def _watermark_suspect(img: Image.Image) -> bool:
 def run_check(ep: Episode, plan: PlanA) -> dict:
     ep.clips_dir.mkdir(parents=True, exist_ok=True)
     files = []
-    for path in sorted(ep.clips_dir.glob("*.png")) + sorted(ep.clips_dir.glob("*.jpg")):
+    for path in sorted(list(ep.clips_dir.glob("*.png")) + list(ep.clips_dir.glob("*.jpg")), key=_order):
         if path.name == CONTACT:
             continue
         try:
@@ -66,7 +112,7 @@ def run_check(ep: Episode, plan: PlanA) -> dict:
             files.append({"name": path.name, "width": 0, "height": 0, "ratio_ok": False, "size_ok": False, "min_short_side": min_short_side(path.name), "watermark_suspect": False, "error": "열 수 없음"})
 
     names = {f["name"] for f in files}
-    missing_required = [c.n for c in plan.cuts if c.required and KEYFRAME.format(n=c.n) not in names]
+    missing_required = [name for name in required_frames(plan) if name not in names]
     sheet_ok = SHEET in names
     report = {
         "sheet": sheet_ok,
@@ -105,19 +151,14 @@ def _contact_sheet(ep: Episode, plan: PlanA, files: list[dict]) -> None:
         bad = not (f["ratio_ok"] and f["size_ok"]) or f.get("watermark_suspect")
         draw.rectangle((x - 3, y - 3, x + thumb_w + 3, y + thumb_h + 3), outline="#ff6b6b" if bad else "#2f9e44", width=3)
         label = f["name"]
-        n = None
-        if label.startswith("키프레임-"):
-            try:
-                n = int(label[5:7])
-            except ValueError:
-                n = None
-        cut = cut_by_n.get(n) if n else None
+        n, kind = frame_cut(label)
+        cut = cut_by_n.get(n) if n is not None else None
         draw.text((x, y + thumb_h + 6), label, fill="#fff", font=font)
         info = f"{f['width']}x{f['height']}"
         if not f["size_ok"] and f.get("min_short_side"):
             info += f" · 기준 {f['min_short_side']}"
         info += " · 워터마크?" if f.get("watermark_suspect") else ""
         if cut:
-            info += f" · {cut.start:g}-{cut.end:g}s {cut.lens}"
+            info += f" · {cut.start:g}-{cut.end:g}s {'끝' if kind == 'end' else '시작'} {cut.lens}"
         draw.text((x, y + thumb_h + 30), info[:38], fill="#ff8787" if bad else "#adb5bd", font=small)
     sheet.save(ep.clips_dir / CONTACT)
