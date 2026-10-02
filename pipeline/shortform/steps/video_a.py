@@ -1,9 +1,11 @@
 """A안 영상 단계 — 컷별 영상, 대사·조리음 믹스와 타임라인.json 을 쓴다.
 
 - 컷마다 키프레임(+시트)을 참조로 넣고, 프롬프트에는 컷표의 ACTION·CAMERA만 쓴다.
-- 편당 비용 상한(config/fal.yaml)을 넘기면 시작하지 않는다. 사용한 금액은 상태.json 에 적는다.
+- 체인 기획안(설계 10): 컷마다 시작 프레임(이어서 컷은 앞 컷의 끝)과 끝 프레임을 함께 보낸다. 대사는 영상보다 먼저 합성해 공백·겹침을 검사한다 — 돈 쓰기 전에 멈추기 위해서다.
+- 편당 비용 상한(config/fal-chain.yaml)을 넘기면 시작하지 않는다. 사용한 금액은 상태.json 에 적는다.
 - 실패한 컷은 03-소재/실패.txt 에 적는다. 같은 이름(클립/NN.mp4)으로 손으로 넣으면 이어서 진행한다.
-- 기획안의 대사는 자막 데이터와 TTS로 함께 만들고, 간단한 주방 룸톤·조리 효과음과 섞는다.
+- 기획안의 대사는 자막 데이터와 TTS로 함께 만들고, 룸톤(주방이면 조리 효과음까지)과 섞는다.
+  Edge 음성 설정에 characters 항목이 있으면 화자별로 다른 목소리를 쓴다.
 """
 
 from __future__ import annotations
@@ -21,14 +23,15 @@ from .. import fal
 from .. import planfile_a
 from ..paths import CONFIG, Episode
 from .. import state
-from .check_frames import KEYFRAME, SHEET
+from .check_frames import SHEET, end_frame_name, start_frame_name
 from .assets import _speak
 from ..tts.episode import load_voice, write_manifest
 from ..tts.engine import audio_duration
 
 
 def _config() -> dict:
-    return yaml.safe_load((CONFIG / "fal.yaml").read_text(encoding="utf-8"))
+    """A안 체인 영상 설정. Take Studio가 쓰는 fal.yaml과 분리한다 — 요청 템플릿 변수가 다르다."""
+    return yaml.safe_load((CONFIG / "fal-chain.yaml").read_text(encoding="utf-8"))
 
 
 def _to_9x16(src: Path, dst: Path, seconds: float) -> None:
@@ -42,10 +45,26 @@ def _to_9x16(src: Path, dst: Path, seconds: float) -> None:
         raise StepFailed(f"ffmpeg 변환 실패 {src.name}: {res.stderr[-300:]}")
 
 
+FAL_PROMPT_LIMIT = 2000  # 긴 프롬프트는 모델이 컷 안에서 장면을 바꾸기 쉬워 상한을 둔다.
+GUARD = "Single continuous shot in the same room with the same characters. No one enters or leaves. No cut, no scene change."
+
+
+def _fit(text: str, limit: int) -> str:
+    """limit 안에서 마지막 문장 끝까지만 남긴다. 문장 중간에서 끊긴 지시는 모델이 오해한다."""
+    if len(text) <= limit:
+        return text
+    cut = text[:max(0, limit)]
+    end = cut.rfind(".")
+    return cut[:end + 1] if end > 0 else cut
+
+
 def _video_prompt(plan, cut) -> str:
-    """A single-shot video prompt with the plan locks repeated for every request."""
+    """외모·의상은 키프레임·시트에 맡긴다. 모션이 있으면 장면 이탈 방지 가드만 붙인다."""
+    motion = getattr(cut, "motion", "")
+    if motion:
+        return (motion if "no one enters or leaves" in motion.lower() else f"{motion} {GUARD}")[:FAL_PROMPT_LIMIT]
     locks = plan.locks
-    return (
+    head = (
         "Generate one continuous vertical 9:16 shot. Do not make a montage, cutaway, split screen, "
         "time jump, or style change. Preserve the supplied keyframe and character-sheet reference exactly; "
         "keep identity, creature anatomy, proportions, costume, props, and all defined details consistent.\n\n"
@@ -53,53 +72,125 @@ def _video_prompt(plan, cut) -> str:
         f"CAMERA: {cut.camera}\n"
         f"LENS: {cut.lens or 'use the keyframe perspective'}\n"
         f"DURATION: {cut.seconds:g} seconds\n\n"
-        f"CHARACTER:\n{locks.get('CHARACTER', '')}\n\n"
-        f"COSTUME:\n{locks.get('COSTUME', '')}\n\n"
-        f"GLOBAL STYLE:\n{locks.get('GLOBAL STYLE', '')}\n\n"
-        f"NEGATIVE:\n{locks.get('NEGATIVE', '')}\n\n"
+    )
+    tail = (
         "Do not add text, watermark, morphing, face changes, extra limbs, or unspecified human accessories. "
         "Do not impose a realistic or photorealistic style; use only the GLOBAL STYLE lock."
     )
+    budget = FAL_PROMPT_LIMIT - len(head) - len(tail)
+    style, negative = locks.get("GLOBAL STYLE", ""), locks.get("NEGATIVE", "")
+    frame = len("GLOBAL STYLE:\n\n\nNEGATIVE:\n\n\n")
+    if len(style) + len(negative) + frame > budget:
+        negative = _fit(negative, max(0, (budget - frame) // 3))
+        style = _fit(style, max(0, budget - frame - len(negative)))
+    prompt = head + f"GLOBAL STYLE:\n{style}\n\nNEGATIVE:\n{negative}\n\n" + tail
+    return prompt[:FAL_PROMPT_LIMIT]
 
 
-def _build_audio(ep: Episode, plan) -> str:
-    """Place character dialogue on the plan clock and add a subtle kitchen sound bed."""
+def _voice_for(voice: dict, character: str) -> dict:
+    """Edge 설정의 characters 항목(화자 이름 → voice/rate/pitch)으로 화자별 목소리를 덮어쓴다.
+    상황극은 주인공과 상대역의 목소리가 달라야 한다. Qwen 설정은 프리셋 하나를 그대로 쓴다."""
+    override = (voice.get("characters") or {}).get(character)
+    if voice.get("provider") == "qwen3-local" or not override:
+        return voice
+    return {**voice, **override}
+
+
+def _estimate(cfg: dict, cuts) -> float:
+    """초당 단가가 있으면 길이 합으로, 없으면 컷당 고정가로."""
+    per_sec = cfg.get("cost_per_second_usd")
+    if per_sec is not None:
+        return sum(c.seconds for c in cuts) * float(per_sec)
+    return len(cuts) * float(cfg.get("cost_per_cut_usd", 0.6))
+
+
+def _check_duration(cfg: dict, cut) -> None:
+    lo, hi = cfg.get("duration_min_sec"), cfg.get("duration_max_sec")
+    if (lo is not None and cut.seconds < float(lo)) or (hi is not None and cut.seconds > float(hi)):
+        raise StepFailed(f"컷 {cut.n} 길이 {cut.seconds:g}초가 모델 허용 범위({lo}~{hi}초) 밖입니다. 컷표를 고치세요.")
+
+
+def _needs_end_frame(cfg: dict) -> bool:
+    return "{end_keyframe}" in json.dumps(cfg.get("body", {}), ensure_ascii=False)
+
+
+def _check_coverage(windows: list[tuple[float, float]], total: float, max_gap: float = 0.6) -> None:
+    """설계 10 §1: 모든 프레임에 대사가 있어야 한다. 겹침과 긴 공백은 돈 쓰기 전에 멈춘다."""
+    prev_end = 0.0
+    for i, (start, end) in enumerate(windows, 1):
+        if start < prev_end - 0.05:
+            raise StepFailed(f"{i}번 대사가 앞 대사와 겹칩니다 ({start:.2f} < {prev_end:.2f}). 대사 시각을 뒤로 미루세요.")
+        if start - prev_end > max_gap:
+            raise StepFailed(f"{i}번 대사 앞에 {start - prev_end:.2f}초 공백이 있습니다 (허용 {max_gap}초). 대사 시각을 당기세요.")
+        prev_end = max(prev_end, end)
+    if total - prev_end > max_gap + 0.05:
+        raise StepFailed(f"마지막 대사가 끝난 뒤 {total - prev_end:.2f}초가 비어 있습니다 (허용 {max_gap}초). 끝 컷을 줄이거나 대사를 미루세요.")
+
+
+WATERMARK = "워터마크.png"
+
+
+def _watermark(ep: Episode) -> str:
+    """03-소재/워터마크.png 가 있으면 렌더가 오른쪽 아래에 반투명으로 얹는다."""
+    return WATERMARK if (ep.assets_dir / WATERMARK).is_file() else ""
+
+
+def _dialogue_payload(plan, windows: list[tuple[float, float]] | None = None) -> list[dict]:
+    items = [
+        {"at": d.at, "character": d.character, "text": d.text, "direction": getattr(d, "direction", ""),
+         "english": getattr(d, "english", "")}
+        for d in plan.dialogues
+    ]
+    # 실제 발화 구간. 웹 스토리보드의 대사 띠가 읽는다. 렌더는 at만 쓴다.
+    for item, (start, end) in zip(items, windows or []):
+        item["speechStart"], item["speechEnd"] = round(start, 2), round(end, 2)
+    return items
+
+
+def _synthesize(ep: Episode, plan, voice: dict) -> list[tuple[Path, float, float]]:
+    """대사마다 mp3 하나를 만들고 (경로, 발화 시작, 발화 끝)을 편 기준 절대초로 돌려준다."""
+    tts_dir = ep.assets_dir / "tts"
+    tts_dir.mkdir(parents=True, exist_ok=True)
+    out: list[tuple[Path, float, float]] = []
+    for index, dialogue in enumerate(plan.dialogues, 1):
+        path = tts_dir / f"dialogue-{index:02d}.mp3"
+        begin, finish = asyncio.run(_speak(dialogue.text, path, _voice_for(voice, getattr(dialogue, "character", ""))))
+        if finish <= begin:
+            # 문장 경계 이벤트가 없으면 파일 길이로 대신한다. 0초 구간이면 공백 검사가 엉뚱하게 실패한다.
+            begin, finish = 0.0, audio_duration(path)
+        out.append((path, dialogue.at + begin, dialogue.at + finish))
+    return out
+
+
+def _build_audio(ep: Episode, plan, synthesized: list[tuple[Path, float, float]]) -> str:
+    """Place character dialogue on the plan clock and add a subtle sound bed."""
     if not plan.dialogues:
         return ""
 
-    voice = load_voice(ep, freeze=True)
-    tts_dir = ep.assets_dir / "tts"
-    tts_dir.mkdir(parents=True, exist_ok=True)
-    dialogue_paths: list[Path] = []
-    print("  리버 대사 합성 중...")
-    for index, dialogue in enumerate(plan.dialogues, 1):
-        out = tts_dir / f"dialogue-{index:02d}.mp3"
-        asyncio.run(_speak(dialogue.text, out, voice))
-        if voice.get("provider") == "qwen3-local":
-            limit = min([plan.total_seconds] + [d.at for d in plan.dialogues if d.at > dialogue.at]
-                        + [cut.end for cut in plan.cuts if cut.start <= dialogue.at < cut.end])
-            duration = audio_duration(out)
-            if dialogue.at + duration > limit + 0.05:
-                raise StepFailed(f"{index}번 대사 {duration:.2f}초가 배정 구간 {limit - dialogue.at:.2f}초를 넘습니다. 대본·속도·대사 시각을 수정하세요.")
-        dialogue_paths.append(out)
+    dialogue_paths = [p for p, _, _ in synthesized]
 
     total = plan.total_seconds
     args = ["ffmpeg", "-y", "-loglevel", "error"]
     for path in dialogue_paths:
         args += ["-i", str(path)]
 
-    # Procedural sounds keep the episode self-contained: room tone, whisk, pan
-    # sizzle, a light egg crack and the ceramic plate landing.
+    # Procedural sounds keep the episode self-contained. Room tone always; the
+    # kitchen set (whisk, pan sizzle, egg crack, plate) only when the plan's
+    # 환경음 is a kitchen — an office skit must not sizzle.
+    kitchen = "주방" in getattr(plan, "sound", {}).get("환경음", "")
     args += [
         "-f", "lavfi", "-t", f"{total:g}", "-i",
         "anoisesrc=color=pink:amplitude=0.018:r=44100",
-        "-f", "lavfi", "-t", "11", "-i",
-        "anoisesrc=color=white:amplitude=0.045:r=44100",
-        "-f", "lavfi", "-t", "4.5", "-i",
-        "anoisesrc=color=white:amplitude=0.025:r=44100",
-        "-f", "lavfi", "-t", "0.12", "-i", "sine=frequency=720:r=44100",
-        "-f", "lavfi", "-t", "0.16", "-i", "sine=frequency=1320:r=44100",
     ]
+    if kitchen:
+        args += [
+            "-f", "lavfi", "-t", "11", "-i",
+            "anoisesrc=color=white:amplitude=0.045:r=44100",
+            "-f", "lavfi", "-t", "4.5", "-i",
+            "anoisesrc=color=white:amplitude=0.025:r=44100",
+            "-f", "lavfi", "-t", "0.12", "-i", "sine=frequency=720:r=44100",
+            "-f", "lavfi", "-t", "0.16", "-i", "sine=frequency=1320:r=44100",
+        ]
 
     filters: list[str] = []
     mix_labels: list[str] = []
@@ -113,16 +204,18 @@ def _build_audio(ep: Episode, plan) -> str:
         mix_labels.append(f"[{label}]")
 
     base = len(dialogue_paths)
-    filters += [
-        f"[{base}:a]lowpass=f=1100,volume=0.22,aformat=channel_layouts=stereo[room]",
-        f"[{base + 1}:a]highpass=f=1700,lowpass=f=7600,volume=0.50,"
-        "afade=t=in:d=0.35,afade=t=out:st=10.4:d=0.6,adelay=12000:all=1[sizzle]",
-        f"[{base + 2}:a]highpass=f=2400,lowpass=f=9000,volume=0.34,"
-        "afade=t=in:d=0.15,afade=t=out:st=4.0:d=0.5,adelay=6800:all=1[whisk]",
-        f"[{base + 3}:a]volume=0.10,adelay=2050:all=1[crack]",
-        f"[{base + 4}:a]volume=0.075,adelay=24000:all=1[plate]",
-    ]
-    mix_labels += ["[room]", "[sizzle]", "[whisk]", "[crack]", "[plate]"]
+    filters.append(f"[{base}:a]lowpass=f=1100,volume=0.22,aformat=channel_layouts=stereo[room]")
+    mix_labels.append("[room]")
+    if kitchen:
+        filters += [
+            f"[{base + 1}:a]highpass=f=1700,lowpass=f=7600,volume=0.50,"
+            "afade=t=in:d=0.35,afade=t=out:st=10.4:d=0.6,adelay=12000:all=1[sizzle]",
+            f"[{base + 2}:a]highpass=f=2400,lowpass=f=9000,volume=0.34,"
+            "afade=t=in:d=0.15,afade=t=out:st=4.0:d=0.5,adelay=6800:all=1[whisk]",
+            f"[{base + 3}:a]volume=0.10,adelay=2050:all=1[crack]",
+            f"[{base + 4}:a]volume=0.075,adelay=24000:all=1[plate]",
+        ]
+        mix_labels += ["[sizzle]", "[whisk]", "[crack]", "[plate]"]
     filters.append(
         "".join(mix_labels)
         + f"amix=inputs={len(mix_labels)}:duration=longest:normalize=0,"
@@ -147,34 +240,50 @@ def run(ep: Episode) -> None:
     fail_log = ep.assets_dir / "실패.txt"
     sheet = ep.clips_dir / SHEET
 
+    # 대사를 먼저 합성·검사해야 유료 영상 요청 전에 빈 구간을 발견한다.
+    synthesized: list[tuple[Path, float, float]] = []
+    if plan.dialogues:
+        print("  대사 합성 중...")
+        synthesized = _synthesize(ep, plan, load_voice(ep, freeze=True))
+        _check_coverage([(s, e) for _, s, e in synthesized], plan.total_seconds)
+
     todo = [c for c in plan.cuts if not (raw_dir / f"{c.n:02d}.mp4").exists() and not (clip_dir / f"{c.n:02d}.mp4").exists()]
-    est = len(todo) * float(cfg.get("cost_per_cut_usd", 0.6))
+    for cut in todo:
+        _check_duration(cfg, cut)
+    est = _estimate(cfg, todo)
     cap = float(cfg.get("max_cost_per_episode_usd", 10))
     spent = float(state.load(ep).get("fal_spent_usd", 0.0))
     print(f"  생성할 컷 {len(todo)}개 · 예상 ${est:.2f} (누적 ${spent:.2f}, 상한 ${cap:.0f})")
     if todo:
         if spent + est > cap:
-            raise StepFailed(f"편당 비용 상한 ${cap:.0f}를 넘깁니다 (누적 ${spent:.2f} + 예상 ${est:.2f}). config/fal.yaml 을 조정하거나 컷을 줄이세요.")
+            raise StepFailed(f"편당 비용 상한 ${cap:.0f}를 넘깁니다 (누적 ${spent:.2f} + 예상 ${est:.2f}). config/fal-chain.yaml 을 조정하거나 컷을 줄이세요.")
         key = os.environ.get("FAL_KEY")
         if not key:
             raise MissingKey("FAL_KEY 가 없습니다. https://fal.ai/dashboard/keys 에서 발급해 pipeline/.env 에 넣으세요.")
 
     failed = []
     for cut in todo:
-        kf = ep.clips_dir / KEYFRAME.format(n=cut.n)
-        if not kf.exists():
-            print(f"  ! 컷 {cut.n:02d} 키프레임 없음 — 건너뜀")
+        start = ep.clips_dir / start_frame_name(plan, cut)
+        end = ep.clips_dir / end_frame_name(cut)
+        if not start.exists():
+            print(f"  ! 컷 {cut.n:02d} 시작 프레임 없음({start.name}) — 건너뜀")
+            failed.append(cut.n)
+            continue
+        if _needs_end_frame(cfg) and not end.exists():
+            print(f"  ! 컷 {cut.n:02d} 끝 프레임 없음({end.name}) — 건너뜀. 설정이 끝 프레임을 요구합니다.")
             failed.append(cut.n)
             continue
         prompt = _video_prompt(plan, cut)
-        print(f"  컷 {cut.n:02d} 생성 (fal) — {prompt[:70]}")
+        print(f"  컷 {cut.n:02d} 생성 (fal, {cut.seconds:g}초) — {prompt[:70]}")
         try:
             fal.generate(cfg, key, raw_dir / f"{cut.n:02d}.mp4", {
                 "prompt": prompt,
-                "keyframe": fal.data_uri(kf),
+                "keyframe": fal.data_uri(start),
+                "end_keyframe": fal.data_uri(end) if end.exists() else "",
+                "seconds": f"{cut.seconds:g}",
                 "sheet": fal.data_uri(sheet) if sheet.exists() else "",
             })
-            spent += float(cfg.get("cost_per_cut_usd", 0.6))
+            spent += _estimate(cfg, [cut])
             st = state.load(ep)
             st["fal_spent_usd"] = round(spent, 2)
             state.save(ep, st)
@@ -202,18 +311,16 @@ def run(ep: Episode) -> None:
         lines.append({"n": cut.n, "text": "", "start": cut.start, "end": cut.end, "words": [], "clip": f"클립/{cut.n:02d}.mp4", "mediaLayout": "portrait"})
 
     total = plan.total_seconds
-    narration = _build_audio(ep, plan)
+    narration = _build_audio(ep, plan, synthesized) if synthesized else ""
     payload = {
         "fps": 30, "width": 1080, "height": 1920, "durationSec": total,
         "title": plan.title, "hook": plan.hook,
         "template": plan.template_id, "templateName": plan.template_name, "channelLabel": plan.meta.get("채널", ""),
         "lines": lines,
         "comments": [],
-        "dialogues": [
-            {"at": d.at, "character": d.character, "text": d.text, "direction": d.direction}
-            for d in plan.dialogues
-        ],
+        "dialogues": _dialogue_payload(plan, [(s, e) for _, s, e in synthesized]),
         "narration": narration, "bgm": None, "credits": [],
+        "watermark": _watermark(ep),
         "sound": plan.sound,
     }
     (ep.assets_dir / "타임라인.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -235,8 +342,11 @@ def regenerate_audio(ep: Episode) -> None:
     for cut in plan.cuts:
         if not (ep.assets_dir / "클립" / f"{cut.n:02d}.mp4").is_file():
             raise StepFailed(f"기존 컷 {cut.n:02d} 영상이 없습니다. 컷 영상을 먼저 준비하세요.")
-    timeline["narration"] = _build_audio(ep, plan)
-    timeline.update(title=plan.title, hook=plan.hook, sound=plan.sound)
-    timeline["dialogues"] = [{"at": d.at, "character": d.character, "text": d.text, "direction": d.direction} for d in plan.dialogues]
+    synthesized = _synthesize(ep, plan, load_voice(ep, freeze=True)) if plan.dialogues else []
+    if synthesized:
+        _check_coverage([(s, e) for _, s, e in synthesized], plan.total_seconds)
+    timeline["narration"] = _build_audio(ep, plan, synthesized) if synthesized else ""
+    timeline.update(title=plan.title, hook=plan.hook, sound=plan.sound, watermark=_watermark(ep))
+    timeline["dialogues"] = _dialogue_payload(plan, [(s, e) for _, s, e in synthesized])
     timeline_file.write_text(json.dumps(timeline, ensure_ascii=False, indent=2), encoding="utf-8")
     write_manifest(ep)
