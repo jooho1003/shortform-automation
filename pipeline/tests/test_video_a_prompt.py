@@ -86,8 +86,10 @@ class TestCost:
 
 def test_fal_chain_body_fills_start_end_and_duration():
     cfg = yaml.safe_load((CONFIG / "fal-chain.yaml").read_text(encoding="utf-8"))
-    body = fal.fill(cfg["body"], {"prompt": "P", "keyframe": "data:a", "end_keyframe": "data:b", "seconds": "3", "sheet": ""})
-    assert body["start_image_url"] == "data:a" and body["end_image_url"] == "data:b" and body["duration"] == "3"
+    body = fal.fill(cfg["body"], {"prompt": "P", "keyframe": "data:a", "end_keyframe": "data:b", "seconds": "3", "seconds_int": 3, "sheet": ""})
+    assert body["image_url"] == "data:a" and body["end_image_url"] == "data:b"
+    assert body["duration"] == 3 and isinstance(body["duration"], int)  # H3 Max는 정수형 duration
+    assert body["prompt_expansion_mode"] == "disabled"
     assert video_a._needs_end_frame(cfg) is True
     assert video_a._needs_end_frame({"body": {"image_url": "{keyframe}"}}) is False
 
@@ -117,3 +119,8 @@ def test_dialogue_payload_carries_speech_windows():
     plan = SimpleNamespace(dialogues=[SimpleNamespace(at=0.3, character="사구", text="와", direction="속마음", english="Whoa")])
     [item] = video_a._dialogue_payload(plan, [(0.5, 5.7)])
     assert item["speechStart"] == 0.5 and item["speechEnd"] == 5.7 and item["english"] == "Whoa"
+
+
+def test_fill_keeps_type_for_whole_placeholder_and_stringifies_inline():
+    out = fal.fill({"duration": "{n}", "label": "cut {n}", "nested": ["{n}"]}, {"n": 3})
+    assert out == {"duration": 3, "label": "cut 3", "nested": [3]}

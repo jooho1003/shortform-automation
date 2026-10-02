@@ -316,6 +316,7 @@ def run(ep: Episode) -> None:
                 "keyframe": fal.data_uri(start),
                 "end_keyframe": fal.data_uri(end) if end.exists() else "",
                 "seconds": f"{cut.seconds:g}",
+                "seconds_int": int(round(cut.seconds)),  # H3 Max 등 정수형 duration 용
                 "sheet": fal.data_uri(sheet) if sheet.exists() else "",
             })
             spent += _estimate(cfg, [cut])

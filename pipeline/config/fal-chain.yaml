@@ -1,28 +1,38 @@
-# A안 체인 영상 생성 — fal.ai Kling v3 pro (설계 10 §5).
-# 시작+끝 프레임을 받고 길이를 정수 초(3~15)로 지정할 수 있어 끝 프레임까지 정확히 재생된다.
+# A안 체인 영상 생성 — fal.ai MiniMax H3 Max (설계 10 §5, 2026-10-03 교체).
+# 시작+끝 프레임을 받고 길이를 정수 초(1~15)로 지정할 수 있어 끝 프레임까지 정확히 재생된다.
 # Take Studio는 config/fal.yaml을 따로 쓴다. 이 파일은 steps/video_a.py만 읽는다.
 #
-# 구현 때 필드 이름을 반드시 확인한다:
-#   https://fal.ai/models/fal-ai/kling-video/v3/pro/image-to-video/api
-# elements[](캐릭터 참조)는 스키마가 확인되면 body에 추가한다.
-endpoint: fal-ai/kling-video/v3/pro/image-to-video
+# 스키마 확인: https://fal.ai/api/openapi/queue/openapi.json?endpoint_id=minimax/h3-max/image-to-video
+#   image_url / end_image_url / duration(int 1~15) / resolution(480P|768P|1080P) / prompt_expansion_mode(필수)
+endpoint: minimax/h3-max/image-to-video
 
-# 문자열 값 안의 {prompt} {keyframe} {end_keyframe} {seconds} {sheet} 가 치환된다.
+# 문자열 값 안의 {prompt} {keyframe} {end_keyframe} {seconds} {seconds_int} {sheet} 가 치환된다.
+# 값 전체가 "{seconds_int}" 이면 정수로 들어간다(fal.fill).
 body:
   prompt: "{prompt}"
-  start_image_url: "{keyframe}"
+  image_url: "{keyframe}"
   end_image_url: "{end_keyframe}"
-  duration: "{seconds}"
-  negative_prompt: "scene change, new person, extra animal, red fox, text, subtitles, morphing, split screen, cartoon"
-  generate_audio: false
+  duration: "{seconds_int}"
+  resolution: "768P"
+  # 프롬프트 자동 확장은 모델이 장면을 덧붙이는 원인이 되므로 끈다. 모션 프롬프트는 컷표에서 이미 다듬었다.
+  prompt_expansion_mode: "disabled"
+  enable_safety_checker: true
 
 video_url_path: video.url
 
 # 비용 가드. 초당 단가 × 컷 길이의 합이 편당 상한을 넘으면 시작하지 않는다.
-cost_per_second_usd: 0.112
+# 768P 정가 $0.08/초로 잡는다(출시 할인가 $0.04는 2026-09-30 종료). 실제 청구는 상태.json fal_spent_usd 로 확인.
+cost_per_second_usd: 0.08
 max_cost_per_episode_usd: 10
-duration_min_sec: 3
+duration_min_sec: 1
 duration_max_sec: 15
 
 poll_interval_sec: 6
 timeout_sec: 900
+
+# 대안: Kling v3 pro (시험 컷에서 H3 Max가 끝 프레임을 못 맞추면 아래로 교체)
+#   endpoint: fal-ai/kling-video/v3/pro/image-to-video
+#   body: {prompt: "{prompt}", start_image_url: "{keyframe}", end_image_url: "{end_keyframe}", duration: "{seconds}",
+#          negative_prompt: "scene change, new person, extra animal, red fox, text, subtitles, morphing, split screen, cartoon",
+#          generate_audio: false}
+#   cost_per_second_usd: 0.112, duration_min_sec: 3

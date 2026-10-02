@@ -24,11 +24,16 @@ def data_uri(path: Path) -> str:
     return f"data:{mime};base64," + base64.b64encode(path.read_bytes()).decode("ascii")
 
 
-def fill(value, vars_: dict[str, str]):
-    """설정 템플릿의 {키}를 값으로 바꾼다. 문자열·딕셔너리·리스트를 재귀로 훑는다."""
+def fill(value, vars_: dict):
+    """설정 템플릿의 {키}를 값으로 바꾼다. 문자열·딕셔너리·리스트를 재귀로 훑는다.
+
+    값 전체가 "{키}" 하나뿐이면 변수의 원래 타입을 그대로 넣는다 — H3 Max의 duration처럼
+    정수를 요구하는 필드에 "3"(문자열)이 가면 422가 난다. 문자열 안에 섞인 {키}는 문자열로 붙인다."""
     if isinstance(value, str):
+        if value.startswith("{") and value.endswith("}") and value[1:-1] in vars_:
+            return vars_[value[1:-1]]
         for k, v in vars_.items():
-            value = value.replace("{" + k + "}", v)
+            value = value.replace("{" + k + "}", str(v))
         return value
     if isinstance(value, dict):
         return {k: fill(v, vars_) for k, v in value.items()}
