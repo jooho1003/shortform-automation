@@ -71,6 +71,8 @@ def dig(obj, path: str):
 def generate(cfg: dict, key: str, out: Path, vars_: dict[str, str]) -> None:
     """cfg['body'] 템플릿에 vars_를 채워 큐에 넣고, 완료되면 영상을 out에 내려받는다."""
     body = fill(cfg.get("body", {"prompt": "{prompt}", "image_url": "{keyframe}"}), vars_)
+    # 비어 있는 선택 입력(끝 프레임·고정 오디오 없음)은 ""로 보내지 않고 뺀다.
+    body = {k: v for k, v in body.items() if v != ""}
     endpoint = cfg["endpoint"].strip("/")
     submitted = request("POST", f"{QUEUE}/{endpoint}", key, body)
     request_id = submitted.get("request_id")

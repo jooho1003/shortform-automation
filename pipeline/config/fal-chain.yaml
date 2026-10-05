@@ -6,12 +6,14 @@
 #   image_url / end_image_url / duration(int 1~15) / resolution(480P|768P|1080P) / prompt_expansion_mode(필수)
 endpoint: minimax/h3-max/image-to-video
 
-# 문자열 값 안의 {prompt} {keyframe} {end_keyframe} {seconds} {seconds_int} {sheet} 가 치환된다.
+# 문자열 값 안의 {prompt} {keyframe} {end_keyframe} {seconds} {seconds_int} {sheet} {target_audio} 가 치환된다.
 # 값 전체가 "{seconds_int}" 이면 정수로 들어간다(fal.fill).
 body:
   prompt: "{prompt}"
   image_url: "{keyframe}"
   end_image_url: "{end_keyframe}"
+  # 화면에서 말하는 한국어 대사(편 시계 그대로 자른 컷 구간). 입이 대사 위치·속도에 맞춰 움직인다. 없으면 보내지 않는다.
+  target_audio_url: "{target_audio}"
   duration: "{seconds_int}"
   resolution: "768P"
   # 프롬프트 자동 확장은 모델이 장면을 덧붙이는 원인이 되므로 끈다. 모션 프롬프트는 컷표에서 이미 다듬었다.
@@ -19,6 +21,9 @@ body:
   enable_safety_checker: true
 
 video_url_path: video.url
+
+# H3는 소리를 자체 생성하며, 대사를 고정하지 않은 컷에는 임의 언어(중국어 등) 음성을 넣는다.
+# 클립 소리는 9:16 변환 때 우리 한국어 대사로 바꾼다. 후처리 립싱크(sync lipsync)는 입이 부자연스러워 쓰지 않는다(2026-10-05).
 
 # 비용 가드. 초당 단가 × 컷 길이의 합이 편당 상한을 넘으면 시작하지 않는다.
 # 768P 정가 $0.08/초로 잡는다(출시 할인가 $0.04는 2026-09-30 종료). 실제 청구는 상태.json fal_spent_usd 로 확인.

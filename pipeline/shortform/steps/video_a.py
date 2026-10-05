@@ -18,7 +18,7 @@ from pathlib import Path
 
 import yaml
 
-from .. import MissingKey, StepFailed
+from .. import GateBlocked, MissingKey, StepFailed
 from .. import fal
 from .. import planfile_a
 from ..paths import CONFIG, Episode
@@ -34,15 +34,59 @@ def _config() -> dict:
     return yaml.safe_load((CONFIG / "fal-chain.yaml").read_text(encoding="utf-8"))
 
 
-def _to_9x16(src: Path, dst: Path, seconds: float) -> None:
+def _to_9x16(src: Path, dst: Path, seconds: float, audio: Path | None = None) -> None:
+    """audio가 있으면 모델이 만든 소리(H3는 임의 언어 음성을 넣는다) 대신 그 오디오를 붙인다."""
     vf = "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,setsar=1"
+    inputs = ["-i", str(src)] + (["-i", str(audio), "-map", "0:v", "-map", "1:a"] if audio else [])
     res = subprocess.run(
-        ["ffmpeg", "-y", "-loglevel", "error", "-i", str(src), "-t", f"{seconds:.3f}", "-vf", vf,
+        ["ffmpeg", "-y", "-loglevel", "error", *inputs, "-t", f"{seconds:.3f}", "-vf", vf,
          "-r", "30", "-c:v", "libx264", "-pix_fmt", "yuv420p", "-c:a", "aac", str(dst)],
         capture_output=True, text=True, encoding="utf-8", errors="replace",
     )
     if res.returncode != 0:
         raise StepFailed(f"ffmpeg 변환 실패 {src.name}: {res.stderr[-300:]}")
+
+
+def _silence(seconds: float, out: Path) -> Path:
+    """컷 길이의 무음 mp3. 화면에서 말하는 대사가 없는 컷에 넣어 모델이 임의 음성·입 움직임을 만들지 않게 한다."""
+    res = subprocess.run(
+        ["ffmpeg", "-y", "-loglevel", "error", "-f", "lavfi", "-i", "anullsrc=r=44100:cl=mono", "-t", f"{seconds:.3f}", str(out)],
+        capture_output=True, text=True, encoding="utf-8", errors="replace",
+    )
+    if res.returncode != 0:
+        raise StepFailed(f"무음 오디오 만들기 실패: {res.stderr[-300:]}")
+    return out
+
+
+def _on_screen_speech(plan, cut, dialogue) -> bool:
+    """입이 화면에서 움직여야 하는 대사인가. 속마음은 제외하고, 컷표 '보이는 사람'에 한 번이라도 나오는
+    사람(=추적되는 출연자)은 이 컷에 보일 때만 센다. 주인공은 그 열에 적지 않으므로 늘 보이는 것으로 본다."""
+    if "속마음" in dialogue.direction:
+        return False
+    tracked = any(dialogue.character in c.visible for c in plan.cuts)
+    return not tracked or dialogue.character in cut.visible
+
+
+def _cut_voice(plan, cut, synthesized, out: Path, on_screen_only: bool = False) -> Path | None:
+    """컷 구간에 걸친 대사를 편 시계대로 놓고 그 구간만 잘라 컷 길이의 mp3로 쓴다. 넣을 대사가 없으면 None."""
+    picks = [
+        (path, d.at) for d, (path, s, e) in zip(plan.dialogues, synthesized)
+        if s < cut.end and e > cut.start and (not on_screen_only or _on_screen_speech(plan, cut, d))
+    ]
+    if not picks:
+        return None
+    args = ["ffmpeg", "-y", "-loglevel", "error"]
+    for path, _ in picks:
+        args += ["-i", str(path)]
+    delays = "".join(f"[{i}:a]adelay=delays={int(at * 1000)}:all=1[a{i}];" for i, (_, at) in enumerate(picks))
+    mix = "".join(f"[a{i}]" for i in range(len(picks)))
+    graph = (f"{delays}{mix}amix=inputs={len(picks)}:normalize=0,"
+             f"atrim=start={cut.start}:end={cut.end},asetpts=PTS-STARTPTS,apad=whole_dur={cut.seconds}[out]")
+    res = subprocess.run(args + ["-filter_complex", graph, "-map", "[out]", "-ac", "1", "-ar", "44100", str(out)],
+                         capture_output=True, text=True, encoding="utf-8", errors="replace")
+    if res.returncode != 0:
+        raise StepFailed(f"컷 {cut.n:02d} 대사 오디오 만들기 실패: {res.stderr[-300:]}")
+    return out
 
 
 FAL_PROMPT_LIMIT = 2000  # 긴 프롬프트는 모델이 컷 안에서 장면을 바꾸기 쉬워 상한을 둔다.
@@ -273,6 +317,8 @@ def run(ep: Episode) -> None:
     raw_dir.mkdir(parents=True, exist_ok=True)
     clip_dir.mkdir(parents=True, exist_ok=True)
     fail_log = ep.assets_dir / "실패.txt"
+    voice_dir = ep.assets_dir / "컷대사"
+    voice_dir.mkdir(parents=True, exist_ok=True)
     sheet = ep.clips_dir / SHEET
 
     # 대사를 먼저 합성·검사해야 유료 영상 요청 전에 빈 구간을 발견한다.
@@ -283,6 +329,10 @@ def run(ep: Episode) -> None:
         _check_coverage([(s, e) for _, s, e in synthesized], plan.total_seconds)
 
     todo = [c for c in plan.cuts if not (raw_dir / f"{c.n:02d}.mp4").exists() and not (clip_dir / f"{c.n:02d}.mp4").exists()]
+    # SHORTFORM_CUTS=1,2 → 그 컷만 만들고 9:16 변환까지 한 뒤 멈춘다(컷별 확인용). 타임라인은 전체가 모인 실행에서 만든다.
+    only_cuts = {int(n) for n in os.environ.get("SHORTFORM_CUTS", "").split(",") if n.strip()}
+    if only_cuts:
+        todo = [c for c in todo if c.n in only_cuts]
     for cut in todo:
         _check_duration(cfg, cut)
     est = _estimate(cfg, todo)
@@ -309,7 +359,14 @@ def run(ep: Episode) -> None:
             failed.append(cut.n)
             continue
         prompt = _video_prompt(plan, cut)
-        print(f"  컷 {cut.n:02d} 생성 (fal, {cut.seconds:g}초) — {prompt[:70]}")
+        # 화면에서 말하는 대사를 편 시계 그대로 잘라 모델에 넣는다. 입이 그 대사의 위치·속도에 맞춰 움직이고,
+        # 최종 렌더의 대사 트랙도 같은 시계라 그대로 맞는다. 그런 대사가 없는 컷(속마음·화면 밖 목소리)은 무음을 넣어 입을 다물게 한다.
+        lip = _cut_voice(plan, cut, synthesized, voice_dir / f"{cut.n:02d}-입.mp3", on_screen_only=True) if synthesized else None
+        if synthesized and lip is None:
+            lip = _silence(cut.seconds, voice_dir / f"{cut.n:02d}-입.mp3")
+            print(f"  컷 {cut.n:02d} 생성 (fal, {cut.seconds:g}초, 무음 — 입 다묾) — {prompt[:70]}")
+        else:
+            print(f"  컷 {cut.n:02d} 생성 (fal, {cut.seconds:g}초{', 한국어 대사에 입 맞춤' if lip else ''}) — {prompt[:70]}")
         try:
             fal.generate(cfg, key, raw_dir / f"{cut.n:02d}.mp4", {
                 "prompt": prompt,
@@ -318,6 +375,7 @@ def run(ep: Episode) -> None:
                 "seconds": f"{cut.seconds:g}",
                 "seconds_int": int(round(cut.seconds)),  # H3 Max 등 정수형 duration 용
                 "sheet": fal.data_uri(sheet) if sheet.exists() else "",
+                "target_audio": fal.data_uri(lip) if lip else "",
             })
             spent += _estimate(cfg, [cut])
             st = state.load(ep)
@@ -335,6 +393,14 @@ def run(ep: Episode) -> None:
         raise StepFailed(f"실패한 컷: {failed} → {fail_log}")
     fail_log.unlink(missing_ok=True)
 
+    if only_cuts:
+        for cut in todo:
+            # 확인용 클립 소리는 최종 렌더와 같은 대사(속마음 포함)로 바꾼다.
+            heard = _cut_voice(plan, cut, synthesized, voice_dir / f"{cut.n:02d}-대사.mp3") if synthesized else None
+            _to_9x16(raw_dir / f"{cut.n:02d}.mp4", clip_dir / f"{cut.n:02d}.mp4", cut.seconds, heard)
+        print(f"  컷 {[c.n for c in todo]} 생성 완료 · 누적 ${spent:.2f} — 03-소재/클립/ 에서 확인하세요. 나머지 컷은 SHORTFORM_CUTS 없이 다시 실행하면 이어서 만듭니다.")
+        raise GateBlocked("컷별 생성 모드 — 확인 후 다음 컷을 지정해 다시 실행하세요.")
+
     # 9:16 변환 + 타임라인
     lines = []
     for cut in plan.cuts:
@@ -343,7 +409,8 @@ def run(ep: Episode) -> None:
         if not dst.exists():
             if not src.exists():
                 raise StepFailed(f"컷 {cut.n:02d} 영상이 없습니다: {src}")
-            _to_9x16(src, dst, cut.seconds)
+            heard = _cut_voice(plan, cut, synthesized, voice_dir / f"{cut.n:02d}-대사.mp3") if synthesized else None
+            _to_9x16(src, dst, cut.seconds, heard)
         lines.append({"n": cut.n, "text": "", "start": cut.start, "end": cut.end, "words": [], "clip": f"클립/{cut.n:02d}.mp4", "mediaLayout": "portrait"})
 
     total = plan.total_seconds
