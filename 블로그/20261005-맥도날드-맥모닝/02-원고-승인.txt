@@ -1,0 +1,29 @@
+{
+  "body_sha256": "a67aafea291ede546e27de56d18a981e215a51d149c0df204ddd82b17b036b31",
+  "images": [
+    {
+      "file": "이미지/00-맥모닝-전체.jpg",
+      "sha256": "c07acf7d285daf09809946492f48591032bea0e820eea63c1ec9b369edf30f38"
+    },
+    {
+      "file": "이미지/01-베이컨토마토에그머핀.jpg",
+      "sha256": "81ce3110a1475489994e4f3a3d9de532f3d4614354543aa83d948d674efde236"
+    },
+    {
+      "file": "이미지/02-해시브라운.jpg",
+      "sha256": "6d77e316b0f65907fcb4bd5265c2e20c5aca91223dc6e8401260b955fdc7223a"
+    },
+    {
+      "file": "이미지/03-핫케이크.jpg",
+      "sha256": "308968fd783236cff03847100768d0ea6deef1a2e4d019a493f8e72729912dcb"
+    },
+    {
+      "file": "이미지/04-리트리버-맥모닝.png",
+      "sha256": "1006c23e92ec1a13c6218fc568adc03541a9e133e2dd5abf91c8371e9e897fca"
+    },
+    {
+      "file": "이미지/05-햄버거-평점.png",
+      "sha256": "354f234c9d163984c89ca0d66074e9b61d89d54b27c9432f77f0617b87a0f1ec"
+    }
+  ]
+}
