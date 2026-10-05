@@ -1,0 +1,80 @@
+{
+  "id": "20261005-hansul-marriage",
+  "title": "취업하면 다 해준다던 남편 · 1~4부 검토본",
+  "client": null,
+  "brand_name": "한술툰",
+  "sponsored": false,
+  "status": "illustrated",
+  "caption": "한술툰 〈취업하면 다 해준다던 남편〉\n※ 창작 사연입니다.",
+  "hashtags": [
+    "한술툰",
+    "사연툰",
+    "결혼생활"
+  ],
+  "created_at": "2026-10-05T06:34:28.695Z",
+  "updated_at": "2026-10-05T06:34:28.695Z",
+  "kind": "instatoon",
+  "genre": "일상툰",
+  "logline": "2년간 대기업 취업만 준비하며 집안일과 육아를 미루는 담이. 생활비를 혼자 감당하던 보리는 아이에게 라면만 주고 게임하는 담이를 보고 이혼을 결심한다. 아이와 친정으로 간 뒤 이혼을 마무리하고 부모님과 편안한 일상을 되찾는다.",
+  "style": "05 손그림 기준. 1~4부 세로 이미지 검토본. 2부·4부 사용자 수정 반영. 서류는 글자 없는 줄 형식만. 최신 콘티와 생성 프롬프트는 제작 폴더에 저장.",
+  "characters": [
+    {
+      "key": "bori",
+      "name": "보리",
+      "lock": "블루그레이 친칠라, 큰 둥근 귀, 겨자색 스카프, 05 손그림.",
+      "sheet": "인스타툰/시리즈/한술툰/한술툰-05-보리담이-손그림.png"
+    },
+    {
+      "key": "dami",
+      "name": "담이",
+      "lock": "회색 라쿤, 눈가 무늬와 띠 꼬리, 세이지 가방, 05 손그림.",
+      "sheet": "인스타툰/시리즈/한술툰/한술툰-05-보리담이-손그림.png"
+    }
+  ],
+  "slides": [
+    {
+      "layout": "single",
+      "fullBleed": true,
+      "panels": [
+        {
+          "scene": "Header 1/4. Panels: 1 wedding home moving boxes, caption \"시댁은 전세보증금을, 나는 혼수를 전부 마련했다.\" 2 Dami resignation laptop Bori listening, Dami \"대기업으로 옮기려고. 잠깐만 생활비 부탁해.\" 3 Dami vacuum and child, \"집안일이랑 아이는 내가 맡을게.\" 4 hopeful Dami to Bori \"취업하면 내가 다 부담할게. 당신 고생한 것도 보상해 줄게.\" 5 time caption \"그렇게 2년이 지났다.\" rejection laptop, bills in weary Bori paws. 6 Bori cautiously \"다른 회사에 다니면서 준비하는 건 어때?\" 7 Dami angry \"너도 내가 대기업 갈 능력은 없다고 생각하지?\" 8 Bori silently faces bills and abandoned chores, caption \"나는 또 말을 삼켰다.\" ending \"-계속-\".",
+          "image": "인스타툰/20261005-hansul-marriage/컷/01-완성.png",
+          "bubbles": []
+        }
+      ]
+    },
+    {
+      "layout": "single",
+      "fullBleed": true,
+      "panels": [
+        {
+          "scene": "Edit the referenced Hansul comic part 2/4. Preserve Bori chinchilla mustard scarf and Dami raccoon sage pouch, exact handdrawn muted flat style of target. Re-layout to EXACTLY TEN panels in 2 columns x 5 rows, tall portrait, generous Korean dialogue space. Header \"한술툰 · 창작 사연\", title \"취업하면 다 해준다던 남편\", \"2/4\". All Korean exact correct spelling. No panel numbers. Read left to right down rows. 1 Dami reading 대기업 채용 laptop with declined small company interview, dialogue \"눈 낮춰서 들어가면 내 인생이 거기서 끝나.\" Critical word 끝나, NEVER 꽅나. 2 Bori with wet laundry basket asks \"세탁 끝난 거라도 널어 주면 안 돼?\" 3 Dami irritated at laptop \"나 지금 서류 제출 얼마 안 남았거든?\" 4 night Bori hanging laundry hears game sounds from Dami room. 5 Bori enters sees Dami wearing headset gaming, BORI dialogue \"게임 그만하고 집안일 좀 도와줘.\" Tail to Bori only. 6 Dami defensive gaming \"하루 종일 준비했어. 잠깐 쉬는 것도 안 돼?\" 7 Bori frustrated not smiling \"아직 취업 준비 중인데 게임만 하고, 집안일도 제대로 안 하잖아.\" Dami hears. 8 Dami snaps \"돈 번다고 사람을 몰아붙여?\" Bori dismayed. 9 caption \"다음 날\" Bori going to work \"오늘 야근이야. 아이 저녁 먹이고 씻기는 건 꼭 해 줘.\" 10 Dami seated ON SOFA relaxed leaning into cushion, NO dining table, says \"알았어. 나도 애 아빠야.\" Child nearby floor toy. ending \"-계속-\". No human characters. All exact dialogue, unambiguous tails. Preserve character identities and varied expressions.",
+          "image": "인스타툰/20261005-hansul-marriage/컷/02-수정01.png",
+          "bubbles": []
+        }
+      ]
+    },
+    {
+      "layout": "single",
+      "fullBleed": true,
+      "panels": [
+        {
+          "scene": "Header 3/4. Panels: 1 caption \"그날 밤, 야근을 마치고 돌아왔다.\" Bori enters home, Dami gaming headphones visible background. 2 child asleep leaning on dining table, half eaten instant noodle cup, soup stains on yellow bib, messy face and dirty paws, no abuse imagery, no burns. 3 Bori gently wakes child asks \"저녁에 라면 먹었어?\" child answers \"응. 아빠가 줬어.\" 4 Bori washing child and serving warm rice small split scene caption \"아이부터 씻기고, 밥을 차렸다.\" 5 child asleep safely separate room, Bori confronts Dami \"저녁 먹이고 씻겨 달라고 했잖아.\" Dami \"라면 챙겨 줬잖아. 하루 먹었다고 큰일 나?\" 6 Dami defensive irritated \"오늘도 떨어졌어. 취업하면 다 해준다는데 그걸 못 기다려?\" 7 big emotionally powerful Bori firm face no smile \"나 이혼할래.\" Dami shocked \"내가 취업 못 했다고?\" 8 Bori firm eye contact dialogue EXACT \"가장으로서, 아빠로서도 자격 없는 사람하고는 더는 못 살아.\" ending \"-계속-\".",
+          "image": "인스타툰/20261005-hansul-marriage/컷/03-완성.png",
+          "bubbles": []
+        }
+      ]
+    },
+    {
+      "layout": "single",
+      "fullBleed": true,
+      "panels": [
+        {
+          "scene": "Edit referenced Hansul comic part 4/4, preserve exact art/character identity, Bori bluegray chinchilla mustard scarf, Dami raccoon sage pouch, child small raccoon yellow bib, maternal grandmother wider chinchilla lavender scarf, maternal grandfather raccoon brown cardigan. Portrait page EXACT 8 panels 2x4, chronological left right down. Korean exact readable bubbles. Title \"취업하면 다 해준다던 남편\", \"한술툰 · 창작 사연\", \"4/4\". Change flow as follows and REMOVE old telephone and pleading conversations. Panel1 Dami angry says EXACT \"우리 부모님이 해준 집이야. 이혼하면 한 푼도 못 줘.\" Bori calm firm. Panel2 IMMEDIATELY Bori packing bags with child, NO new dialogue, caption \"나는 아이 짐과 내 짐을 챙겼다.\" Panel3 mother and father welcome Bori and child in parents home doorway with suitcase, caption EXACT \"친정으로 갔다.\" grandmother dialogue \"잘 왔어. 들어와.\" Panel4 caption \"별거 후, 상담과 조정을 거쳤다.\" Bori and counselor at desk holding generic papers, papers have ONLY abstract horizontal gray line marks, NO letters NO readable words NO document headings. Panel5 generic blank papers with lines and pen, NO legal text on paper, narration in separate box above \"전세보증금과 혼수 내역을 확인하고, 재산 문제를 정리했다.\" Panel6 Bori and child playing safe parents home, narration separate boxes \"아이는 내가 양육하고, 양육비와 아빠를 만나는 일정도 정했다.\" then \"몇 달 뒤, 이혼이 마무리됐다.\" Panel7 family four Bori child grandparents warm dinner, child says \"할머니, 나 더 먹어도 돼?\" grandmother \"그럼. 먹을 거 넉넉해.\" Panel8 cheerful final same four family members grandmother offers Bori food says \"너도 먹어. 이제 눈치 보지 말고.\" final narration \"그날은 아이도 나도, 밥이 따뜻할 때 먹었다.\" bottom \"-끝-\". No 정산 합의 or 면접교섭 text anywhere. No human hair/hands. Retain clean soft handdrawn style with expressive readable faces.",
+          "image": "인스타툰/20261005-hansul-marriage/컷/04-수정01.png",
+          "bubbles": []
+        }
+      ]
+    }
+  ]
+}

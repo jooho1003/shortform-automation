@@ -1,0 +1,34 @@
+{
+  "tool": "image_gen.imagegen",
+  "verified": true,
+  "edits": [
+    {
+      "part": 1,
+      "page": 4,
+      "file": "04-완성.png",
+      "prompt": "Make one surgical local edit only: the household budget spiral notebook on the table currently faces the viewer instead of the seated characters. Rotate ONLY notebook cover markings / title 가계부 and lines 180 degrees in its plane so they face Bori and Dami seated behind the table, upside down to viewer. Keep notebook physical placement and perspective plausible. The title TOP edge should now be near foreground viewer, the BOTTOM of its characters near the seated animals. Binding can be on right relative to viewer after turning notebook. Preserve EVERYTHING else exactly: all speech text, tails, characters, expressions, table, mugs, colors, background and handmade style. Do not redraw whole scene. No other text edits.",
+      "path": "C:\\Users\\ssool\\.codex\\generated_images\\01a10a5b-5c36-71c1-8cb7-27934042f308\\exec-ff73b004-d349-4ba1-a17a-a20f1263d98d.png"
+    },
+    {
+      "part": 1,
+      "page": 1,
+      "file": "01-수정01.png",
+      "prompt": "Surgical text-only edit. In the small footer, replace '한술툰 · 창작 사연' with exact '한술툰 · 사연'. Remove only word 창작, arrange remaining footer naturally. Keep all other pixels, title, part badge, characters, composition, colors, handdrawn style unchanged.",
+      "path": "C:\\Users\\ssool\\.codex\\generated_images\\01a10a5b-5c36-71c1-8cb7-27934042f308\\exec-e4fedd0f-78e9-4607-9f4d-f7f02f753957.png"
+    },
+    {
+      "part": 2,
+      "page": 1,
+      "file": "01-완성.png",
+      "prompt": "Surgical text-only edit. In the small footer, replace '한술툰 · 창작 사연' with exact '한술툰 · 사연'. Remove only word 창작, arrange remaining footer naturally. Keep all other pixels, title, part badge, characters, composition, colors, handdrawn style unchanged.",
+      "path": "C:\\Users\\ssool\\.codex\\generated_images\\01a10a5b-5c36-71c1-8cb7-27934042f308\\exec-6afd8277-ed17-4ced-9d9e-71b416872d3a.png"
+    },
+    {
+      "part": 3,
+      "page": 1,
+      "file": "01-완성.png",
+      "prompt": "Surgical text-only edit. In the small footer, replace '한술툰 · 창작 사연' with exact '한술툰 · 사연'. Remove only word 창작, arrange remaining footer naturally. Keep all other pixels, title, part badge, characters, composition, colors, handdrawn style unchanged.",
+      "path": "C:\\Users\\ssool\\.codex\\generated_images\\01a10a5b-5c36-71c1-8cb7-27934042f308\\exec-aba190d0-d97b-4a44-b869-4c7e3a8e5ab4.png"
+    }
+  ]
+}

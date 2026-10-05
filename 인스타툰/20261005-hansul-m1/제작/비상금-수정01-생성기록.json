@@ -1,0 +1,41 @@
+{
+  "tool": "image_gen.imagegen",
+  "verified": true,
+  "changes": [
+    {
+      "page": 3,
+      "scene": "같은 저녁 식탁. 담이의 퇴사 이야기를 듣는 보리와 아이. 두 말풍선 모두 오른쪽 담이가 말한다.",
+      "dialogue": "담이: 지금 회사에선 더 올라갈 데가 없어.\n담이: 퇴사하고 대기업 이직 준비에 집중하고 싶어.",
+      "prompt": "Edit only speech-bubble attribution in this Korean comic. BOTH dialogues are spoken by DAMI, the adult RACCOON ON THE RIGHT with sage pouch. First bubble '지금 회사에선 더 올라갈 데가 없어.' currently has wrong left tail: REMOVE that tail, redraw its tail clearly toward right adult Dami's mouth, NEVER toward Bori chinchilla or child. Second bubble '퇴사하고 대기업 이직 준비에 집중하고 싶어.' also clearly points to same right adult Dami. Can stack the bubbles upper-right with connected same-speaker arrangement to make attribution unambiguous, first above second. Bori LEFT is listening silently, with NO balloon connected to her. Keep all exact text, animals, child, dining table, food, colors, handdrawn brown outlines and layout scale otherwise unchanged. No added text. One 4:5 carousel slide.",
+      "path": "C:\\Users\\ssool\\.codex\\generated_images\\01a10a5b-5c36-71c1-8cb7-27934042f308\\exec-0ab7594a-d43c-4991-ab37-1073cf69aeba.png"
+    },
+    {
+      "page": 7,
+      "scene": "2년 뒤 밤. 보리가 혼자 가계부와 비상금 잔액을 살펴본다. 담이는 뒤편 노트북 앞에서 취업 준비 중. 모아 둔 돈이 줄어드는 상황을 보여 준다.",
+      "dialogue": "시간: 그렇게 2년이 지났다.\n내레이션: 월급은 생활비로 다 나갔고,\n내레이션: 모아 둔 비상금도 거의 바닥났다.",
+      "prompt": "Edit this single slide while preserving exactly its handdrawn style and Bori/Dami identities. Night scene Bori at household-budget desk checking bills and emergency fund almost exhausted, worried tired expression; Dami background at laptop preparing applications. Replace existing captions with ONLY exact Korean: top time tag '그렇게 2년이 지났다.' and lower narration in two lines '월급은 생활비로 다 나갔고,\\n모아 둔 비상금도 거의 바닥났다.' No old caption about money still her share. Small papers may use abstract gray lines; no invented account balances or bank identifiers. Spacious readable text, muted cream tones and dark brown handmade lines exactly as original. No extra dialogue, no child.",
+      "path": "C:\\Users\\ssool\\.codex\\generated_images\\01a10a5b-5c36-71c1-8cb7-27934042f308\\exec-bf862e31-46e5-48ea-9639-bbd2ac51120e.png"
+    },
+    {
+      "page": 8,
+      "scene": "그날 밤 거실. 보리와 담이가 같은 소파에 앉아 낮은 탁자의 가계부와 생활비 내역을 본다. 보리는 돈이 모자란 상황을 설명하고 담이는 듣는다. 아직 대기업 자존심 논쟁 전이다.",
+      "dialogue": "내레이션: 저축은 못 하는데, 나갈 돈은 계속 늘었다.\n보리: 생활비가 자꾸 늘어서, 이제 내 월급만으론 빠듯해.",
+      "prompt": "Rework target slide into ONE continuing household conversation, matching exact original Bori/Dami shapes, brown handmade outlines muted cream/pastel published Hansul style. Bori LEFT and Dami RIGHT on same pale pink sofa, low table household notebook/bills with abstract lines, evening. Bori worried speaking, Dami listens silent initially. NO job interview email or interview invitation dialogue anymore. Top narration EXACT '저축은 못 하는데, 나갈 돈은 계속 늘었다.' Bori bubble EXACT '생활비가 자꾸 늘어서,\\n이제 내 월급만으론 빠듯해.' Tail clearly to Bori LEFT. Dami no bubble. No child, no extra readable words. 4:5 portrait one comic slide, large Korean handmade text with comfortable margins.",
+      "path": "C:\\Users\\ssool\\.codex\\generated_images\\01a10a5b-5c36-71c1-8cb7-27934042f308\\exec-d68e390c-6f2f-4da0-9ff8-265fcd069288.png"
+    },
+    {
+      "page": 9,
+      "scene": "같은 밤, 같은 거실 소파 대화. 보리가 작은 회사에 다니며 이직을 준비하자는 현실적인 제안을 한다. 담이는 팔짱을 끼며 표정이 굳기 시작한다.",
+      "dialogue": "보리: 작은 회사라도 다니면서 준비하면 어때?\n보리: 둘이 벌면 비상금도 다시 모을 수 있잖아.",
+      "prompt": "Edit target exact same pink sofa living room nighttime composition, Bori LEFT mustard scarf and Dami RIGHT sage pouch, maintain original handdrawn art style. This immediately follows discussion of exhausted emergency savings. Replace Bori's two dialogue bubbles with ONLY exact '작은 회사라도 다니면서\\n준비하면 어때?' followed below by '둘이 벌면 비상금도\\n다시 모을 수 있잖아.' Both tails Bori LEFT. REMOVE old 생활비도 계속 나가니까 text. Bori gentle cautious worried, Dami closes posture arms crossed with slightly tightening brows and pride, not screaming yet. No extra narration/child/text. Evening warm lighting. One 4:5 slide.",
+      "path": "C:\\Users\\ssool\\.codex\\generated_images\\01a10a5b-5c36-71c1-8cb7-27934042f308\\exec-1eb12ad3-9f55-433c-a186-f8e284c09a5f.png"
+    },
+    {
+      "page": 10,
+      "scene": "같은 거실에서 담이가 소파에서 일어나 제안을 거부한다. 보리는 소파에 남아 상처받은 얼굴로 말을 멈춘다. 생활비 걱정을 자존심 문제로 바꾸는 순간.",
+      "dialogue": "담이: 내가 그런 데 가려고 퇴사한 게 아니잖아.\n담이: 너도 내가 대기업 갈 능력은 없다고 생각하지?\n내레이션: 남편은 내 걱정보다 자기 자존심이 먼저였다.\n끝표기: -계속-",
+      "prompt": "Edit existing final slide part1, preserve Bori/Dami original exact shapes and published Hansul handmade brown line cream pastel art. Same living room immediately after Bori proposal, Dami RIGHT stands from sofa angrily rejecting, Bori LEFT remains seated silent hurt. Two Dami bubbles upper part in reading order EXACT '내가 그런 데 가려고\\n퇴사한 게 아니잖아.' then '너도 내가 대기업 갈 능력은\\n없다고 생각하지?' Both tails adult raccoon Dami RIGHT. Lower separate narration EXACT '남편은 내 걱정보다\\n자기 자존심이 먼저였다.' Replace old 나는 또 말을 삼켰다 narration. Ending '-계속-'. No extra text, no child, no new object. Make dialogue fit legibly without crowding. 4:5 single slide.",
+      "path": "C:\\Users\\ssool\\.codex\\generated_images\\01a10a5b-5c36-71c1-8cb7-27934042f308\\exec-4208e815-b5d5-4db7-9372-8a6b9725add8.png"
+    }
+  ]
+}
