@@ -34,6 +34,13 @@ def test_video_prompt_keeps_short_locks_whole():
     assert plan.locks["GLOBAL STYLE"] in prompt and plan.locks["NEGATIVE"] in prompt
 
 
+def test_shots_group_chained_cuts_for_ambience():
+    modes = ["새로", "이어서", "새로", "이어서", "새로", "새로", "새로", "새로", "각도변경", "이어서", "이어서"]
+    cuts = [SimpleNamespace(n=i, chained=m == "이어서") for i, m in enumerate(modes, 1)]
+    shots = video_a._shots(SimpleNamespace(cuts=cuts))
+    assert [[c.n for c in s] for s in shots] == [[1, 2], [3, 4], [5], [6], [7], [8], [9, 10, 11]]
+
+
 def test_fit_cuts_at_sentence_end():
     assert video_a._fit("One. Two. Three.", 9) == "One. Two."
     assert video_a._fit("short", 10) == "short"

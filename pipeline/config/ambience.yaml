@@ -1,0 +1,20 @@
+# A안 생활음 — 이어지는 컷 묶음(장면)마다 fal MMAudio(영상→소리)로 바닥 소리를 만든다.
+#
+# 장면 = '이어서' 컷끼리 묶은 것. 장면마다 한 번 만들어 컷 경계에서 소리 결이 바뀌지 않게 한다.
+# 편 폴더의 03-소재/생활음/프롬프트.json 에 장면별 프롬프트를 둘 수 있다({"1-2": {"prompt": "...", "db": -24}}).
+# 없으면 default_prompt 에 첫 컷의 모션 문장을 붙여 보낸다. 만든 파일(생활음/1-2.wav)을 지우면 다시 만든다.
+endpoint: fal-ai/mmaudio-v2
+body:
+  video_url: "{video}"
+  prompt: "{prompt}"
+  negative_prompt: "speech, talking, voices, words, music, singing"
+  duration: "{seconds_int}"
+  num_steps: 25
+video_url_path: video.url
+# https://fal.ai/models/fal-ai/mmaudio-v2 — 초당 $0.001
+cost_per_second_usd: 0.001
+# 장면마다 평균 음량을 이 값(dB)에 맞춘 뒤 대사 아래 mix_volume 배로 깐다.
+# 1화 미리보기에서 사용자가 괜찮다고 한 값: 대사 평균보다 약 10dB 아래.
+target_db: -28
+mix_volume: 0.5
+default_prompt: "natural ambient room tone and foley that match this scene"

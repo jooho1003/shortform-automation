@@ -4,7 +4,8 @@
 - 체인 기획안(설계 10): 컷마다 시작 프레임(이어서 컷은 앞 컷의 끝)과 끝 프레임을 함께 보낸다. 대사는 영상보다 먼저 합성해 공백·겹침을 검사한다 — 돈 쓰기 전에 멈추기 위해서다.
 - 편당 비용 상한(config/fal-chain.yaml)을 넘기면 시작하지 않는다. 사용한 금액은 상태.json 에 적는다.
 - 실패한 컷은 03-소재/실패.txt 에 적는다. 같은 이름(클립/NN.mp4)으로 손으로 넣으면 이어서 진행한다.
-- 기획안의 대사는 자막 데이터와 TTS로 함께 만들고, 룸톤(주방이면 조리 효과음까지)과 섞는다.
+- 기획안의 대사는 자막 데이터와 TTS로 함께 만들고, 생활음(없으면 룸톤, 주방이면 조리 효과음까지)과 섞는다.
+  생활음은 장면('이어서' 컷 묶음)마다 fal MMAudio로 만든다(config/ambience.yaml).
   Edge 음성 설정에 characters 항목이 있으면 화자별로 다른 목소리를 쓴다.
 """
 
@@ -179,6 +180,96 @@ def _watermark(ep: Episode) -> str:
     return WATERMARK if (ep.assets_dir / WATERMARK).is_file() else ""
 
 
+AMBIENCE_DIR = "생활음"
+
+
+def _ambience_config() -> dict:
+    path = CONFIG / "ambience.yaml"
+    return yaml.safe_load(path.read_text(encoding="utf-8")) if path.exists() else {}
+
+
+def _shots(plan) -> list[list]:
+    """'이어서' 컷은 앞 컷과 한 장면이다. 생활음은 장면마다 한 번 만들어 컷 경계에서 소리 결이 바뀌지 않게 한다."""
+    shots: list[list] = []
+    for cut in plan.cuts:
+        if cut.chained and shots:
+            shots[-1].append(cut)
+        else:
+            shots.append([cut])
+    return shots
+
+
+def _ambience_file(ep: Episode, shot) -> Path:
+    label = f"{shot[0].n}" if len(shot) == 1 else f"{shot[0].n}-{shot[-1].n}"
+    return ep.assets_dir / AMBIENCE_DIR / f"{label}.wav"
+
+
+def _mean_db(path: Path) -> float:
+    res = subprocess.run(["ffmpeg", "-hide_banner", "-i", str(path), "-af", "volumedetect", "-f", "null", "-"],
+                         capture_output=True, text=True, encoding="utf-8", errors="replace")
+    for line in res.stderr.splitlines():
+        if "mean_volume:" in line:
+            return float(line.split("mean_volume:")[1].split("dB")[0])
+    raise StepFailed(f"음량 측정 실패 {path.name}: {res.stderr[-300:]}")
+
+
+def _run_ffmpeg(args: list[str], what: str) -> None:
+    res = subprocess.run(["ffmpeg", "-y", "-v", "error", *args], capture_output=True, text=True, encoding="utf-8", errors="replace")
+    if res.returncode != 0:
+        raise StepFailed(f"{what} 실패: {res.stderr[-400:]}")
+
+
+def _make_ambience(ep: Episode, plan, spent: float, cap: float) -> float:
+    """장면마다 생활음이 없으면 fal MMAudio로 만든다. 돌려주는 값은 갱신된 누적 비용."""
+    cfg = _ambience_config()
+    if not cfg:
+        return spent
+    out_dir = ep.assets_dir / AMBIENCE_DIR
+    prompt_file = out_dir / "프롬프트.json"
+    prompts = json.loads(prompt_file.read_text(encoding="utf-8")) if prompt_file.exists() else {}
+    todo = [s for s in _shots(plan) if not _ambience_file(ep, s).exists()]
+    if not todo:
+        return spent
+    per_sec = float(cfg.get("cost_per_second_usd", 0.001))
+    est = sum(s[-1].end - s[0].start for s in todo) * per_sec
+    print(f"  생활음 {len(todo)}장면 생성 · 예상 ${est:.3f}")
+    if spent + est > cap:
+        raise StepFailed(f"편당 비용 상한 ${cap:.0f}를 넘깁니다 (누적 ${spent:.2f} + 생활음 ${est:.3f}).")
+    key = os.environ.get("FAL_KEY")
+    if not key:
+        raise MissingKey("FAL_KEY 가 없습니다. https://fal.ai/dashboard/keys 에서 발급해 pipeline/.env 에 넣으세요.")
+    out_dir.mkdir(parents=True, exist_ok=True)
+    for shot in todo:
+        dst = _ambience_file(ep, shot)
+        seconds = shot[-1].end - shot[0].start
+        entry = prompts.get(dst.stem, {})
+        prompt = entry.get("prompt") or f"{cfg['default_prompt']}. {getattr(shot[0], 'motion', '')[:200]}"
+        work = out_dir / f"{dst.stem}.work"
+        # 장면의 컷 영상을 이어 붙여 보낸다. 요청 크기를 줄이려고 소리를 빼고 540px로 낮춘다.
+        clips = sum((["-i", str(ep.assets_dir / "클립" / f"{c.n:02d}.mp4")] for c in shot), [])
+        graph = "".join(f"[{i}:v]scale=540:-2,setsar=1[v{i}];" for i in range(len(shot)))
+        graph += "".join(f"[v{i}]" for i in range(len(shot))) + f"concat=n={len(shot)}:v=1:a=0[v]"
+        _run_ffmpeg([*clips, "-filter_complex", graph, "-map", "[v]", "-c:v", "libx264", "-crf", "28", f"{work}.mp4"], "생활음용 장면 영상")
+        print(f"  생활음 {dst.stem} 생성 (fal MMAudio, {seconds:g}초) — {prompt[:60]}")
+        fal.generate(cfg, key, Path(f"{work}.out.mp4"), {
+            "video": fal.data_uri(Path(f"{work}.mp4")), "prompt": prompt, "seconds_int": max(1, round(seconds)),
+        })
+        spent += seconds * per_sec
+        st = state.load(ep)
+        st["fal_spent_usd"] = round(spent, 3)
+        state.save(ep, st)
+        # 소리만 꺼내 장면 길이에 맞추고, 평균 음량을 장면마다 같게 맞춘다(모델이 장면마다 크기를 다르게 낸다).
+        fade = max(0, seconds - 0.08)
+        _run_ffmpeg(["-i", f"{work}.out.mp4", "-vn", "-af",
+                     f"aresample=44100,aformat=channel_layouts=stereo,apad,atrim=0:{seconds:g},"
+                     f"afade=t=in:d=0.08,afade=t=out:st={fade:g}:d=0.08", f"{work}.wav"], "생활음 자르기")
+        gain = float(entry.get("db", cfg.get("target_db", -28))) - _mean_db(Path(f"{work}.wav"))
+        _run_ffmpeg(["-i", f"{work}.wav", "-af", f"volume={max(-12.0, min(12.0, gain)):.1f}dB", str(dst)], "생활음 음량 맞춤")
+        for suffix in (".mp4", ".out.mp4", ".wav"):
+            Path(f"{work}{suffix}").unlink(missing_ok=True)
+    return spent
+
+
 def _dialogue_payload(plan, windows: list[tuple[float, float]] | None = None) -> list[dict]:
     items = [
         {"at": d.at, "character": d.character, "text": d.text, "direction": getattr(d, "direction", ""),
@@ -257,10 +348,15 @@ def _build_audio(ep: Episode, plan, synthesized: list[tuple[Path, float, float]]
     # kitchen set (whisk, pan sizzle, egg crack, plate) only when the plan's
     # 환경음 is a kitchen — an office skit must not sizzle.
     kitchen = "주방" in getattr(plan, "sound", {}).get("환경음", "")
-    args += [
-        "-f", "lavfi", "-t", f"{total:g}", "-i",
-        "anoisesrc=color=pink:amplitude=0.018:r=44100",
-    ]
+    # 장면별 생활음이 있으면 합성 룸톤 대신 그것을 깐다.
+    beds = [(p, shot[0].start) for shot in _shots(plan) if (p := _ambience_file(ep, shot)).exists()]
+    for path, _ in beds:
+        args += ["-i", str(path)]
+    if not beds:
+        args += [
+            "-f", "lavfi", "-t", f"{total:g}", "-i",
+            "anoisesrc=color=pink:amplitude=0.018:r=44100",
+        ]
     if kitchen:
         args += [
             "-f", "lavfi", "-t", "11", "-i",
@@ -283,16 +379,25 @@ def _build_audio(ep: Episode, plan, synthesized: list[tuple[Path, float, float]]
         mix_labels.append(f"[{label}]")
 
     base = len(dialogue_paths)
-    filters.append(f"[{base}:a]lowpass=f=1100,volume=0.22,aformat=channel_layouts=stereo[room]")
-    mix_labels.append("[room]")
+    if beds:
+        bed_volume = float(_ambience_config().get("mix_volume", 0.5))
+        for k, (_, at) in enumerate(beds):
+            filters.append(f"[{base + k}:a]aformat=sample_rates=44100:channel_layouts=stereo,"
+                           f"volume={bed_volume:g},adelay={round(at * 1000)}:all=1[bed{k}]")
+            mix_labels.append(f"[bed{k}]")
+        nxt = base + len(beds)
+    else:
+        filters.append(f"[{base}:a]lowpass=f=1100,volume=0.22,aformat=channel_layouts=stereo[room]")
+        mix_labels.append("[room]")
+        nxt = base + 1
     if kitchen:
         filters += [
-            f"[{base + 1}:a]highpass=f=1700,lowpass=f=7600,volume=0.50,"
+            f"[{nxt}:a]highpass=f=1700,lowpass=f=7600,volume=0.50,"
             "afade=t=in:d=0.35,afade=t=out:st=10.4:d=0.6,adelay=12000:all=1[sizzle]",
-            f"[{base + 2}:a]highpass=f=2400,lowpass=f=9000,volume=0.34,"
+            f"[{nxt + 1}:a]highpass=f=2400,lowpass=f=9000,volume=0.34,"
             "afade=t=in:d=0.15,afade=t=out:st=4.0:d=0.5,adelay=6800:all=1[whisk]",
-            f"[{base + 3}:a]volume=0.10,adelay=2050:all=1[crack]",
-            f"[{base + 4}:a]volume=0.075,adelay=24000:all=1[plate]",
+            f"[{nxt + 2}:a]volume=0.10,adelay=2050:all=1[crack]",
+            f"[{nxt + 3}:a]volume=0.075,adelay=24000:all=1[plate]",
         ]
         mix_labels += ["[sizzle]", "[whisk]", "[crack]", "[plate]"]
     filters.append(
@@ -414,6 +519,7 @@ def run(ep: Episode) -> None:
         lines.append({"n": cut.n, "text": "", "start": cut.start, "end": cut.end, "words": [], "clip": f"클립/{cut.n:02d}.mp4", "mediaLayout": "portrait"})
 
     total = plan.total_seconds
+    spent = _make_ambience(ep, plan, spent, cap)
     narration = _build_audio(ep, plan, synthesized) if synthesized else ""
     payload = {
         "fps": 30, "width": 1080, "height": 1920, "durationSec": total,
