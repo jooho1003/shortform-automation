@@ -1,0 +1,9 @@
+{
+  "status": "awaiting_user_review",
+  "approved": false,
+  "part": 4,
+  "totalParts": 4,
+  "requested_at": "2026-10-15T06:06:28.771Z",
+  "local_url": "http://localhost:3123/instatoon/20261015-hansul-m4",
+  "notes": "사용자 요청으로 4부 결말을 제작하고 로컬 검토본을 준비함. 사용자 승인 대기. 게시 미실행."
+}

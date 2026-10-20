@@ -1,0 +1,46 @@
+{
+  "selected_path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\outputs\\park-A-light-uncle-20261008.wav",
+  "selected_hash": "0987e35622eee44862c0e10af27ee566caecbaef9a817030297fff0b494dc380",
+  "duration": 2.531708333,
+  "generation": {
+    "model": "Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign",
+    "seed": 81009101,
+    "temperature": 0.72,
+    "job": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\park-A-light-uncle-20261008\\job-a.json",
+    "request": {
+      "text": "사구 씨, 자기소개 해 보실래요?",
+      "config": {
+        "provider": "qwen3-local",
+        "mode": "voice_design",
+        "schemaVersion": 1,
+        "modelId": "Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign",
+        "language": "Korean",
+        "pronunciations": {},
+        "postprocess": {
+          "speed": 1.0,
+          "sentenceGapMs": 0
+        },
+        "generation": {
+          "seed": 81009101,
+          "temperature": 0.72
+        },
+        "instruct": "A native Korean man aged 43, a small-company owner speaking directly to a new colleague. A comfortable middle-to-low male register, with lighter chest resonance and a softly rounded everyday tone. An ordinary approachable uncle: relaxed and unpretentious, with a tiny natural nasal color and a small lived-in rough grain. He keeps his mature male body but speaks with less vocal weight and less authority. His speech is clear and connected, with firm consonants and concise vowels, at a normal brisk conversational pace. Say 사구 씨 distinctly, then invite the introduction with a small friendly questioning lift. Brief pause only, no stretched vowels, no trailing sentence ending. Ordinary human dialogue, not a performance. Keep the sound easy and familiar: no booming baritone, no seductive leading-man polish, no exaggerated nasal caricature, no old-man tremor. Speak only the supplied Korean words."
+      },
+      "take": "reuse"
+    }
+  },
+  "processing": {
+    "native_source_hash": "7756ffc4804958c4e7aa4c8eb7369a09f3c8c5a8f94b671b819027eb0c0e206e",
+    "trim_samples": [
+      0,
+      60761
+    ],
+    "gain": 1.1240985354388653,
+    "sample_rate": 24000,
+    "pitch_shift": 0,
+    "time_stretch": 1
+  },
+  "reference_registration": "not_performed",
+  "approval_status": "user_approved",
+  "approval_quote": "좋아 이걸로가자 대표목소리로설계"
+}

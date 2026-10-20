@@ -1,0 +1,220 @@
+{
+  "items": [
+    {
+      "id": "cut01-02",
+      "character": "사구",
+      "text": "와, 진짜 왔네. 오늘부터 난 대학생이 아니라 직장인이야.",
+      "path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-park-approved-20261008\\rendered\\cuts\\cut01-02-approved-20261008.wav",
+      "sha256": "ac5f9769cb896b556139fa080b1f817dff7af6d4b49000ced0f0652da3d5bf93",
+      "source_path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-tasting-register-20261008\\rendered\\sagu-A01-register-cut01-02-20261008.wav",
+      "source_sha256": "ac5f9769cb896b556139fa080b1f817dff7af6d4b49000ced0f0652da3d5bf93",
+      "sample_rate": 44100,
+      "duration": 4.60265306122449,
+      "start_sample": 6615,
+      "end_sample": 209592,
+      "start": 0.15,
+      "end": 4.75265306122449,
+      "processing": {
+        "kind": "exact_reuse",
+        "byte_preserved": true
+      },
+      "montage_pcm_verified": true
+    },
+    {
+      "id": "cut03",
+      "character": "사구",
+      "text": "보시다시피, 시식 반응이 압도적입니다.",
+      "path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-park-approved-20261008\\rendered\\cuts\\cut03-approved-20261008.wav",
+      "sha256": "b7c289a1eab1d49520e98564847a50430c43ec6e80caf34eec1e8d0853ea3c68",
+      "source_path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-tasting-register-20261008\\rendered\\sagu-A01-register-cut03-20261008.wav",
+      "source_sha256": "b7c289a1eab1d49520e98564847a50430c43ec6e80caf34eec1e8d0853ea3c68",
+      "sample_rate": 44100,
+      "duration": 2.8221768707482995,
+      "start_sample": 223704,
+      "end_sample": 348162,
+      "start": 5.07265306122449,
+      "end": 7.894829931972789,
+      "processing": {
+        "kind": "exact_reuse",
+        "byte_preserved": true
+      },
+      "montage_pcm_verified": true
+    },
+    {
+      "id": "cut04",
+      "character": "사구",
+      "text": "이 소스, 출시 가시죠.",
+      "path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-park-approved-20261008\\rendered\\cuts\\cut04-approved-20261008.wav",
+      "sha256": "aa552ad7dffd269ea43c9984cd0519e76d59f4c5bfc7d37ec9f72de3cbdc774c",
+      "source_path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-tasting-register-20261008\\rendered\\sagu-A01-register-cut04-20261008.wav",
+      "source_sha256": "aa552ad7dffd269ea43c9984cd0519e76d59f4c5bfc7d37ec9f72de3cbdc774c",
+      "sample_rate": 44100,
+      "duration": 1.9395691609977324,
+      "start_sample": 362274,
+      "end_sample": 447809,
+      "start": 8.214829931972789,
+      "end": 10.154399092970522,
+      "processing": {
+        "kind": "exact_reuse",
+        "byte_preserved": true
+      },
+      "montage_pcm_verified": true
+    },
+    {
+      "id": "cut05",
+      "character": "사구",
+      "text": "[시식 소리] 단맛이 과하네요. 다음 거요.",
+      "path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-park-approved-20261008\\rendered\\cuts\\cut05-approved-20261008.wav",
+      "sha256": "0027d0499ce9bc6ff1f33c171b52df0b20f11a4a7d33aa240bd793ba482c011d",
+      "source_path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-tasting-register-20261008\\rendered\\sagu-A01-register-cut05-20261008.wav",
+      "source_sha256": "0027d0499ce9bc6ff1f33c171b52df0b20f11a4a7d33aa240bd793ba482c011d",
+      "sample_rate": 44100,
+      "duration": 3.4474149659863946,
+      "start_sample": 461921,
+      "end_sample": 613952,
+      "start": 10.474399092970522,
+      "end": 13.921814058956915,
+      "processing": {
+        "kind": "exact_reuse",
+        "byte_preserved": true
+      },
+      "montage_pcm_verified": true
+    },
+    {
+      "id": "cut06",
+      "character": "사구",
+      "text": "크, 이러다 여기저기서 스카우트 제안 오는 거 아니야?",
+      "path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-park-approved-20261008\\rendered\\cuts\\cut06-approved-20261008.wav",
+      "sha256": "40e570d5edc7e2c81f7606cfe32604c13ad62850a40b509c7b4080ae37b3a324",
+      "source_path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-tasting-register-20261008\\rendered\\sagu-A01-register-cut06-20261008.wav",
+      "source_sha256": "40e570d5edc7e2c81f7606cfe32604c13ad62850a40b509c7b4080ae37b3a324",
+      "sample_rate": 44100,
+      "duration": 3.983877551020408,
+      "start_sample": 628064,
+      "end_sample": 803753,
+      "start": 14.241814058956916,
+      "end": 18.225691609977325,
+      "processing": {
+        "kind": "exact_reuse",
+        "byte_preserved": true
+      },
+      "montage_pcm_verified": true
+    },
+    {
+      "id": "cut07",
+      "character": "사구",
+      "text": "안녕하세요, 인턴 사구입니다.",
+      "path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-park-approved-20261008\\rendered\\cuts\\cut07-approved-20261008.wav",
+      "sha256": "8499c7a5c4e346c7db7007a455f36fef6cceb3c5cbea4de1c8fc6a59620b5c6f",
+      "source_path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-tasting-register-20261008\\rendered\\sagu-A01-register-cut07-20261008.wav",
+      "source_sha256": "8499c7a5c4e346c7db7007a455f36fef6cceb3c5cbea4de1c8fc6a59620b5c6f",
+      "sample_rate": 44100,
+      "duration": 2.1412244897959183,
+      "start_sample": 817865,
+      "end_sample": 912293,
+      "start": 18.545691609977325,
+      "end": 20.686916099773242,
+      "processing": {
+        "kind": "exact_reuse",
+        "byte_preserved": true
+      },
+      "montage_pcm_verified": true
+    },
+    {
+      "id": "cut08",
+      "character": "박대표",
+      "text": "사구 씨, 자기소개 해 보실래요?",
+      "path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-park-approved-20261008\\rendered\\cuts\\park-cut08-approved-20261008.wav",
+      "sha256": "e57d8333809fd4cd90410e691246fb998c81234f15d01ea12d4edf19876b247b",
+      "source_path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\outputs\\park-A-light-uncle-20261008.wav",
+      "source_sha256": "0987e35622eee44862c0e10af27ee566caecbaef9a817030297fff0b494dc380",
+      "sample_rate": 44100,
+      "duration": 2.53172335600907,
+      "start_sample": 926405,
+      "end_sample": 1038054,
+      "start": 21.006916099773242,
+      "end": 23.538639455782313,
+      "processing": {
+        "kind": "resample_only",
+        "source_sample_rate": 24000,
+        "target_sample_rate": 44100,
+        "up": 147,
+        "down": 80,
+        "tempo": 1,
+        "pitch_shift_semitones": 0
+      },
+      "montage_pcm_verified": true
+    },
+    {
+      "id": "cut09-10",
+      "character": "사구",
+      "text": "넵. 사 개월 동안 인턴을 진행하게 된 사구입니다. 잘 부탁드리겠습니다.",
+      "path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-park-approved-20261008\\rendered\\cuts\\cut09-10-approved-20261008.wav",
+      "sha256": "cbbee4970a5ad8cf7516afccd9677a628dedcd88b8b9015f9ee99e89faa5f1cb",
+      "source_path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-tasting-register-20261008\\rendered\\sagu-A01-register-cut09-10-20261008.wav",
+      "source_sha256": "cbbee4970a5ad8cf7516afccd9677a628dedcd88b8b9015f9ee99e89faa5f1cb",
+      "sample_rate": 44100,
+      "duration": 5.8461678004535145,
+      "start_sample": 1052166,
+      "end_sample": 1309982,
+      "start": 23.858639455782313,
+      "end": 29.704807256235828,
+      "processing": {
+        "kind": "exact_reuse",
+        "byte_preserved": true
+      },
+      "montage_pcm_verified": true
+    },
+    {
+      "id": "cut11",
+      "character": "사구",
+      "text": "이제 나의 첫 사회생활이 시작됐다.",
+      "path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-park-approved-20261008\\rendered\\cuts\\cut11-approved-20261008.wav",
+      "sha256": "705d40b3cdc672aaedd9d891be92b5bde4c808c8f90545494dde4f9cbe12b0d2",
+      "source_path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-tasting-register-20261008\\rendered\\sagu-A01-register-cut11-20261008.wav",
+      "source_sha256": "705d40b3cdc672aaedd9d891be92b5bde4c808c8f90545494dde4f9cbe12b0d2",
+      "sample_rate": 44100,
+      "duration": 2.730453514739229,
+      "start_sample": 1324094,
+      "end_sample": 1444507,
+      "start": 30.024807256235828,
+      "end": 32.755260770975056,
+      "processing": {
+        "kind": "exact_reuse",
+        "byte_preserved": true
+      },
+      "montage_pcm_verified": true
+    }
+  ],
+  "full": {
+    "path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-park-approved-20261008\\rendered\\sagu-A01-approved-full-20261008.wav",
+    "sha256": "066c4fe6e54312fb1ba189da2cda0c324a5c44903c076aec394955117bad6fd5",
+    "duration": 32.905260770975055,
+    "sample_rate": 44100,
+    "lead": 0.15,
+    "gap": 0.32,
+    "tail": 0.15
+  },
+  "park_master": {
+    "path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-park-approved-20261008\\rendered\\park-ceo-approved-master-20261008.wav",
+    "sha256": "0987e35622eee44862c0e10af27ee566caecbaef9a817030297fff0b494dc380",
+    "sample_rate": 24000,
+    "duration": 2.5317083333333334
+  },
+  "source_hash_snapshot": {
+    "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\outputs\\park-A-light-uncle-20261008.wav": "0987e35622eee44862c0e10af27ee566caecbaef9a817030297fff0b494dc380",
+    "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\outputs\\sagu-A01-register-full-20261008.wav": "769580bff5bb71a32becde8d4a2f5316aac81708c3757f7062c0758d991662b7",
+    "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-tasting-register-20261008\\rendered\\sagu-A01-register-cut01-02-20261008.wav": "ac5f9769cb896b556139fa080b1f817dff7af6d4b49000ced0f0652da3d5bf93",
+    "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-tasting-register-20261008\\rendered\\sagu-A01-register-cut03-20261008.wav": "b7c289a1eab1d49520e98564847a50430c43ec6e80caf34eec1e8d0853ea3c68",
+    "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-tasting-register-20261008\\rendered\\sagu-A01-register-cut04-20261008.wav": "aa552ad7dffd269ea43c9984cd0519e76d59f4c5bfc7d37ec9f72de3cbdc774c",
+    "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-tasting-register-20261008\\rendered\\sagu-A01-register-cut05-20261008.wav": "0027d0499ce9bc6ff1f33c171b52df0b20f11a4a7d33aa240bd793ba482c011d",
+    "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-tasting-register-20261008\\rendered\\sagu-A01-register-cut06-20261008.wav": "40e570d5edc7e2c81f7606cfe32604c13ad62850a40b509c7b4080ae37b3a324",
+    "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-tasting-register-20261008\\rendered\\sagu-A01-register-cut07-20261008.wav": "8499c7a5c4e346c7db7007a455f36fef6cceb3c5cbea4de1c8fc6a59620b5c6f",
+    "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-tasting-register-20261008\\rendered\\sagu-A01-register-cut09-10-20261008.wav": "cbbee4970a5ad8cf7516afccd9677a628dedcd88b8b9015f9ee99e89faa5f1cb",
+    "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-tasting-register-20261008\\rendered\\sagu-A01-register-cut11-20261008.wav": "705d40b3cdc672aaedd9d891be92b5bde4c808c8f90545494dde4f9cbe12b0d2"
+  },
+  "approved_sagu_8_byte_preserved": true,
+  "sources_unchanged": true,
+  "clipped_samples": 0,
+  "finite": true
+}

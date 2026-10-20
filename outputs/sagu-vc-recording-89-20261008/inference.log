@@ -1,0 +1,29 @@
+DEVICE cuda
+Warning: Skipped loading some keys due to shape mismatch: {'estimator.input_pos', 'estimator.f0_embedder.weight'}
+cfm loaded
+length_regulator loaded
+Loading weights from nvidia/bigvgan_v2_22khz_80band_256x
+Xet Storage is enabled for this repo, but the 'hf_xet' package is not installed. Falling back to regular HTTP download. For better performance, install the package with: `pip install huggingface_hub[hf_xet]` or `pip install hf_xet`
+Removing weight norm...
+`torch_dtype` is deprecated! Use `dtype` instead!
+Xet Storage is enabled for this repo, but the 'hf_xet' package is not installed. Falling back to regular HTTP download. For better performance, install the package with: `pip install huggingface_hub[hf_xet]` or `pip install hf_xet`
+It is strongly recommended to pass the `sampling_rate` argument to `WhisperFeatureExtractor()`. Failing to do so can result in silent errors that might be hard to debug.
+It is strongly recommended to pass the `sampling_rate` argument to `WhisperFeatureExtractor()`. Failing to do so can result in silent errors that might be hard to debug.
+
+  0%|          | 0/30 [00:00<?, ?it/s]
+  3%|▎         | 1/30 [00:01<00:51,  1.77s/it]
+ 13%|█▎        | 4/30 [00:01<00:09,  2.61it/s]
+ 20%|██        | 6/30 [00:02<00:05,  4.05it/s]
+ 27%|██▋       | 8/30 [00:02<00:04,  5.37it/s]
+ 37%|███▋      | 11/30 [00:02<00:02,  7.86it/s]
+ 43%|████▎     | 13/30 [00:02<00:02,  8.17it/s]
+ 50%|█████     | 15/30 [00:02<00:01,  9.72it/s]
+ 57%|█████▋    | 17/30 [00:02<00:01, 10.17it/s]
+ 63%|██████▎   | 19/30 [00:03<00:01, 10.83it/s]
+ 70%|███████   | 21/30 [00:03<00:00, 12.06it/s]
+ 77%|███████▋  | 23/30 [00:03<00:00, 13.31it/s]
+ 83%|████████▎ | 25/30 [00:03<00:00, 13.94it/s]
+ 90%|█████████ | 27/30 [00:03<00:00, 14.26it/s]
+ 97%|█████████▋| 29/30 [00:03<00:00, 14.78it/s]
+100%|██████████| 30/30 [00:03<00:00,  7.91it/s]
+RTF: 0.632667031739122
