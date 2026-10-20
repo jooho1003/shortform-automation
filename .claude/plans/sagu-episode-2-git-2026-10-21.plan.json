@@ -1,0 +1,45 @@
+{
+  "task": "sagu-episode-2-git",
+  "date": "2026-10-21",
+  "authorization": "사용자 요청: 사구 2화 관련된거 git에 커밋 병합 해줘",
+  "source_branch": "feat/sagu-episode-2",
+  "target_branch": "master",
+  "episode": "2026-09-30/A-04-사구-첫날-회사소개서/01-기획안.md",
+  "episode_basis": "기획안에 제작 번호 A-04, 방영은 1화 바로 다음을 권장한다고 명시되어 있다.",
+  "scope": [
+    "2026-09-30/A-04-사구-첫날-회사소개서/01-기획안.md",
+    ".claude/plans/sagu-episode-2-git-2026-10-21.plan.json",
+    ".claude/plans/sagu-episode-2-git-2026-10-21.md"
+  ],
+  "preserve": "기존 1화 음성 수정, 실험 산출물, 한술툰 및 기타 미커밋 작업",
+  "nodes": [
+    {
+      "id": "commit-and-merge",
+      "title": "2화 범위 확인, 파서 검증, 선택 커밋 및 master 병합",
+      "domain": "general",
+      "D1": 1,
+      "D2": 1,
+      "D3": 0,
+      "D4": 2,
+      "score": 4,
+      "tier": "powerful",
+      "agent": "main",
+      "claude_model": "opus",
+      "codex_model": "gpt-5.6-sol",
+      "model_note": "로컬 배정 기준이다. 기존 메인 세션에서 직접 실행하며 런타임 모델 전환을 주장하지 않는다.",
+      "hard_override": "모호한 회차 범위 해석과 최종 리뷰·머지 판단은 메인이 직접 수행한다.",
+      "depends_on": [],
+      "outputs": ["2화 기획안 커밋", "master 병합 커밋", "기획안 파싱 및 병합 범위 검증"],
+      "requires_approval": false,
+      "remote_push": false
+    }
+  ],
+  "gates": {
+    "G1": "PASS",
+    "G2": "PASS",
+    "G3": "PASS",
+    "G4": "PASS: 단일 powerful 노드는 회차 범위 해석 및 최종 리뷰·머지 판단의 메인 직접 수행 예외다.",
+    "G5": "PASS: 사용자 요청 범위의 로컬 커밋·병합이며 원격 쓰기는 포함하지 않는다."
+  },
+  "result": "PASS"
+}
