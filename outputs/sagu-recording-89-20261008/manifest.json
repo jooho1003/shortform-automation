@@ -1,0 +1,91 @@
+{
+  "source": "C:\\Users\\이주호\\OneDrive\\문서\\소리 녹음\\녹음 (89).m4a",
+  "source_sha256": "34407eabd6650950b39b0bf605b3a4a75bf5f75526be580329a3a448c3ae32d1",
+  "original_seconds": 21.738645833333333,
+  "trim_bounds": [
+    0.2,
+    21.15
+  ],
+  "removed_gap_centers": [
+    [
+      4.956729,
+      6.000687999999999
+    ],
+    [
+      9.474375,
+      10.259708
+    ],
+    [
+      13.370542,
+      13.862333
+    ],
+    [
+      17.158936999999998,
+      18.167479
+    ]
+  ],
+  "edited_seconds_before_speed": 17.620375,
+  "qa_scope": "Signal/decode checks only; no listening judgement claimed.",
+  "variants": [
+    {
+      "name": "A-natural",
+      "pitch_semitones": 3,
+      "speed": 1.12,
+      "filter": "highpass=f=85,afftdn=nr=5:nf=-45:tn=1,asetrate=57082,aresample=48000,rubberband=tempo=0.9418030202:pitch=1:transients=mixed:detector=soft:pitchq=quality,equalizer=f=3200:t=q:w=0.8:g=-1.5,acompressor=threshold=0.12:ratio=2:attack=10:release=100:makeup=1,loudnorm=I=-17:TP=-2:LRA=9",
+      "qa": {
+        ".wav": {
+          "duration_seconds": 15.732479166666666,
+          "peak_dbfs": -1.9999089930845473,
+          "clipped_samples": 0,
+          "finite": true
+        },
+        ".mp3": {
+          "duration_seconds": 15.732479166666666,
+          "peak_dbfs": -2.2485122641781086,
+          "clipped_samples": 0,
+          "finite": true
+        }
+      }
+    },
+    {
+      "name": "B-sagu",
+      "pitch_semitones": 5,
+      "speed": 1.16,
+      "filter": "highpass=f=85,afftdn=nr=5:nf=-45:tn=1,asetrate=64072,aresample=48000,rubberband=tempo=0.8690223499:pitch=1:transients=mixed:detector=soft:pitchq=quality,equalizer=f=3200:t=q:w=0.8:g=-1.5,acompressor=threshold=0.12:ratio=2:attack=10:release=100:makeup=1,loudnorm=I=-17:TP=-2:LRA=9",
+      "qa": {
+        ".wav": {
+          "duration_seconds": 15.189979166666667,
+          "peak_dbfs": -2.0145625561818656,
+          "clipped_samples": 0,
+          "finite": true
+        },
+        ".mp3": {
+          "duration_seconds": 15.189979166666667,
+          "peak_dbfs": -2.2760264738725122,
+          "clipped_samples": 0,
+          "finite": true
+        }
+      }
+    },
+    {
+      "name": "C-cartoon",
+      "pitch_semitones": 7,
+      "speed": 1.2,
+      "filter": "highpass=f=85,afftdn=nr=5:nf=-45:tn=1,asetrate=71919,aresample=48000,rubberband=tempo=0.8009010136:pitch=1:transients=mixed:detector=soft:pitchq=quality,equalizer=f=3200:t=q:w=0.8:g=-1.5,acompressor=threshold=0.12:ratio=2:attack=10:release=100:makeup=1,loudnorm=I=-17:TP=-2:LRA=9",
+      "qa": {
+        ".wav": {
+          "duration_seconds": 14.683666666666667,
+          "peak_dbfs": -1.9997994975507813,
+          "clipped_samples": 0,
+          "finite": true
+        },
+        ".mp3": {
+          "duration_seconds": 14.683666666666667,
+          "peak_dbfs": -2.257516881753265,
+          "clipped_samples": 0,
+          "finite": true
+        }
+      }
+    }
+  ]
+}

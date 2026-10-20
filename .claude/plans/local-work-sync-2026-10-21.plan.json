@@ -1,0 +1,59 @@
+{
+  "task": "local-work-sync",
+  "date": "2026-10-21",
+  "authorization": "미커밋 작업과 원격 미푸시 상태를 안내한 뒤 사용자 요청: 다 반영해줘.",
+  "source_branch": "feat/local-work-sync-20261021",
+  "target_branch": "master",
+  "remote": "origin",
+  "scope": "남아 있는 추적 파일 수정과 Git 제외 규칙에 해당하지 않는 모든 신규 작업 파일. 사구 음성 설계·TTS 설정·샘플·재현 기록, 한술툰 4부 제작 기록, 세션 메모, 실행 계획을 포함한다.",
+  "exclusions": ["기존 .gitignore의 비밀 파일·캐시·생성 미디어", "*.stackdump: 로컬 보존"],
+  "nodes": [
+    {
+      "id": "review-commit-merge",
+      "title": "남은 로컬 작업 검토·검증·커밋 및 master 병합",
+      "domain": "general",
+      "D1": 0,
+      "D2": 2,
+      "D3": 0,
+      "D4": 2,
+      "score": 4,
+      "tier": "powerful",
+      "agent": "main",
+      "claude_model": "opus",
+      "codex_model": "gpt-5.6-sol",
+      "hard_override": "최종 리뷰 및 머지 판단은 메인이 직접 수행한다.",
+      "depends_on": [],
+      "outputs": ["모든 작업의 선택 스냅샷", "형식 및 데이터 검증", "작업 커밋", "master 병합 커밋"],
+      "requires_approval": false
+    },
+    {
+      "id": "push-and-verify",
+      "title": "원격 변경 확인 후 master 푸시·동기화 검증",
+      "domain": "general",
+      "D1": 0,
+      "D2": 1,
+      "D3": 2,
+      "D4": 1,
+      "score": 4,
+      "tier": "balanced",
+      "agent": "main",
+      "claude_model": "sonnet",
+      "codex_model": "gpt-5.6-terra",
+      "depends_on": ["review-commit-merge"],
+      "outputs": ["origin/master 동기화", "깨끗한 작업 트리 및 원본 파일 보존 검증"],
+      "requires_approval": true,
+      "approval_status": "authorized",
+      "approval_evidence": "원격 미푸시 상태도 안내받은 사용자가 다 반영해줘라고 요청했다.",
+      "force_push": false
+    }
+  ],
+  "model_note": "모델명은 로컬 배정 기준이다. 현재 메인 세션에서 순차 수행하며 모델을 전환했다고 주장하지 않는다.",
+  "gates": {
+    "G1": "PASS",
+    "G2": "PASS",
+    "G3": "PASS",
+    "G4": "PASS: powerful 노드는 최종 리뷰·머지 판단의 메인 직접 수행 예외다.",
+    "G5": "PASS: 사용자의 전체 반영 요청에 따라 일반 푸시까지 승인되어 있으며 강제 푸시는 하지 않는다."
+  },
+  "result": "PASS"
+}

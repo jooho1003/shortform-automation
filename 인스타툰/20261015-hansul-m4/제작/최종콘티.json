@@ -1,0 +1,69 @@
+{
+  "part": 4,
+  "totalParts": 4,
+  "title": "밥이 따뜻할 때 먹었다",
+  "status": "awaiting_user_review",
+  "source": "인스타툰/20261005-hansul-marriage/프로젝트.json",
+  "cards": [
+    {
+      "page": 1,
+      "scene": "표지. 보리가 아이 손을 잡고 여행가방을 옆에 둔 채 친정 현관 안으로 들어온다. 뒤쪽 할머니가 따뜻하게 맞이한다. 보리는 지쳤지만 안도하는 표정, 아이는 엄마를 올려다본다. 따뜻한 식탁이 안쪽에 작게 보인다. 제목을 상단에 크게, 4/4는 작게.",
+      "dialogue": "밥이 따뜻할 때\n먹었다\n4/4\n한술툰 · 창작 사연",
+      "instructions": "COVER. Exact main title split two lines '밥이 따뜻할 때' / '먹었다'. Small '4/4' badge. Tiny branding '한술툰 · 창작 사연'. NO dialogue balloons. Bori and child in lower two thirds. Promise a quiet hopeful conclusion, not a triumphant revenge scene."
+    },
+    {
+      "page": 2,
+      "scene": "3부 마지막의 같은 밤. 아이를 재운 뒤 보리와 담이가 게임 책상 옆에서 마주 보고 있다. 담이는 의자에서 일어나 화난 얼굴로 말한다. 보리는 조용히 바라보며 결심을 바꾸지 않는다. 아이는 등장하지 않는다.",
+      "dialogue": "담이: 우리 부모님이 해준 집이야.\n담이: 이혼하면 한 푼도 못 줘.",
+      "instructions": "At the gaming desk at night, Dami upset talking toward silent firm Bori. Only TWO Dami speech bubbles, in order: '우리 부모님이 해준 집이야.' then '이혼하면 한 푼도 못 줘.' Both tails to Dami. This is his angry claim, not narrator advice."
+    },
+    {
+      "page": 3,
+      "scene": "다음 날 아침. 보리가 아이의 노란 옷과 자기 옷을 가방에 넣는다. 아이는 작은 장난감을 들고 옆에 있다. 보리는 단호하지만 아이에게는 부드러운 눈빛. 담이 없이 짐을 챙기는 한 장면.",
+      "dialogue": "내레이션: 다음 날 아침,\n내레이션: 아이 짐과 내 짐을 챙겼다.",
+      "instructions": "One quiet bedroom packing scene in daylight. Bori kneeling beside open suitcase with folded child's yellow clothes, child holding small toy. Narration at top EXACT two lines: '다음 날 아침,' / '아이 짐과 내 짐을 챙겼다.' No spoken dialogue. Keep Bori recognizable with mustard scarf."
+    },
+    {
+      "page": 4,
+      "scene": "친정집 현관. 짐가방을 든 보리와 작은 아이를 엄마와 아빠가 맞는다. 엄마는 보리에게 손을 내민다. 아빠는 옆에서 문을 잡아 준다. 동물 네 명만.",
+      "dialogue": "내레이션: 친정으로 갔다.\n엄마: 잘 왔어. 들어와.",
+      "instructions": "Doorway of maternal parents' home, Bori with suitcase and small yellow-shirt child, grandmother chinchilla lavender scarf reaching toward her, grandfather raccoon brown cardigan holding door. EXACT narration '친정으로 갔다.' uppermost. Then grandma speech '잘 왔어. 들어와.' with tail to grandma. Four characters total, no Dami."
+    },
+    {
+      "page": 5,
+      "scene": "시간이 흐른 후. 보리가 동물 상담자와 책상에서 서류를 보며 차분하게 상담한다. 서류는 글자 없는 회색 줄과 빈 칸만. 아이와 담이는 등장하지 않는다. 어렵고 법적인 설명 없이 과정을 보여 준다.",
+      "dialogue": "내레이션: 따로 살기 시작한 뒤,\n내레이션: 상담과 조정을 거쳤다.",
+      "instructions": "Bori seated at simple consultation desk with neutral adult hedgehog adviser, no human features. Papers contain ONLY abstract gray lines, no readable writing or document headings. EXACT upper narration '따로 살기 시작한 뒤,' / '상담과 조정을 거쳤다.' No speech bubbles. Calm focused adult expression."
+    },
+    {
+      "page": 6,
+      "scene": "보리 앞에 집과 가구에 관한 자료가 펼쳐져 있다. 보리가 펜으로 내역을 확인한다. 서류에는 글자 없는 회색 줄만. 잔잔하게 현실을 정리하는 장면.",
+      "dialogue": "내레이션: 전세보증금과 혼수 내역을 확인하고,\n내레이션: 재산 문제를 정리했다.",
+      "instructions": "Medium shot Bori reviewing several documents and receipts on simple cream desk, pen in paw. Slightly tired but resolute. Papers ONLY abstract gray horizontal lines, NO words, numbers, headings or legal clauses. Narration EXACT '전세보증금과 혼수 내역을 확인하고,' / '재산 문제를 정리했다.' Large lettering fit as three or four short visual lines if needed. No legal claim or amounts."
+    },
+    {
+      "page": 7,
+      "scene": "친정집 거실. 보리가 아이 옆에 앉아 나무 블록을 쌓으며 이야기를 들어준다. 밝은 낮. 아이를 둘러싼 생활을 안정되게 정했다는 내레이션. 서류나 담이는 없다.",
+      "dialogue": "내레이션: 아이는 내가 키우기로 했다.\n내레이션: 양육비와 아빠를 만나는 일정도 정했다.",
+      "instructions": "Bori sitting on rug helping small raccoon child yellow shirt stack wooden blocks, calm maternal smile, child content. EXACT narration above '아이는 내가 키우기로 했다.' then '양육비와 아빠를 만나는 일정도 정했다.' Keep text large, wrap second into two visual lines if useful. No calendar numbers, paperwork or Dami."
+    },
+    {
+      "page": 8,
+      "scene": "몇 달 뒤. 보리가 봉투를 서랍에 넣고 조용히 닫는다. 아이는 옆에서 장난감을 가지고 논다. 서류와 봉투에 글자는 없다. 보리가 긴 숨을 내쉬는 해방감, 과장된 기쁨은 없다.",
+      "dialogue": "시간: 몇 달 뒤\n내레이션: 이혼이 마무리됐다.",
+      "instructions": "Quiet home living room medium view: Bori gently closes a drawer after putting a plain envelope inside, shoulders relaxed, softly exhaling; child yellow shirt plays nearby on floor. Top small time caption EXACT '몇 달 뒤'. Main narration EXACT '이혼이 마무리됐다.' No text on envelope. Gentle relief, no celebration, no courthouse."
+    },
+    {
+      "page": 9,
+      "scene": "친정의 저녁 식탁. 보리, 아이, 엄마, 아빠 네 명이 둘러앉아 따뜻한 집밥을 먹는다. 아이가 빈 밥그릇을 살짝 들어 할머니에게 묻고 할머니는 웃으며 주걱을 든다. 보리는 옆에서 작은 미소.",
+      "dialogue": "아이: 할머니, 나 더 먹어도 돼?\n엄마: 그럼. 먹을 거 넉넉해.",
+      "instructions": "Wide warm dinner table with EXACTLY four animals: Bori, preschool raccoon child in yellow, grandma bluegray chinchilla lavender scarf, grandpa raccoon brown cardigan. Child lifts small rice bowl asking GRANDMA. First upper bubble child '할머니, 나 더 먹어도 돼?' tail to child. Second lower bubble grandma '그럼. 먹을 거 넉넉해.' tail to grandma. Steaming rice and simple Korean sides. No cup noodles. Bori quiet small smile."
+    },
+    {
+      "page": 10,
+      "scene": "같은 저녁 식탁. 엄마가 보리의 밥그릇 옆에 반찬을 놓아 준다. 보리는 젓가락을 들고 편안하게 먹으며 작게 웃는다. 아이와 아빠도 함께 밥을 먹는다. 김 나는 밥이 중심. 마지막 내레이션과 -끝-.",
+      "dialogue": "엄마: 너도 먹어. 이제 눈치 보지 말고.\n내레이션: 그날은 아이도 나도,\n내레이션: 밥이 따뜻할 때 먹었다.\n끝표기: -끝-",
+      "instructions": "FINAL PAGE same four-character dinner, closer focus grandma placing a side dish near Bori bowl. Bori finally relaxed, slight moist eyes and gentle smile, about to eat warm rice. Child and grandpa quietly eating in background. Grandma speech at TOP EXACT '너도 먹어. 이제 눈치 보지 말고.' tail to lavender-scarf grandma. Concluding narration in separate space BELOW art '그날은 아이도 나도,' / '밥이 따뜻할 때 먹었다.' Center bottom end marker '-끝-'. Clear quiet emotional payoff, no CTA or next episode teaser."
+    }
+  ]
+}

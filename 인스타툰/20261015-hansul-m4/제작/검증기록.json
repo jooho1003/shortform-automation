@@ -1,0 +1,85 @@
+{
+  "verified_at": "2026-10-15T15:08:41.9627754+09:00",
+  "slide_count": 10,
+  "all_passed": true,
+  "images": [
+    {
+      "file": "01.jpg",
+      "width": 1080,
+      "height": 1350,
+      "bytes": 272079,
+      "passed": true
+    },
+    {
+      "file": "02.jpg",
+      "width": 1080,
+      "height": 1350,
+      "bytes": 257562,
+      "passed": true
+    },
+    {
+      "file": "03.jpg",
+      "width": 1080,
+      "height": 1350,
+      "bytes": 290771,
+      "passed": true
+    },
+    {
+      "file": "04.jpg",
+      "width": 1080,
+      "height": 1350,
+      "bytes": 273865,
+      "passed": true
+    },
+    {
+      "file": "05.jpg",
+      "width": 1080,
+      "height": 1350,
+      "bytes": 265278,
+      "passed": true
+    },
+    {
+      "file": "06.jpg",
+      "width": 1080,
+      "height": 1350,
+      "bytes": 249268,
+      "passed": true
+    },
+    {
+      "file": "07.jpg",
+      "width": 1080,
+      "height": 1350,
+      "bytes": 271556,
+      "passed": true
+    },
+    {
+      "file": "08.jpg",
+      "width": 1080,
+      "height": 1350,
+      "bytes": 241899,
+      "passed": true
+    },
+    {
+      "file": "09.jpg",
+      "width": 1080,
+      "height": 1350,
+      "bytes": 309901,
+      "passed": true
+    },
+    {
+      "file": "10.jpg",
+      "width": 1080,
+      "height": 1350,
+      "bytes": 307523,
+      "passed": true
+    }
+  ],
+  "browser": "Aside: 10 thumbnails and main preview loaded; last-slide selection verified",
+  "approval": "awaiting_user_review",
+  "notes": [
+    "원전 4부 결말의 사건 순서 유지",
+    "표지 4/4와 창작 사연, 마지막 -끝- 확인",
+    "대사 오탈자와 발화자 꼬리 육안 확인",
+    "보리·담이 기준 시트 사용, 아이·조부모는 완성 컷 참조로 일관성 확인. 별도 캐릭터 시트 부재 경고 3개 있음. 게시 차단 오류 없음."
+  ]
+}

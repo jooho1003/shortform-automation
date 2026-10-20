@@ -1,0 +1,7 @@
+{
+  "task": "사용자 녹음 89를 사구 비교용 음성으로 로컬 변환",
+  "scope": "일회성 미디어 편집. 제품 기능 변경 없음. 원본과 기본 음성 프리셋 유지.",
+  "nodes": [{"id":"audio-edit","title":"캐릭터 방향 해석, 비교본 렌더, 최종 파일 검증","domain":"general","D1":1,"D2":1,"D3":0,"D4":2,"score":4,"tier":"powerful","agent":"main","claude_model":"opus","codex_model":"gpt-5.6-sol","depends_on":[],"산출물":"outputs/sagu-recording-89-20261008의 WAV/MP3 및 manifest","override":"모호한 캐릭터 음색 판단 및 최종 리뷰는 메인 직접 수행","execution_note":"현재 메인 세션에서 실행; 모델 전환을 수행했다고 주장하지 않음"}],
+  "gates":{"G1":"PASS","G2":"PASS","G3":"PASS","G4":"PASS","G5":"PASS"},
+  "cost_exception":"단일 미디어 작업에 음색 해석과 최종 리뷰가 포함되어 powerful 비율 100%; 위임 금지 대상이므로 메인에서 직접 처리."
+}

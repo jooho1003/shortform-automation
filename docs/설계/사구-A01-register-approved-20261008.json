@@ -1,0 +1,64 @@
+{
+  "approved_file": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\outputs\\sagu-A01-register-full-20261008.wav",
+  "approved_sha256": "769580bff5bb71a32becde8d4a2f5316aac81708c3757f7062c0758d991662b7",
+  "duration": 33.076462585,
+  "scope": "Sagu 8 utterances; cut08 excluded pending replacement",
+  "items": [
+    {
+      "id": "cut01-02",
+      "path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-tasting-register-20261008\\rendered\\sagu-A01-register-cut01-02-20261008.wav",
+      "source_path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-soft-uncle-20261008\\rendered\\sagu-A01-soft-cut01-02-20261008.wav",
+      "source_sha256": "a028a7c46dcc2fdd2de76388118b0e3d8f6c643bef11dbfc54484ac840644b8d",
+      "output_sha256": "ac5f9769cb896b556139fa080b1f817dff7af6d4b49000ced0f0652da3d5bf93"
+    },
+    {
+      "id": "cut03",
+      "path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-tasting-register-20261008\\rendered\\sagu-A01-register-cut03-20261008.wav",
+      "source_path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-soft-uncle-20261008\\rendered\\sagu-A01-soft-cut03-20261008.wav",
+      "source_sha256": "867ee14a59b50f80bcd4c47bffe3d1e5a722a383008bff61ed63d0c235ee138c",
+      "output_sha256": "b7c289a1eab1d49520e98564847a50430c43ec6e80caf34eec1e8d0853ea3c68"
+    },
+    {
+      "id": "cut04",
+      "path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-tasting-register-20261008\\rendered\\sagu-A01-register-cut04-20261008.wav",
+      "source_path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-soft-uncle-20261008\\rendered\\sagu-A01-soft-cut04-20261008.wav",
+      "source_sha256": "66d04bc41d644dec58ef6806540045f8ec46a53eb5d0d8b5177e395d31d232ef",
+      "output_sha256": "aa552ad7dffd269ea43c9984cd0519e76d59f4c5bfc7d37ec9f72de3cbdc774c"
+    },
+    {
+      "id": "cut05",
+      "path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-tasting-register-20261008\\rendered\\sagu-A01-register-cut05-20261008.wav",
+      "source_path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-soft-uncle-20261008\\rendered\\sagu-A01-soft-cut05-20261008.wav",
+      "source_sha256": "550f9f4e6e607a89eeb800ebff747f9a9d28627829122965d40d9a9b14c22185",
+      "output_sha256": "0027d0499ce9bc6ff1f33c171b52df0b20f11a4a7d33aa240bd793ba482c011d"
+    },
+    {
+      "id": "cut06",
+      "path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-tasting-register-20261008\\rendered\\sagu-A01-register-cut06-20261008.wav",
+      "source_path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-soft-uncle-20261008\\rendered\\sagu-A01-soft-cut06-20261008.wav",
+      "source_sha256": "07a031d9062881c7069e3991097627554b590a8787b8852820096760ee546b35",
+      "output_sha256": "40e570d5edc7e2c81f7606cfe32604c13ad62850a40b509c7b4080ae37b3a324"
+    },
+    {
+      "id": "cut07",
+      "path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-tasting-register-20261008\\rendered\\sagu-A01-register-cut07-20261008.wav",
+      "source_path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-soft-uncle-20261008\\rendered\\sagu-A01-soft-cut07-20261008.wav",
+      "source_sha256": "8499c7a5c4e346c7db7007a455f36fef6cceb3c5cbea4de1c8fc6a59620b5c6f",
+      "output_sha256": "8499c7a5c4e346c7db7007a455f36fef6cceb3c5cbea4de1c8fc6a59620b5c6f"
+    },
+    {
+      "id": "cut09-10",
+      "path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-tasting-register-20261008\\rendered\\sagu-A01-register-cut09-10-20261008.wav",
+      "source_path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-soft-uncle-20261008\\rendered\\sagu-A01-soft-cut09-10-20261008.wav",
+      "source_sha256": "cbbee4970a5ad8cf7516afccd9677a628dedcd88b8b9015f9ee99e89faa5f1cb",
+      "output_sha256": "cbbee4970a5ad8cf7516afccd9677a628dedcd88b8b9015f9ee99e89faa5f1cb"
+    },
+    {
+      "id": "cut11",
+      "path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-tasting-register-20261008\\rendered\\sagu-A01-register-cut11-20261008.wav",
+      "source_path": "C:\\Users\\이주호\\Documents\\Codex\\2026-10-06\\d\\work\\sagu-soft-uncle-20261008\\rendered\\sagu-A01-soft-cut11-20261008.wav",
+      "source_sha256": "a9ffe958bc3a037aca21c95fd8b56ae4b6daaef2bba58fef08e8744ab7e9a790",
+      "output_sha256": "705d40b3cdc672aaedd9d891be92b5bde4c808c8f90545494dde4f9cbe12b0d2"
+    }
+  ]
+}
